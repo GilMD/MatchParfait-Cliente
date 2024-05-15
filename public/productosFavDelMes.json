@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "titulo": "Producto 1",
+      "subtitulo": "Subtítulo del producto 1",
+      "imagen": "18JQpYXcfptFusEE-3oZhWPGQ9yyhwKfg",
+      "rating": 4
+    },
+    {
+      "id": 2,
+      "titulo": "Producto 2",
+      "subtitulo": "Subtítulo del producto 2",
+      "imagen": "18JQpYXcfptFusEE-3oZhWPGQ9yyhwKfg",
+      "rating": 3
+    }
+    
+  ]

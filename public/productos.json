@@ -1,0 +1,29 @@
+{
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Producto 1",
+      "rating": 4,
+      "gamaDeColores": [
+        "#ff0000",
+        "#00ff00",
+        "#0000ff"
+      ],
+      "detalles": "Detalles del Producto 1",
+      "ingredientes": "Ingredientes del Producto 1",
+      "src": "require('@/assets/imgPrueba/img1.png')"
+    },
+    {
+      "id": 2,
+      "nombre": "24H Infallible 24h Labial 501 Timeless Red",
+      "rating": 3,
+      "gamaDeColores": [
+        "#ffff00",
+        "#ff00ff",
+        "#00ffff"
+      ],
+      "detalles": "El trastorno del espectro autista (ASD, por sus siglas en inglés) es un problema que afecta el sistema nervioso de los niños durante sus primeros 3 años de vida. Algunos niños con ASD parecen vivir en su propio mundo. No están interesados en otros niños y carecen de consciencia social. Un niño con ASD s El trastorno del espectro autista (ASD, por sus siglas en inglés) es un problema que afecta el sistema nervioso de los niños durante sus primeros 3 años de vida. Algunos niños con ASD parecen vivir en su propio mundo. No están interesados en otros niños y carecen de consciencia social. Un niño con ASD s",
+      "ingredientes": "El trastorno del espectro autista (ASD, por sus siglas en inglés) es un problema que afecta el sistema nervioso de los niños durante sus primeros 3 años de vida. Algunos niños con ASD parecen vivir en su propio mundo. No están interesados en otros niños y carecen de consciencia social. Un niño con ASD s"
+    }
+  ]
+}

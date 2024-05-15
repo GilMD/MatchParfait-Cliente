@@ -1,0 +1,8 @@
+{
+    "imagenescarrusel1": [
+      { "src": "imgPrueba/imagen6.jpg", "alt": "image1" },
+      { "src": "imgPrueba/imagen7.jpg", "alt": "image2" },
+      { "src": "imgPrueba/imagen8.jpg", "alt": "image3" },
+      { "src": "imgPrueba/imagen7.jpg", "alt": "image4" }
+    ]
+  }
