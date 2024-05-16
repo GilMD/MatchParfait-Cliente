@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="app">
       <aside class="Sidebar">
         <router-link to="/home" class="Sidebar__Logo center">
           <img src="@/assets/img/LOGO.png" height="85px" alt="Logo" />
@@ -35,12 +35,18 @@
     box-sizing: border-box;
   }
   
-  body {
+  html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     background-color: #f00d38;
     overflow: hidden;
   }
   
   #app {
+    width: 95.8%;
+    
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -54,40 +60,44 @@
     left: 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    width: 80px;
+    align-items: center; /* Cambiado para centrar los elementos */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+    width: 3.7%; /* Puedes ajustar esto según necesites */
     height: 100%;
-    padding: 40px 10px 30px 10px;
+    padding: 20px 10px; /* Ajustado para mejor apariencia */
     border-right: 1px solid black;
+    
     transition: 0.3s;
-  
-    ul {
-      list-style-type: none;
-      width: 0px;
-      margin: auto;
-  
-      li {
-        a {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-  
-          img {
-            margin-left: -40px;
-          }
-        }
-      }
-    }
-  }
-  
-  .center {
+}
+
+.Sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.Sidebar li {
+    margin-bottom: 20px; /* Añadido margen entre los elementos de la lista */
+}
+
+.Sidebar li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* Añadido para ajustar el ancho */
+}
+
+.Sidebar li img {
+    margin-left: 0; /* Ajustado el margen */
+}
+
+.center {
     justify-self: center;
     align-self: center;
-  }
-  
-  .negative {
+}
+
+.negative {
     filter: invert(100%);
-  }
+}
   </style>

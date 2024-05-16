@@ -30,7 +30,8 @@
       <div class="carrusel">
         <h2 class="fdm">Favoritos del mes</h2>
         <div class="container">
-          <div class="child" v-for="(producto, index) in products" :key="producto.productId" @click.prevent="detalleProducto(producto.productId)">
+          <div class="child" v-for="(producto, index) in products" :key="producto.productId"
+            @click.prevent="detalleProducto(producto.productId)">
             <div class="img_container">
               <img :src="producto.photo" class="img" />
             </div>
@@ -113,7 +114,7 @@ export default {
 
   },
   created() {
-    this.obtenerProducts();
+    this.obtenerProductsFM();
   },
   beforeDestroy() {
     this.stopScrolling();
@@ -128,7 +129,7 @@ export default {
       this.$router.push(`/producto/${productId}`);
     },
 
-    async obtenerProducts() {
+    async obtenerProductsFM() {
       try {
         let p = [];
         const response = await axios.get(`${URL_DATOS}/products`)
@@ -287,7 +288,7 @@ export default {
 .carrusel1 {
   /* background-color: aquamarine; */
   width: 91%;
-  height: 45%;
+  height: 50%;
   margin: auto;
   margin-top: 0%;
   overflow: hidden;
@@ -312,13 +313,15 @@ export default {
   white-space: nowrap;
   transition: transform 0.10s ease;
 
+  align-items: center;
+
 }
 
 .carrusel-item {
   /* background-color: #ffc107; */
   position: relative;
   width: 30%;
-  height: 100%;
+  height: 90%;
   border-radius: 5px;
   margin: 0 20px;
   flex: none;
@@ -330,6 +333,7 @@ export default {
 }
 
 .carrusel-item img {
+  /* background-color: #ffc107; */
   position: relative;
   width: 100%;
   height: 100%;
@@ -341,7 +345,7 @@ export default {
 }
 
 .carrusel-item img:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
   z-index: 1;
 }
 
@@ -353,7 +357,7 @@ export default {
   margin-left: 10%;
   justify-items: center;
   align-items: center;
-  margin-top: -0.5%;
+  margin-top: -1.5%;
 
 }
 
@@ -374,6 +378,8 @@ export default {
 
 .imgclasif:hover {
   opacity: 0.8;
+  transition: 0.3s;
+  transform: scale(1.2);
 }
 
 .fdm,
@@ -442,10 +448,11 @@ export default {
   margin: 0 20px;
   flex: none;
   scroll-snap-align: start;
-  
+
 }
 
 .child:hover {
+  transition: 0.3s;
   transform: scale(1.1);
   z-index: 1;
 }
@@ -489,17 +496,17 @@ export default {
   text-align: start;
   margin-left: 2%;
   margin-top: 2%;
-  
+
 }
 
 
 .titulos {
   display: inline-block;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  width: calc(100% - 50px); 
-  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 50px);
+
 }
 
 .rating {

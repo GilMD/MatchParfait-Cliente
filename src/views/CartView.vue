@@ -1,17 +1,17 @@
 <template>
     <div class="cart page">
+        <sidebar />
         <h1>Carrito de compras</h1>
     </div>
 </template>
 
 <script>
-// @ is an alias to /src
-//aqui van los imports
+import sidebar from '@/components/sidebar.vue'
 
 export default{
     name: 'CartView',
     components:{
-        //
+        sidebar
     }
 }
 </script>
