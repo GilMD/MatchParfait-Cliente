@@ -1,64 +1,64 @@
 {
   "FavMes": [
     {
-      "nombre": "Producto 1",
+      "nombre": "Produc 1",
       "marca": "Marca 1",
       "rating": 4,
-      "imagen": "@/assets/img/FDM_1.jpeg"
+      "imagen": "img/FDM_1.jpeg"
     },
     {
-      "nombre": "Producto 2",
+      "nombre": "Produc 2",
       "marca": "Marca 2",
       "rating": 3,
-      "imagen": "@/assets/img/FDM_2.jpeg"
+      "imagen": "img/FDM_2.jpeg"
     },
     {
-      "nombre": "Producto 3",
+      "nombre": "Produc 3",
       "marca": "Marca 3",
       "rating": 5,
-      "imagen": "@/assets/img/FDM_3.jpeg"
+      "imagen": "img/FDM_3.jpeg"
     },
     {
-      "nombre": "Producto 4",
+      "nombre": "Produc 4",
       "marca": "Marca 4",
       "rating": 2,
-      "imagen": "@/assets/img/FDM_4.jpeg"
+      "imagen": "img/FDM_4.jpeg"
     },
     {
-      "nombre": "Producto 5",
+      "nombre": "Produc 5",
       "marca": "Marca 5",
       "rating": 1,
-      "imagen": "@/assets/img/FDM_5.jpeg"
+      "imagen": "img/FDM_5.jpeg"
     },
     {
-      "nombre": "Producto 6",
+      "nombre": "Produc 6",
       "marca": "Marca 6",
       "rating": 4,
-      "imagen": "@/assets/img/FDM_1.jpeg"
+      "imagen": "img/FDM_1.jpeg"
     },
     {
-      "nombre": "Producto 7",
+      "nombre": "Produc 7",
       "marca": "Marca 7",
       "rating": 4,
-      "imagen": "@/assets/img/FDM_1.jpeg"
+      "imagen": "img/FDM_1.jpeg"
     },
     {
-      "nombre": "Producto 8",
+      "nombre": "Produc 8",
       "marca": "Marca 8",
       "rating": 3,
-      "imagen": "@/assets/img/FDM_2.jpeg"
+      "imagen": "img/FDM_2.jpeg"
     },
     {
-      "nombre": "Producto 9",
+      "nombre": "Produc 9",
       "marca": "Marca 9",
       "rating": 5,
-      "imagen": "@/assets/img/FDM_3.jpeg"
+      "imagen": "img/FDM_3.jpeg"
     },
     {
-      "nombre": "Producto 10",
+      "nombre": "Produc 10",
       "marca": "Marca 10",
       "rating": 2,
-      "imagen": "@/assets/img/FDM_4.jpeg"
+      "imagen": "img/FDM_4.jpeg"
     }
   ],
   "vistoreciente": [
@@ -66,61 +66,61 @@
       "nombre": "Producto 1",
       "marca": "Marca 1",
       "rating": 4,
-      "imagen": "@/assets/img/FDM_1.jpeg"
+      "imagen": "img/FDM_1.jpeg"
     },
     {
       "nombre": "Producto 2",
       "marca": "Marca 2",
       "rating": 3,
-      "imagen": "@/assets/img/FDM_2.jpeg"
+      "imagen": "img/FDM_2.jpeg"
     },
     {
       "nombre": "Producto 3",
       "marca": "Marca 3",
       "rating": 5,
-      "imagen": "@/assets/img/FDM_3.jpeg"
+      "imagen": "img/FDM_3.jpeg"
     },
     {
       "nombre": "Producto 4",
       "marca": "Marca 4",
       "rating": 2,
-      "imagen": "@/assets/img/FDM_4.jpeg"
+      "imagen": "img/FDM_4.jpeg"
     },
     {
       "nombre": "Producto 5",
       "marca": "Marca 5",
       "rating": 1,
-      "imagen": "@/assets/img/FDM_5.jpeg"
+      "imagen": "img/FDM_5.jpeg"
     },
     {
       "nombre": "Producto 6",
       "marca": "Marca 6",
       "rating": 4,
-      "imagen": "@/assets/img/FDM_1.jpeg"
+      "imagen": "img/FDM_1.jpeg"
     },
     {
       "nombre": "Producto 7",
       "marca": "Marca 7",
       "rating": 4,
-      "imagen": "@/assets/img/FDM_1.jpeg"
+      "imagen": "img/FDM_1.jpeg"
     },
     {
       "nombre": "Producto 8",
       "marca": "Marca 8",
       "rating": 3,
-      "imagen": "@/assets/img/FDM_2.jpeg"
+      "imagen": "img/FDM_2.jpeg"
     },
     {
       "nombre": "Producto 9",
       "marca": "Marca 9",
       "rating": 5,
-      "imagen": "@/assets/img/FDM_3.jpeg"
+      "imagen": "img/FDM_3.jpeg"
     },
     {
       "nombre": "Producto 10",
       "marca": "Marca 10",
       "rating": 2,
-      "imagen": "@/assets/img/FDM_4.jpeg"
+      "imagen": "img/FDM_4.jpeg"
     }
   ]
 }

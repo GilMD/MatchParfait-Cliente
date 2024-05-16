@@ -8,15 +8,13 @@
         <h1 class="t1">Acercándote a la perfección</h1>
         <img src="../assets/img/estrellas.png" alt="">
       </div>
-      <img src="https://drive.google.com/file/d/18JQpYXcfptFusEE-3oZhWPGQ9yyhwKfg/view?usp=drive_link" alt="">
 
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(image, index) in images" :key="index">
+      <div class="carrusel1" @mouseover="stopScrolling" @mouseout="startScrolling">
+        <div class="carrusel-items" ref="carruselItems">
+          <div class="carrusel-item" v-for="(image, index) in images" :key="index">
             <img :src="image.src" :alt="image.alt" class="carousel-image">
           </div>
         </div>
-        <div class="swiper-pagination"></div>
       </div>
 
       <div class="clasificaciones">
@@ -28,127 +26,20 @@
           <img src="../assets/img/healty_skin.png" alt="" class="imgclasif" onclick="imagenClicada('healty_skin')">
         </div>
       </div>
+
       <div class="carrusel">
         <h2 class="fdm">Favoritos del mes</h2>
         <div class="container">
-          <div class="child">
+          <div class="child" v-for="(producto, index) in productosfm" :key="index">
             <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
+              <img :src="producto.imagen" class="img" />
             </div>
             <div class="detalles">
-              <span>{{ productosfm[0].nombre }}</span></br>
-              <span>{{ productosfm[0].marca }}</span></br>
+              <span>{{ producto.nombre }}</span><br>
+              <span>{{ producto.marca }}</span><br>
               <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[0].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[1].nombre }}</span></br>
-              <span>{{ productosfm[1].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[1].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[2].nombre }}</span></br>
-              <span>{{ productosfm[2].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[2].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[3].nombre }}</span></br>
-              <span>{{ productosfm[3].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[3].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[4].nombre }}</span></br>
-              <span>{{ productosfm[4].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[4].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[5].nombre }}</span></br>
-              <span>{{ productosfm[5].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[5].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[6].nombre }}</span></br>
-              <span>{{ productosfm[6].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[6].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[7].nombre }}</span></br>
-              <span>{{ productosfm[7].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[7].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[8].nombre }}</span></br>
-              <span>{{ productosfm[8].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[8].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosfm[9].nombre }}</span></br>
-              <span>{{ productosfm[9].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosfm[9].rating }">&#9733;</span>
+                <span v-for="star in 5" :key="star" class="star"
+                  :class="{ filled: star <= producto.rating }">&#9733;</span>
               </div>
             </div>
           </div>
@@ -157,129 +48,21 @@
       <div class="carrusel">
         <h2 class="vr">Visto reciente</h2>
         <div class="container">
-          <div class="child">
+          <div class="child" v-for="(producto, index) in productosvr" :key="index">
             <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
+              <img :src="producto.imagen" class="img" />
             </div>
             <div class="detalles">
-              <span>{{ productosvr[0].nombre }}</span></br>
-              <span>{{ productosvr[0].marca }}</span></br>
+              <span>{{ producto.nombre }}</span><br>
+              <span>{{ producto.marca }}</span><br>
               <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[0].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[1].nombre }}</span></br>
-              <span>{{ productosvr[1].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[1].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[2].nombre }}</span></br>
-              <span>{{ productosvr[2].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[2].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[3].nombre }}</span></br>
-              <span>{{ productosvr[3].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[3].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[4].nombre }}</span></br>
-              <span>{{ productosvr[4].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[4].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[5].nombre }}</span></br>
-              <span>{{ productosvr[5].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[5].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[6].nombre }}</span></br>
-              <span>{{ productosvr[6].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[6].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[7].nombre }}</span></br>
-              <span>{{ productosvr[7].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[7].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[8].nombre }}</span></br>
-              <span>{{ productosvr[8].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[8].rating }">&#9733;</span>
-              </div>
-            </div>
-          </div>
-          <div class="child">
-            <div class="img_container">
-              <img src="https://ss702.liverpool.com.mx/xl/1113114262.jpg" class="img" />
-            </div>
-            <div class="detalles">
-              <span>{{ productosvr[9].nombre }}</span></br>
-              <span>{{ productosvr[9].marca }}</span></br>
-              <div class="rating">
-                <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= productosvr[9].rating }">&#9733;</span>
+                <span v-for="star in 5" :key="star" class="star"
+                  :class="{ filled: star <= producto.rating }">&#9733;</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-
 
       <div>
         <button @click="Producto">Ir a Otra Página</button>
@@ -291,13 +74,7 @@
 
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
-import { ref } from 'vue'
-import Swiper, { Navigation, Pagination } from 'swiper';
-import 'swiper/swiper-bundle.css';
 import sidebar from '@/components/sidebar.vue'
-
-Swiper.use([Navigation, Pagination]);
 
 export default {
   data() {
@@ -305,11 +82,15 @@ export default {
       images: [],
       productosfm: [],
       productosvr: [],
+      swiper: null,
+      interval: null,
+      step: 1,
     };
   },
 
   mounted() {
     this.obtenerProductos();
+    this.startScrolling();
 
     // Carga imágenes
     fetch('rutaimagenes.json')
@@ -326,21 +107,10 @@ export default {
       });
 
 
-    // Inicializa Swiper
-    new Swiper('.swiper-container', {
-      // Opciones de Swiper
-      slidesPerView: 'auto',
-      spaceBetween: 10,
-      direction: 'horizontal',
-      loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-      },
-    });
+
+  },
+  beforeDestroy() {
+    this.stopScrolling();
   },
 
   name: 'HomeView',
@@ -348,6 +118,25 @@ export default {
     sidebar
   },
   methods: {
+
+    startScrolling() {
+      this.interval = setInterval(() => {
+        const carrusel = this.$refs.carruselItems;
+        carrusel.scrollLeft += this.step;
+        if (carrusel.scrollLeft + carrusel.clientWidth >= carrusel.scrollWidth ) {
+          carrusel.scrollLeft = 0;
+        }
+      }, 10);
+    },
+
+    stopScrolling() {
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+    },
+
+
     async obtenerProductos() {
       try {
         const response = await fetch('productosFav.json');
@@ -357,10 +146,26 @@ export default {
         const data = await response.json();
 
         // Asignar los productos de "FavMes" a this.productosFavMes
-        this.productosfm = data.FavMes;
+        // this.productosfm = data.FavMes;
+        this.productosfm = data.FavMes.map(producto => ({
+          nombre: producto.nombre,
+          marca: producto.marca,
+          rating: producto.rating,
+          imagen: require('@/assets/' + producto.imagen)
+        }));
+
+
+
 
         // Asignar los productos de "vistoreciente" a this.productosVistoReciente
-        this.productosvr = data.vistoreciente;
+        // this.productosvr = data.vistoreciente;
+        this.productosvr = data.vistoreciente.map(producto => ({
+          nombre: producto.nombre,
+          marca: producto.marca,
+          rating: producto.rating,
+          imagen: require('@/assets/' + producto.imagen)
+        }));
+
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);
       }
@@ -453,35 +258,65 @@ export default {
 
 }
 
-.swiper-container {
-  align-items: center;
-  display: flex;
-  width: 90%;
-  height: 39%;
+.carrusel1 {
+  /* background-color: aquamarine; */
+  width: 91%;
+  height: 45%;
   margin: auto;
-  margin-bottom: 2%;
   margin-top: 0%;
   overflow: hidden;
-  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  /* Add this line */
+  justify-content: center;
+  margin-bottom: 1%;
+  overflow: hidden;
 }
 
-.swiper-slide {
-  width: 28%;
+.carrusel-items {
+  /* background-color: bisque; */
+  display: flex;
+  width: 100%;
+  height: 99%;
+  margin: auto;
+  flex-flow: row nowrap;
+  /* Alinear elementos en fila */
+  overflow-y: hidden;
+  overflow-x: hidden;
+  white-space: nowrap;
+  transition: transform 0.10s ease;
+  
+}
+
+.carrusel-item {
+  /* background-color: #ffc107; */
+  position: relative;
+  width: 30%;
   height: 100%;
+  border-radius: 5px;
+  margin: 0 20px;
+  flex: none;
+  scroll-snap-align: start;
+  margin-left: 0%;
+  padding: 30px 0px;
+
+
 }
 
-.swiper-slide img {
+.carrusel-item img {
+  position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
+  border-radius: 15px;
+  box-shadow: 3px 8px 15px rgba(0, 0, 0, 0.2);
+  /* Agregar sombra */
+  transition: transform 0.3s ease;
   object-fit: cover;
 }
 
-
-
-.swiper-pagination {
-  position: absolute;
-  bottom: 10px;
+.carrusel-item img:hover {
+  transform: scale(1.1);
+  z-index: 1;
 }
 
 
