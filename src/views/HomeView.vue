@@ -30,13 +30,13 @@
       <div class="carrusel">
         <h2 class="fdm">Favoritos del mes</h2>
         <div class="container">
-          <div class="child" v-for="(producto, index) in productosfm" :key="index">
+          <div class="child" v-for="(producto, index) in products" :key="producto.productId" @click.prevent="detalleProducto(producto.productId)">
             <div class="img_container">
-              <img :src="producto.imagen" class="img" />
+              <img :src="producto.photo" class="img" />
             </div>
             <div class="detalles">
-              <span>{{ producto.nombre }}</span><br>
-              <span>{{ producto.marca }}</span><br>
+              <span class="titulos">{{ producto.productName }}</span><br>
+              <span class="titulos">{{ producto.productBrand }}</span><br>
               <div class="rating">
                 <span v-for="star in 5" :key="star" class="star"
                   :class="{ filled: star <= producto.rating }">&#9733;</span>
@@ -74,11 +74,14 @@
 
 
 <script>
+import axios from 'axios';
+import { URL_DATOS } from '@/Utils/constantes';
 import sidebar from '@/components/sidebar.vue'
 
 export default {
   data() {
     return {
+      products: [],
       images: [],
       productosfm: [],
       productosvr: [],
@@ -109,6 +112,9 @@ export default {
 
 
   },
+  created() {
+    this.obtenerProducts();
+  },
   beforeDestroy() {
     this.stopScrolling();
   },
@@ -118,12 +124,32 @@ export default {
     sidebar
   },
   methods: {
+    detalleProducto(productId) {
+      this.$router.push(`/producto/${productId}`);
+    },
+
+    async obtenerProducts() {
+      try {
+        let p = [];
+        const response = await axios.get(`${URL_DATOS}/products`)
+          // headers: {
+          //   Authorization: `Bearer ${localStorage.getItem('token')}`
+          // }
+          .then(response => {
+            p = response.data.data;
+            this.products = p;
+          })
+      } catch (error) {
+        console.error('Error al obtener la información de los productos:', error);
+      }
+
+    },
 
     startScrolling() {
       this.interval = setInterval(() => {
         const carrusel = this.$refs.carruselItems;
         carrusel.scrollLeft += this.step;
-        if (carrusel.scrollLeft + carrusel.clientWidth >= carrusel.scrollWidth ) {
+        if (carrusel.scrollLeft + carrusel.clientWidth >= carrusel.scrollWidth) {
           carrusel.scrollLeft = 0;
         }
       }, 10);
@@ -285,7 +311,7 @@ export default {
   overflow-x: hidden;
   white-space: nowrap;
   transition: transform 0.10s ease;
-  
+
 }
 
 .carrusel-item {
@@ -394,6 +420,7 @@ export default {
   /* background-color: antiquewhite; */
   position: relative;
   display: flex;
+  align-items: center;
   width: 97%;
   height: 80%;
   margin: auto;
@@ -403,17 +430,24 @@ export default {
   overflow-x: auto;
   white-space: nowrap;
   transition: transform 0.5s ease;
+  margin-top: -3%;
 }
 
 .child {
   /* background-color: #ba3e97; */
   position: relative;
   width: 18.8%;
-  height: 100%;
+  height: 350px;
   border-radius: 5px;
   margin: 0 20px;
   flex: none;
   scroll-snap-align: start;
+  
+}
+
+.child:hover {
+  transform: scale(1.1);
+  z-index: 1;
 }
 
 .child>.img_container {
@@ -438,9 +472,13 @@ export default {
 }
 
 
+
+
+
 .detalles {
-  width: 80%;
-  height: 20%;
+  /* background-color: #81b7b7; */
+  width: 100%;
+  height: 30%;
   /* background-color: thistle; */
   position: relative;
   font-size: 1vw;
@@ -451,6 +489,17 @@ export default {
   text-align: start;
   margin-left: 2%;
   margin-top: 2%;
+  
+}
+
+
+.titulos {
+  display: inline-block;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  width: calc(100% - 50px); 
+  
 }
 
 .rating {
