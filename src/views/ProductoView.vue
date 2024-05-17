@@ -1,13 +1,14 @@
 <template>
   <div class="producto page">
+    <sidebar />
     <div class="container">
       <div class="column">
-          <div class="previewImg ">
-            <div class="panel">
-              <div v-for="(image, index) in imageArray" :key="index" class="image-item">
-                <img :src="image" alt="Imagen" class="gallery-image">
-              </div>
+        <div class="previewImg ">
+          <div class="panel">
+            <div v-for="(image, index) in imageArray" :key="index" class="image-item">
+              <img :src="image" alt="Imagen" class="gallery-image">
             </div>
+          </div>
         </div>
       </div>
 
@@ -24,31 +25,38 @@
       <div class="column">
         <div class="info">
 
-          <div class="rating">
+          <!-- <div class="rating">
             <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= producto.rating }">&#9733;</span>
-          </div>
+          </div> -->
 
           <div class="nombre">
-            {{ producto.nombre }}
+            {{ productos.productName }}
           </div>
 
           <hr class="linea-horizontal">
 
           <div class="gamadecolores">
-            <div v-for="color in producto.gamaDeColores" :key="color" class="color-box"
-              :style="{ backgroundColor: color }"></div>
             <h2 class="titulogamadecolores">
               Colores Disponibles
             </h2>
+            <div class="gamadecolores1">
+              <div v-for="color in colorArray" :key="color" class="color-box"
+                :style="{ backgroundColor:color }"></div>
+            </div>
+
           </div>
+
 
           <hr class="linea-horizontal">
 
-          <div class="detalles">
+          <div class="ingredientes">
             <h2 class="titulodetalles">
               Detalles del Producto
             </h2>
-            {{ producto.detalles }}
+            <div class="detalles1">
+              {{ productos.description }}
+            </div>
+
           </div>
 
           <hr class="linea-horizontal">
@@ -57,19 +65,21 @@
             <h2 class="tituloingredientes">
               Ingredientes
             </h2>
-            {{ producto.ingredientes }}
+            <div class="detalles1">{{ productos.ingredients }}</div>
           </div>
           <hr class="linea-horizontal">
         </div>
         <div class="botones">
-          <button class="action-button" @click="comprar()">
+          <button class="action-button" @click.prevent="comprar()">
             <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path fill="#FFFCF7"
                 d="M12 18.39l-6.35 3.86 1.65-7.4L2.38 9.74l7.79-.67L12 2l1.83 6.07 7.79.67-5.92 4.11 1.65 7.4z" />
             </svg>
-            Comprar
+            Agregar al carrito
           </button>
-          <button class="action-button" @click="probar()">Probar</button>
+          <button class="action-button" @click.prevent="agregarWishlist()">
+            Agregar a wishlist
+          </button>
         </div>
       </div>
     </div>
@@ -77,57 +87,82 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { URL_DATOS } from '../Utils/constantes';
+import sidebar from '@/components/sidebar.vue'
+
 export default {
-  data() {
+  props:{
+            id: String
+        },
+  data:function() {
     return {
+      colorArray: [],
       imageArray: [], // Array para almacenar las rutas de las imágenes
-      producto: {}
+      productos: []
     };
   },
+  created(){
+            this.traeDetalleProducto();
+        },
   mounted() {
-    // Cargar las rutas de las imágenes en el array
     this.loadImages();
-    this.loadProducto(2);
+    this.traeDetalleProducto();
+  },
+  components: {
+    sidebar
   },
   methods: {
     loadImages() {
-
-      // Aquí se están agregando rutas de imágenes de ejemplo, debes reemplazarlas con tus rutas reales
-      this.imageArray.push(require('@/assets/imgPrueba/img1.png'));
-      this.imageArray.push(require('@/assets/imgPrueba/img2.png'));
-      this.imageArray.push(require('@/assets/imgPrueba/img3.png'));
-      this.imageArray.push(require('@/assets/imgPrueba/img4.png'));
-      this.imageArray.push(require('@/assets/imgPrueba/img5.png'));
+      this.imageArray = this.productos.photos.split(",");
     },
-    async loadProducto(productId) {
-  try {
-    const response = await fetch('productos.json');
-    const data = await response.json();
-    // Buscar el producto con el ID proporcionado
-    const productoEncontrado = data.productos.find(producto => producto.id === productId);
-    if (productoEncontrado) {
-      // Agregar una propiedad "imagenes" al producto si aún no existe
-      if (!productoEncontrado.imagenes) {
-        productoEncontrado.imagenes = [];
-      }
-      // Agregar la ruta completa de cada imagen al producto
-      productoEncontrado.imagenes = productoEncontrado.imagenes.map(imagen => require('@/assets/' + imagen));
-      // Asignar el producto encontrado a la propiedad "producto"
-      this.producto = productoEncontrado;
-    } else {
-      console.error('No se encontró ningún producto con el ID especificado.');
+    traeDetalleProducto: async function(){
+                let p = [];
+                await axios.get(URL_DATOS+"/productDetail/"+this.id)
+                .then(function(response){
+                    console.log(response.data.data[0]);
+                    console.log(response.data.data[0].productName)
+                    p = response.data.data[0]
+
+                })
+                .catch(function(error){
+                    console.log(error)
+                });
+                this.productos = p
+                this.colorArray = this.productos.colors.split(",").map(color => "#" + color);
+                this.loadImages();
     }
-  } catch (error) {
-    console.error('Error al cargar el producto:', error);
-  }
-}
+
+  //   async loadProducto(productId) {
+  //     try {
+  //       const response = await fetch('productos.json');
+  //       const data = await response.json();
+  //       // Buscar el producto con el ID proporcionado
+  //       const productoEncontrado = data.productos.find(producto => producto.id === productId);
+  //       if (productoEncontrado) {
+  //         // Agregar una propiedad "imagenes" al producto si aún no existe
+  //         if (!productoEncontrado.imagenes) {
+  //           productoEncontrado.imagenes = [];
+  //         }
+  //         // Agregar la ruta completa de cada imagen al producto
+  //         productoEncontrado.imagenes = productoEncontrado.imagenes.map(imagen => require('@/assets/' + imagen));
+  //         // Asignar el producto encontrado a la propiedad "producto"
+  //         this.producto = productoEncontrado;
+  //       } else {
+  //         console.error('No se encontró ningún producto con el ID especificado.');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error al cargar el producto:', error);
+  //     }
+  //   }
   }
 }
 </script>
 
 <style scoped>
 .page {
-  background-color: #d9d9d9;
+  background-color: #FFFCF7;
+;
   height: 98vh;
   width: calc(99.3% - 65px);
   display: flex;
@@ -136,7 +171,7 @@ export default {
   margin-left: 75px;
   margin-top: 1vh;
   border-radius: 10px;
-  
+
 }
 
 .image-gallery {
@@ -150,8 +185,10 @@ export default {
 }
 
 .image-item img {
-  width: 100%; /* Ancho del 100% del contenedor */
-  height: auto; /* Altura automática para mantener la proporción */
+  width: 100%;
+  /* Ancho del 100% del contenedor */
+  height: auto;
+  /* Altura automática para mantener la proporción */
 }
 
 .image-item2 {
@@ -174,7 +211,10 @@ export default {
 
 .column {
   flex: 1;
+}
 
+.column:first-child {
+  max-width: 25%;
 }
 
 
@@ -182,8 +222,9 @@ export default {
 .info {
   display: flex;
   justify-content: flex-start;
-  height: auto;
+  height: 57%;
   display: flex;
+  margin-right: 3%;
   flex-direction: column;
   overflow-y: auto;
 }
@@ -191,12 +232,12 @@ export default {
 .info {
   margin-top: 9%;
   flex-direction: column;
-  max-height: 71%;
+  max-height: 70%;
   overflow-y: auto;
 }
 
 .gallery-image {
-  
+
   top: 20%;
   max-width: 90%;
   /* Ancho de cada imagen */
@@ -227,10 +268,10 @@ export default {
 }
 
 .panel {
+  padding: 5% 0;
   position: absolute;
   top: 10%;
-  left: -7px;
-  width: 19%;
+  width: 28%;
   height: auto;
   background-color: rgb(146, 143, 143);
   /* Asegura que el panel sea transparente */
@@ -242,7 +283,7 @@ export default {
   position: relative;
   top: 0%;
   height: 89%;
-  left: 150px;
+  left: 18%;
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -252,7 +293,7 @@ export default {
 }
 
 .imgsProduct {
-  max-height: 850px;
+  max-height: 1200px;
   width: 90%;
   overflow-y: auto;
   margin-top: 60px;
@@ -321,8 +362,10 @@ export default {
 }
 
 .linea-horizontal {
+  margin-top: 3%;
   border: 0;
-  border-top: 2px solid #ccc;
+  border-radius: 5px;
+  border-top: 5px solid #211d1d;
   width: 90%;
   margin-left: 5%;
 }
@@ -342,28 +385,33 @@ export default {
   font-weight: 100;
   margin-top: 3%;
   margin-right: 25%;
-  margin-left: -24%;
+  margin-left: 5%;
+  max-height: 5%;
   text-align: left;
 }
 
 .detalles,
+
+.detalles1 {
+  max-width: 90%;
+  text-align: justify;
+}
+
 .ingredientes {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 100;
   margin-top: 3%;
-  margin-right: 25%;
+  margin-right: 5%;
   margin-left: 5%;
   text-align: left;
 }
 
 .gamadecolores {
-  display: flex;
-  justify-content: flex-start;
   margin-top: 10px;
 }
 
 .color-box {
-  margin-top: 10%;
+  margin-top: 2%;
   width: 40px;
   height: 40px;
   margin-right: 10px;
@@ -371,9 +419,10 @@ export default {
   cursor: pointer;
 }
 
-.gamadecolores {
-
+.gamadecolores1 {
+  display: flex;
   margin-left: 5%;
+  max-height: 5%;
 }
 
 .botones {

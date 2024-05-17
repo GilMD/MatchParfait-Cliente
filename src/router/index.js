@@ -42,7 +42,8 @@ const routes = [
   {
     path: '/producto',
     name: 'producto',
-    component: ProductoView
+    component: ProductoView,
+    props: true
   },
   {
     path: '/about',
