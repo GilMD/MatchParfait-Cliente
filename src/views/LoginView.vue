@@ -60,9 +60,10 @@ export default {
 
 <style scoped>
 .login {
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: row;
-    margin: -8px;
     overflow-y: hidden;
     font-family: inter;
     font-size: 16px;
