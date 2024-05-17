@@ -126,7 +126,8 @@ export default {
   },
   methods: {
     detalleProducto(productId) {
-      this.$router.push(`/producto/${productId}`);
+      // this.$router.push(`/producto/${productId}`);
+      this.$router.push({name: 'producto', params: { id: productId}});
     },
 
     async obtenerProductsFM() {
