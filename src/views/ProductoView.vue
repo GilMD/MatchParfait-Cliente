@@ -1,6 +1,7 @@
 <template>
   <div class="producto page">
     <sidebar />
+
     <div class="container">
       <div class="column">
         <div class="previewImg ">
@@ -30,7 +31,14 @@
           </div> -->
 
           <div class="nombre">
-            {{ productos.productName }}
+            <span>
+              {{ productos.productName }}
+            </span>
+            <img src="@/assets/img/sparkles_red.svg">
+          </div>
+
+          <div class="marca">
+            {{ productos.productBrand }}
           </div>
 
           <hr class="linea-horizontal">
@@ -40,12 +48,14 @@
               Colores Disponibles
             </h2>
             <div class="gamadecolores1">
-              <div v-for="color in colorArray" :key="color" class="color-box"
-                :style="{ backgroundColor:color }"></div>
+              <div v-for="color in colorArray" :key="color" class="color-box" :style="{ backgroundColor: color }"></div>
             </div>
 
           </div>
 
+          <div>
+            ${{ productos.price }}
+          </div>
 
           <hr class="linea-horizontal">
 
@@ -71,13 +81,11 @@
         </div>
         <div class="botones">
           <button class="action-button" @click.prevent="comprar()">
-            <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path fill="#FFFCF7"
-                d="M12 18.39l-6.35 3.86 1.65-7.4L2.38 9.74l7.79-.67L12 2l1.83 6.07 7.79.67-5.92 4.11 1.65 7.4z" />
-            </svg>
+            <img src="@/assets/img/cesta_ico.png" alt="">
             Agregar al carrito
           </button>
           <button class="action-button" @click.prevent="agregarWishlist()">
+            <img src="@/assets/img/sparkles.svg" alt="">
             Agregar a wishlist
           </button>
         </div>
@@ -92,19 +100,19 @@ import { URL_DATOS } from '../Utils/constantes';
 import sidebar from '@/components/sidebar.vue'
 
 export default {
-  props:{
-            id: String
-        },
-  data:function() {
+  props: {
+    id: String
+  },
+  data: function () {
     return {
       colorArray: [],
       imageArray: [], // Array para almacenar las rutas de las imágenes
       productos: []
     };
   },
-  created(){
-            this.traeDetalleProducto();
-        },
+  created() {
+    this.traeDetalleProducto();
+  },
   mounted() {
     this.loadImages();
     this.traeDetalleProducto();
@@ -113,48 +121,30 @@ export default {
     sidebar
   },
   methods: {
+    traeDetalleProducto: async function () {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      let p = [];
+      await axios.get(URL_DATOS + "/productDetail/" + this.id, {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        }
+      })
+        .then(function (response) {
+          console.log(response.data.data[0]);
+          console.log(response.data.data[0].productName)
+          p = response.data.data[0]
+
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
+      this.productos = p
+      this.colorArray = this.productos.colors.split(",").map(color => "#" + color);
+      this.loadImages();
+    },
     loadImages() {
       this.imageArray = this.productos.photos.split(",");
-    },
-    traeDetalleProducto: async function(){
-                let p = [];
-                await axios.get(URL_DATOS+"/productDetail/"+this.id)
-                .then(function(response){
-                    console.log(response.data.data[0]);
-                    console.log(response.data.data[0].productName)
-                    p = response.data.data[0]
-
-                })
-                .catch(function(error){
-                    console.log(error)
-                });
-                this.productos = p
-                this.colorArray = this.productos.colors.split(",").map(color => "#" + color);
-                this.loadImages();
     }
-
-  //   async loadProducto(productId) {
-  //     try {
-  //       const response = await fetch('productos.json');
-  //       const data = await response.json();
-  //       // Buscar el producto con el ID proporcionado
-  //       const productoEncontrado = data.productos.find(producto => producto.id === productId);
-  //       if (productoEncontrado) {
-  //         // Agregar una propiedad "imagenes" al producto si aún no existe
-  //         if (!productoEncontrado.imagenes) {
-  //           productoEncontrado.imagenes = [];
-  //         }
-  //         // Agregar la ruta completa de cada imagen al producto
-  //         productoEncontrado.imagenes = productoEncontrado.imagenes.map(imagen => require('@/assets/' + imagen));
-  //         // Asignar el producto encontrado a la propiedad "producto"
-  //         this.producto = productoEncontrado;
-  //       } else {
-  //         console.error('No se encontró ningún producto con el ID especificado.');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error al cargar el producto:', error);
-  //     }
-  //   }
   }
 }
 </script>
@@ -162,7 +152,7 @@ export default {
 <style scoped>
 .page {
   background-color: #FFFCF7;
-;
+  ;
   height: 98vh;
   width: calc(99.3% - 65px);
   display: flex;
@@ -352,13 +342,18 @@ export default {
 
 /* Estilos del nombre */
 .nombre {
-
+  display: flex;
   font-size: 40px;
   font-weight: 100;
   margin-top: 5%;
   margin-right: 25%;
   margin-left: 5%;
   text-align: left;
+}
+
+.nombre img {
+  max-width: 9%;
+  align-self: flex-end;
 }
 
 .linea-horizontal {
@@ -441,6 +436,13 @@ export default {
   background-color: #f00d38;
   color: white;
   border: 2px solid #ccc;
+  margin: auto;
+  height: 15%;
+  width: 40%;
+}
+
+.action-button img {
+  max-width: 15%;
 
 }
 

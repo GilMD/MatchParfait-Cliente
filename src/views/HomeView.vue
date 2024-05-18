@@ -127,13 +127,19 @@ export default {
   methods: {
     detalleProducto(productId) {
       // this.$router.push(`/producto/${productId}`);
-      this.$router.push({name: 'producto', params: { id: productId}});
+      this.$router.push({ name: 'producto', params: { id: productId } });
     },
 
     async obtenerProductsFM() {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+
       try {
         let p = [];
-        const response = await axios.get(`${URL_DATOS}/products`)
+        const response = await axios.get(`${URL_DATOS}/products`, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        })
           // headers: {
           //   Authorization: `Bearer ${localStorage.getItem('token')}`
           // }
@@ -144,7 +150,7 @@ export default {
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);
       }
-
+      2
     },
 
     startScrolling() {
