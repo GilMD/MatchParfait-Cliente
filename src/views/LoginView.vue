@@ -46,7 +46,9 @@ export default {
                     email: this.user.email,
                     password: this.user.password
                 });
-                console.log('Response:', response.data.data);
+                console.log('Response:', response.data);
+                localStorage.setItem('vue2.token', JSON.stringify(response.data.tokenSession));
+
                 this.$router.push('/home');
             } catch (error) {
                 console.error('Error:', error);

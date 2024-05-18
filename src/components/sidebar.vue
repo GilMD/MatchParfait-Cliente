@@ -15,6 +15,11 @@
               <img src="@/assets/img/cesta_ico.png" height="50px" alt="Cart" />
             </router-link>
           </li>
+          <li>
+            <router-link to="/wishlist" class="Sidebar__Cart">
+              <img src="@/assets/img/wish_list_solid.svg" height="50px" alt="Cart" />
+            </router-link>
+          </li>
         </ul>
         <router-link to="/user" class="Sidebar__User center">
           <img class="negative" src="@/assets/img/circle-user-solid.svg" height="40px" alt="User" />
