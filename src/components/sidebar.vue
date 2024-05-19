@@ -51,12 +51,12 @@
   
   #app {
     width: 95.8%;
-    
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    overflow: hidden;
   }
   
   .Sidebar {
@@ -70,7 +70,7 @@
     width: 3.7%; /* Puedes ajustar esto según necesites */
     height: 100%;
     padding: 20px 10px; /* Ajustado para mejor apariencia */
-    border-right: 1px solid black;
+    // border-right: 1px solid black;
     
     transition: 0.3s;
 }
