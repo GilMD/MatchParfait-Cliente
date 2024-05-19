@@ -80,11 +80,11 @@
                                 <a href="#" @click.prevent="mostrarTerminos">Términos y Condiciones</a> de Match Parfait
                             </label>
                         </div>
-                        <input @click.prevent="cambiarVisibililidad()" class="signup-container_tabform_button"
-                            type="submit" value="Continuar">
+                        <input @click.prevent="continuar()" class="signup-container_tabform_button" type="submit"
+                            value="Continuar">
 
                         <span class="signup-information__register">¿Ya tienes una cuenta? <a href="#"
-                                @click.prevent="iniciarSesion">Inicia
+                                @click.prevent="iniciarSesion()">Inicia
                                 sesión</a></span>
                     </div>
                 </div>
@@ -219,17 +219,17 @@ export default {
                 shine: '',
                 dermatitis: '',
                 sensibility: '',
-                tightness: '',
-                rosasea: '',
-                peeling: '',
-                hives: '',
+                tightness: 0,
+                rosasea: 0,
+                peeling: 0,
+                hives: 0,
                 imperfection: '',
-                acne: '',
-                englarged_pores: '',
-                sun_spots: '',
-                cloth: '',
-                blackheads: '',
-                roughness: '',
+                acne: 0,
+                enlarged_pores: 0,
+                sun_spots: 0,
+                cloth: 0,
+                blackheads: 0,
+                roughness: 0,
                 rangeValue: 1
             },
             texture: 'Normal',
@@ -239,6 +239,7 @@ export default {
             Sensibility: ['Tirantez', 'Rosacesa', 'Descamación', 'Urticaria'],
             Imperfection: ['Acné', 'Poros dilatados', 'Manchas de sol', 'Paño', 'Puntos negros', 'Sensación aspera'],
             rangeValue: 1,
+            passwordError: '',
             images: [
                 { src: require('@/assets/img/1.png'), label: 'Tone 1' },
                 { src: require('@/assets/img/2.png'), label: 'Tone 2' },
@@ -270,8 +271,19 @@ export default {
         }
 
     },
+    watch: {
+        'user.sensibility': function (newSensibility) {
+            this.updateSensibilityFlags(newSensibility);
+        },
+        'user.imperfection': function (newImperfection) {
+            this.updateImperfectionFlags(newImperfection);
+        }
+    },
 
     methods: {
+        iniciarSesion() {
+            this.$router.push('/');
+        },
         updateImageAndLabel() {
             const imageObject = this.images[this.user.rangeValue - 1];
             this.currentImage = imageObject.src;
@@ -289,7 +301,7 @@ export default {
             }
             document.getElementById('toggleForm').addEventListener('submit', function (event) {
                 event.preventDefault();  // Evita el envío del formulario
-                continuar();
+                // continuar(); 
             });
         },
         validarFormulario() {
@@ -302,43 +314,62 @@ export default {
                 alert('Por favor, complete todos los campos obligatorios.');
                 return false;
             }
+            if (this.user.password !== this.user.passwordConfirm) {
+                alert('Las contraseñas no coinciden.');
+                return false;
+            }
             return true;
         },
         async continuar() {
+            if (this.validarFormulario()) {
+                try {
+                    this.cambiarVisibililidad();
+                    const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
+                    // Format the date as ISO string
+                    const date_of_birth = birthDate.toISOString();
 
-            //if ( true) {
-            try {
-                cambiarVisibililidad();
-                const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
-                // Format the date as ISO string
-                const date_of_birth = birthDate.toISOString();
+                    const response = await axios.post(`${URL_DATOS}/auth/register`, {
+                        email: this.user.email,
+                        name: this.user.name,
+                        last_name1: this.user.last_name1,
+                        last_name2: this.user.last_name2,
+                        password: this.user.password,
+                        phone_number: this.user.phone_number,
+                        birthDate: date_of_birth,
+                        gender: this.user.gender,
+                        state: this.user.state,
+                        municipality: this.user.municipality,
+                        suburb: this.user.suburb,
+                        street: this.user.street,
+                        ext_num: this.user.ext_num,
+                        int_num: this.user.int_num,
+                        postal_code: this.user.postal_code
+                    });
 
-                const response = await axios.post(`${URL_DATOS}/auth/register`, {
-                    email: this.user.email,
-                    password: this.user.password,
-                    name: this.user.name,
-                    last_name1: this.user.last_name1,
-                    last_name2: this.user.last_name2,
-                    password: this.user.password,
-                    phone_number: this.user.phone_number,
-                    birthDate: date_of_birth,
-                    gender: this.user.gender,
-                    state: this.user.state,
-                    municipality: this.user.municipality,
-                    suburb: this.user.suburb,
-                    street: this.user.street,
-                    ext_num: this.user.ext_num,
-                    int_num: this.user.int_num,
-                    postal_code: this.user.postal_code
-                });
-
-                console.log('Registration successful:', response.data.data);
-            } catch (error) {
-                console.error('Error:', error);
-                console.log('Error:', error.response.data);
+                    console.log('Registration successful:', response.data.data);
+                } catch (error) {
+                    console.error('Error:', error);
+                    if (error.response && error.response.data) {
+                        console.log('Error:', error.response.data);
+                    }
+                }
             }
-            //}
         },
+        updateSensibilityFlags(newSensibility) {
+            this.user.tightness = newSensibility.includes('Tirantez') ? 1 : 0;
+            this.user.rosasea = newSensibility.includes('Rosacea') ? 1 : 0;
+            this.user.peeling = newSensibility.includes('Descamación') ? 1 : 0;
+            this.user.hives = newSensibility.includes('Urticaria') ? 1 : 0;
+        },
+        updateImperfectionFlags(newImperfection) {
+            this.user.acne = newImperfection.includes('Acné') ? 1 : 0;
+            this.user.enlarged_pores = newImperfection.includes('Poros dilatados') ? 1 : 0;
+            this.user.sun_spots = newImperfection.includes('Manchas de sol') ? 1 : 0;
+            this.user.cloth = newImperfection.includes('Paño') ? 1 : 0;
+            this.user.blackheads = newImperfection.includes('Puntos negros') ? 1 : 0;
+            this.user.roughness = newImperfection.includes('Sensación aspera') ? 1 : 0;
+        },
+
         async finalizar() {
             const textureMapping = {
                 'Normal': 1,
@@ -356,8 +387,16 @@ export default {
                 texture: textureValue,
                 shine: shineValue,
                 dermatitis: dermatitisValue,
-                sensibility: this.user.sensibility,
-                imperfection: this.user.imperfection,
+                thighness: this.user.tightness,
+                rosasea: this.user.rosasea,
+                peeling: this.user.peeling,
+                hives: this.user.hives,
+                acne: this.user.acne,
+                enlarged_pores: this.user.enlarged_pores,
+                sun_spots: this.user.sun_spots,
+                cloth: this.user.cloth,
+                blackheads: this.user.blackheads,
+                roughness: this.user.roughness,
                 rangeValue: this.user.rangeValue
             });
         }

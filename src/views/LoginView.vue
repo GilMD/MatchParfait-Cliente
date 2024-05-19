@@ -18,7 +18,8 @@
                     <input @click.prevent="iniciarSesion()" class="login-container_tabform_button" type="submit"
                         value="Iniciar Sesión">
                 </form>
-                <span class="login-information__register">¿No tienes una cuenta? <a href="#">Regístrate</a></span>
+                <span class="login-information__register">¿No tienes una cuenta? <a href="#"
+                        @click.prevent="signUpPage()">Regístrate</a></span>
             </div>
         </div>
     </div>
@@ -30,16 +31,19 @@ import { URL_DATOS } from '@/Utils/constantes';
 
 export default {
     name: 'LoginView',
-    data:function() {
+    data: function () {
         return {
             user: {
                 email: '',
                 password: ''
             }
         }
-        
+
     },
     methods: {
+        signUpPage() {
+            this.$router.push('/signup');
+        },
         async iniciarSesion() {
             try {
                 const response = await axios.post(`${URL_DATOS}/auth/login`, {
@@ -168,6 +172,7 @@ export default {
 .login-container_tabform_button:hover {
     box-shadow: 0px 0px 20px 0px rgba(230, 84, 84, 0.85);
     transition-duration: .5s;
+    transform: scale(1.1);
 }
 
 .login-information__register {
