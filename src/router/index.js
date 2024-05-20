@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import  CartView  from '../views/CartView';
+import  WishView  from '../views/WishView';
 import UserView from "../views/UserView";
 import ProductoView from "../views/ProductoView";
 import LoginView from "../views/LoginView";
@@ -40,7 +41,12 @@ const routes = [
     component: CartView
   },
   {
-    path: '/producto',
+    path: '/wishlist',
+    name: 'wishlist',
+    component: WishView
+  },
+  {
+    path: '/producto/:id',
     name: 'producto',
     component: ProductoView,
     props: true
