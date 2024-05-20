@@ -34,7 +34,7 @@
             <span>
               {{ productos.productName }}
             </span>
-            <img src="@/assets/img/sparkles_red.svg">
+            <img style="display: none;" src="@/assets/img/sparkles_red.svg">
           </div>
 
           <div class="marca">
@@ -48,13 +48,24 @@
               Colores Disponibles
             </h2>
             <div class="gamadecolores1">
-              <div v-for="color in colorArray" :key="color" class="color-box" :style="{ backgroundColor: color }"></div>
+              <div @click.prevent="setColor(color)" v-for="color in colorArray" :key="color" class="color-box" :style="{ backgroundColor: color }"></div>
             </div>
 
           </div>
 
-          <div>
-            ${{ productos.price }}
+          <div class="precio-cantidad">
+            <div class="precio">
+              ${{ productos.price }}
+            </div>
+            <div class="cantidad">
+              <button @click.prevent="cambiarCantidad('-')" class="cantidad-btn">
+                <img src="@/assets/img/minus.svg" alt="">
+              </button>
+              <input v-model="cantidad" type="number" class="cantidad-input" value="1" min="1" disabled="true">
+              <button @click.prevent="cambiarCantidad('+')" class="cantidad-btn">
+                <img src="@/assets/img/plus.svg" alt="">
+              </button>
+            </div>
           </div>
 
           <hr class="linea-horizontal">
@@ -80,11 +91,11 @@
           <hr class="linea-horizontal">
         </div>
         <div class="botones">
-          <button class="action-button" @click.prevent="comprar()">
+          <button class="action-button" @click.prevent="agregarCarrito">
             <img src="@/assets/img/cesta_ico.png" alt="">
             Agregar al carrito
           </button>
-          <button class="action-button" @click.prevent="agregarWishlist()">
+          <button class="action-button" @click.prevent="agregarWishlist">
             <img src="@/assets/img/sparkles.svg" alt="">
             Agregar a wishlist
           </button>
@@ -107,14 +118,15 @@ export default {
     return {
       colorArray: [],
       imageArray: [], // Array para almacenar las rutas de las imágenes
-      productos: []
+      productos: [],
+      cantidad: 1,
+      colorSelected: ''
     };
   },
   created() {
     this.traeDetalleProducto();
   },
   mounted() {
-    this.loadImages();
     this.traeDetalleProducto();
   },
   components: {
@@ -131,7 +143,7 @@ export default {
       })
         .then(function (response) {
           console.log(response.data.data[0]);
-          console.log(response.data.data[0].productName)
+          console.log(response.data.data[0])
           p = response.data.data[0]
 
         })
@@ -140,10 +152,63 @@ export default {
         });
       this.productos = p
       this.colorArray = this.productos.colors.split(",").map(color => "#" + color);
-      this.loadImages();
-    },
-    loadImages() {
       this.imageArray = this.productos.photos.split(",");
+      this.colorSelected = this.colorArray[0].substring(1);
+      console.log(this.colorSelected);
+      // this.loadImages();
+    },
+    setColor(color) {
+      this.colorSelected = color.substring(1);
+      console.log(this.colorSelected);
+    },
+    cambiarCantidad(op) {
+      if (op === '+') {
+        this.cantidad += 1;
+      } else if (this.cantidad !== 1) {
+        this.cantidad -= 1;
+      }
+    },
+    async agregarWishlist() {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      const response = await axios.post(`${URL_DATOS}/wishList/`, {
+        productId: this.id,
+        color: this.colorSelected
+      },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        }
+      )
+        .then(function (response) {
+          console.log(response.data.data[0]);
+
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
+
+    },
+    async agregarCarrito() {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      const response = await axios.post(`${URL_DATOS}/shippingCart/`, {
+        productId: this.id,
+        color: this.colorSelected,
+        cantidad: parseInt(this.cantidad)
+      },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        }
+      )
+        .then(function (response) {
+          console.log(response.data.data[0]);
+
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
     }
   }
 }
@@ -172,6 +237,7 @@ export default {
 .image-item {
   margin-bottom: 5%;
   margin-top: 5%;
+  margin-left: 8%;
 }
 
 .image-item img {
@@ -349,11 +415,21 @@ export default {
   margin-right: 25%;
   margin-left: 5%;
   text-align: left;
+  color: #9B0E28;
+  font-family: Playfair Display;
 }
 
 .nombre img {
   max-width: 9%;
   align-self: flex-end;
+}
+
+.marca {
+  color: #391414;
+  font-family: DM Sans;
+  font-size: 20px;
+  margin-left: 5%;
+  font-weight: 400;
 }
 
 .linea-horizontal {
@@ -367,12 +443,14 @@ export default {
 
 .titulodetalles,
 .tituloingredientes {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 100;
   margin-top: 3%;
   margin-right: 25%;
   margin-left: 0%;
   text-align: left;
+  color: #391414;
+  font-weight: 400;
 }
 
 .titulogamadecolores {
@@ -382,14 +460,19 @@ export default {
   margin-right: 25%;
   margin-left: 5%;
   max-height: 5%;
+  padding-bottom: 5%;
   text-align: left;
+  font-family: DM Sans;
+  font-weight: 400;
+  color: #391414;
 }
 
 .detalles,
-
 .detalles1 {
   max-width: 90%;
   text-align: justify;
+  font-size: 18px;
+  color: #391414;
 }
 
 .ingredientes {
@@ -399,6 +482,8 @@ export default {
   margin-right: 5%;
   margin-left: 5%;
   text-align: left;
+  font-family: DM Sans;
+  font-weight: 400;
 }
 
 .gamadecolores {
@@ -449,5 +534,68 @@ export default {
 .star-icon {
   width: 17.03px;
   height: 17.03px;
+}
+
+.precio-cantidad {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.precio {
+  max-height: 31.25px;
+  margin-left: 5%;
+  color: #391414;
+  font-weight: 400;
+  font-family: DM Sans;
+  font-size: 24px;
+}
+
+.cantidad {
+  display: flex;
+  align-items: center;
+  background-color: #FFFCF7;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  overflow: hidden;
+  width: 137px;
+  height: 50px;
+  max-width: 40%;
+  max-height: 80%;
+  margin-right: 5%;
+}
+
+.cantidad-btn {
+  /* background-color: #007bff; */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 30px;
+  border-radius: 50%;
+  width: 35%;
+}
+
+.cantidad-btn img {
+  /* background-color: #007bff; */
+  border: none;
+  font-size: 30px;
+  border-radius: 50%;
+  width: 175%;
+}
+
+.cantidad-input {
+  width: 30%;
+  text-align: center;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  font-family: DM Sans;
+  color: #391414;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>
