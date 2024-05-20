@@ -108,7 +108,7 @@
                             <span class="signup-information_tab_spann">Tipo de piel</span>
                         </div>
                         <v-container class="vcontainer">
-                            <v-chip-group v-model="user.texture" mandatory active-class="primary--text">
+                            <v-chip-group v-model="user.texture" column active-class="primary--text">
                                 <v-chip v-for="option in skinTypes" :key="option" :value="option" class="ma-2"
                                     size="x-large">
                                     {{ option }}
@@ -215,7 +215,7 @@ export default {
                 int_num: '',
                 postal_code: '',
                 acceptTerms: false,
-                texture: 'Normal',
+                texture: '',
                 shine: '',
                 dermatitis: '',
                 sensibility: '',
@@ -232,7 +232,7 @@ export default {
                 roughness: 0,
                 rangeValue: 1
             },
-            texture: 'Normal',
+            // texture: 'Normal',
             skinTypes: ['Normal', 'Sensible', 'Seca', 'Grasa', 'Mixta'],
             Brightness: ['Brillo a final del día', 'Brillo a medio día', 'Sin brillo en el día', 'Brillo en zona T'],
             Dermatitis: ['Atópica', 'Por contacto', 'Seborreica'],
@@ -320,6 +320,13 @@ export default {
             }
             return true;
         },
+        validarFormulario2() {
+            if (!this.user.texture || !this.user.shine) {
+                alert('Por favor, complete todos los campos obligatorios.');
+                return false;
+            }
+            return true;
+        },
         async continuar() {
             if (this.validarFormulario()) {
                 try {
@@ -327,16 +334,18 @@ export default {
                     const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
                     // Format the date as ISO string
                     const date_of_birth = birthDate.toISOString();
+                    console.log('Date of birth:', date_of_birth);
 
                     const response = await axios.post(`${URL_DATOS}/auth/register`, {
                         email: this.user.email,
                         name: this.user.name,
-                        last_name1: this.user.last_name1,
-                        last_name2: this.user.last_name2,
-                        password: this.user.password,
+                        lasName1: this.user.last_name1,
+                        lasName2: this.user.last_name2,
+                        plainPassword: this.user.password,
                         phone_number: this.user.phone_number,
-                        birthDate: date_of_birth,
+                        date_of_birth: date_of_birth,
                         gender: this.user.gender,
+                        country: 'México',
                         state: this.user.state,
                         municipality: this.user.municipality,
                         suburb: this.user.suburb,
@@ -369,41 +378,58 @@ export default {
             this.user.blackheads = newImperfection.includes('Puntos negros') ? 1 : 0;
             this.user.roughness = newImperfection.includes('Sensación aspera') ? 1 : 0;
         },
+        validarFormulario2() {
+            if (!this.user.texture || !this.user.shine) {
+                alert('Por favor, complete todos los campos obligatorios.');
+                return false;
+            }
+            return true;
+        },
 
         async finalizar() {
-            const textureMapping = {
-                'Normal': 1,
-                'Sensible': 2,
-                'Seca': 3,
-                'Grasa': 4,
-                'Mixta': 5
-            };
-            const textureValue = textureMapping[this.user.texture] || 1;
-            const shineValue = this.Brightness.includes(this.user.shine) ? 1 : 0;
-            const dermatitisValue = this.Dermatitis.includes(this.user.dermatitis) ? 1 : 0;
+            if (this.validarFormulario2()) {
+                try {
+                    const textureMapping = {
+                        'Normal': 1,
+                        'Sensible': 2,
+                        'Seca': 3,
+                        'Grasa': 4,
+                        'Mixta': 5
+                    };
+                    const textureValue = textureMapping[this.user.texture] || 1;
+                    const shineValue = this.Brightness.includes(this.user.shine) ? 1 : 0;
+                    const dermatitisValue = this.Dermatitis.includes(this.user.dermatitis) ? 1 : 0;
 
+                    console.log('tono de piel:', this.user.rangeValue);
 
-            const response = await axios.post(`${URL_DATOS}/skin-profile`, {
-                texture: textureValue,
-                shine: shineValue,
-                dermatitis: dermatitisValue,
-                thighness: this.user.tightness,
-                rosasea: this.user.rosasea,
-                peeling: this.user.peeling,
-                hives: this.user.hives,
-                acne: this.user.acne,
-                enlarged_pores: this.user.enlarged_pores,
-                sun_spots: this.user.sun_spots,
-                cloth: this.user.cloth,
-                blackheads: this.user.blackheads,
-                roughness: this.user.roughness,
-                rangeValue: this.user.rangeValue
-            });
+                    const response = await axios.post(`${URL_DATOS}/skin-profile`, {
+                        texture: textureValue,
+                        shine: shineValue,
+                        dermatitis: dermatitisValue,
+                        thighness: this.user.tightness,
+                        rosasea: this.user.rosasea,
+                        peeling: this.user.peeling,
+                        hives: this.user.hives,
+                        acne: this.user.acne,
+                        enlarged_pores: this.user.enlarged_pores,
+                        sun_spots: this.user.sun_spots,
+                        cloth: this.user.cloth,
+                        blackheads: this.user.blackheads,
+                        roughness: this.user.roughness,
+                        tone: this.user.rangeValue
+                    });
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    if (error.response && error.response.data) {
+                        console.log('Error:', error.response.data);
+                    }
+
+                }
+
+            }
+
         }
-
-
-
-
     }
 }
 </script>
@@ -414,7 +440,7 @@ export default {
 
 #div1 {
     display: block;
-    width: 100%;
+    
 }
 
 #div2 {

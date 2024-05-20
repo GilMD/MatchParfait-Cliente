@@ -8,12 +8,12 @@
                 </div>
                 <div v-for="product in products" :key="product.id" class="producto">
                     <div class="imagen_producto">
-                        <img :src="product.imagen" alt="Imagen del producto">
+                        <img :src="product.photos" alt="Imagen del producto">
                     </div>
                     <div class="informacion_producto">
                         <div class="nombre_marca">
-                            <td class="nombre">{{ product.name }}</td>
-                            <td class="marca">{{ product.brand }}</td>
+                            <td class="nombre">{{ product.productName }}</td>
+                            <td class="marca">{{ product.productBrand }}</td>
                         </div>
                         <div class="precio_botones">
                             <td class="precio">{{ product.price | currency }}</td>
@@ -29,12 +29,12 @@
             </div>
             <div class="informacion_envio">
                 <div class="formulario">
-                    <div class="direccion" style="display: none;">
+                    <div id="div1" class="direccion">
                         <h1>Dirección de envío</h1>
                         <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span>
-                        <td>Editar</td>
+                        <td @click="cambiarVisibililidad()">Editar</td>
                     </div>
-                    <div class="direccionInputs">
+                    <div id="div2" class="direccionInputs">
                         <h1>Dirección de envío</h1>
                         <div class="estadoMunicipioInputs">
                             <input type="text" placeholder="Estado">
@@ -128,13 +128,37 @@ export default {
         borrarProd() {
             this.productos = this.products.filter(p => p.id !== product.id);
             console.log('Producto eliminado', product);
-        }
+        },
+        cambiarVisibililidad() {
+            var div1 = document.getElementById('div1');
+            var div2 = document.getElementById('div2');
+            if (div1.style.display == 'none') {
+                div1.style.display = 'block';
+                div2.style.display = 'none';
+            } else {
+                div1.style.display = 'none';
+                div2.style.display = 'block';
+            }
+            document.getElementById('toggleForm').addEventListener('submit', function (event) {
+                event.preventDefault();  // Evita el envío del formulario
+                // continuar(); 
+            });
+        },
     },
 }
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+#div1 {
+    display: block;
+    width: 100%;
+}
+
+#div2 {
+    display: none;
+}
 
 .cart {
     display: flex;
@@ -162,13 +186,14 @@ export default {
     width: 50%;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
 
 }
 
 .producto {
     gap: 2vh;
-    background-color: #FFFCF7;
-    height: 23%;
+    /* background-color: #6441b6; */
+    height: 24%;
     width: 80%;
     display: flex;
     flex-direction: row;
@@ -183,7 +208,6 @@ export default {
     /* background-color: #f0f0f0; */
     width: 80%;
     height: 6%;
-    overflow: hidden;
     /* Ocultar cualquier contenido que se salga */
     margin-top: 2%;
     word-wrap: break-word;
@@ -276,6 +300,7 @@ export default {
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
     font-size: 16px;
+    margin-bottom: 2%;
 }
 
 .dec_inc button {
@@ -287,15 +312,16 @@ export default {
 }
 
 .precio_botones img {
-    width: 7%;
+    width: 6%;
     margin-left: 40%;
     cursor: pointer;
+    margin-bottom: 1%;
 }
 
 .direccion {
-    /* background-color: #FFFCF7; */
+    /* background-color: #1d1c5d; */
     width: 80%;
-    height: 20%;
+    height: 21%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -322,15 +348,14 @@ export default {
 }
 
 .direccion td {
-    width: 10%;
+    
     /* background-color: aqua; */
     font-family: 'dm sans', sans-serif;
     font-weight: 400;
     font-size: 1rem;
     color: #9B0E28;
-    text-align: left;
     cursor: pointer;
-    margin-left: 1%;
+    margin-left: 50px;
 }
 
 .direccion td:hover {
@@ -426,14 +451,15 @@ export default {
 }
 
 .formulario {
-    background-color: #FFFCF7;
+    /* background-color: #916a26; */
     height: 55%;
     width: 85%;
     display: flex;
     flex-direction: column;
     font-family: "DM Sans", sans-serif;
     margin-top: 20%;
-    margin-left: 9%;
+    margin-left: 5%;
+    
 }
 
 .formulario input {
@@ -456,7 +482,7 @@ export default {
     margin-top: 5%;
     border-radius: 12px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
-    margin-left: 9%;
+    margin-left: 0%;
 }
 
 .subtotal_pago span {
@@ -483,7 +509,7 @@ export default {
 
 
 
-.btnSubtotalPago{
+.btnSubtotalPago {
     width: 41%;
     height: 50px;
     border: none;
@@ -493,7 +519,7 @@ export default {
     font-weight: 500;
     cursor: pointer;
     border-radius: 25px;
-    
+
 }
 
 .subtotal_pago div {
