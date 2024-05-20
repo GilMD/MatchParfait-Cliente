@@ -318,51 +318,55 @@ export default {
                 alert('Las contraseñas no coinciden.');
                 return false;
             }
-            return true;
-        },
-        validarFormulario2() {
             if (!this.user.texture || !this.user.shine) {
                 alert('Por favor, complete todos los campos obligatorios.');
                 return false;
             }
             return true;
+            
         },
+        // validarFormulario2() {
+        //     if (!this.user.texture || !this.user.shine) {
+        //         alert('Por favor, complete todos los campos obligatorios.');
+        //         return false;
+        //     }
+        //     return true;
+        // },
         async continuar() {
-            if (this.validarFormulario()) {
                 try {
                     this.cambiarVisibililidad();
-                    const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
-                    // Format the date as ISO string
-                    const date_of_birth = birthDate.toISOString();
-                    console.log('Date of birth:', date_of_birth);
+                    // const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
+                    // // Format the date as ISO string
+                    // const date_of_birth = birthDate.toISOString();
+                    // console.log('Date of birth:', date_of_birth);
 
-                    const response = await axios.post(`${URL_DATOS}/auth/register`, {
-                        email: this.user.email,
-                        name: this.user.name,
-                        lasName1: this.user.last_name1,
-                        lasName2: this.user.last_name2,
-                        plainPassword: this.user.password,
-                        phone_number: this.user.phone_number,
-                        date_of_birth: date_of_birth,
-                        gender: this.user.gender,
-                        country: 'México',
-                        state: this.user.state,
-                        municipality: this.user.municipality,
-                        suburb: this.user.suburb,
-                        street: this.user.street,
-                        ext_num: this.user.ext_num,
-                        int_num: this.user.int_num,
-                        postal_code: this.user.postal_code
-                    });
+                    // const response = await axios.post(`${URL_DATOS}/auth/register`, {
+                    //     email: this.user.email,
+                    //     name: this.user.name,
+                    //     lasName1: this.user.last_name1,
+                    //     lasName2: this.user.last_name2,
+                    //     plainPassword: this.user.password,
+                    //     phone_number: this.user.phone_number,
+                    //     date_of_birth: date_of_birth,
+                    //     gender: this.user.gender,
+                    //     country: 'México',
+                    //     state: this.user.state,
+                    //     municipality: this.user.municipality,
+                    //     suburb: this.user.suburb,
+                    //     street: this.user.street,
+                    //     ext_num: this.user.ext_num,
+                    //     int_num: this.user.int_num,
+                    //     postal_code: this.user.postal_code
+                    // });
 
-                    console.log('Registration successful:', response.data.data);
+                    // console.log('Registration successful:', response.data.data);
                 } catch (error) {
                     console.error('Error:', error);
                     if (error.response && error.response.data) {
                         console.log('Error:', error.response.data);
                     }
                 }
-            }
+            
         },
         updateSensibilityFlags(newSensibility) {
             this.user.tightness = newSensibility.includes('Tirantez') ? 1 : 0;
@@ -399,10 +403,58 @@ export default {
                     const textureValue = textureMapping[this.user.texture] || 1;
                     const shineValue = this.Brightness.includes(this.user.shine) ? 1 : 0;
                     const dermatitisValue = this.Dermatitis.includes(this.user.dermatitis) ? 1 : 0;
+                    const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
+                    // Format the date as ISO string
+                    const date_of_birth = birthDate.toISOString();
+                    console.log('email:', this.user.email);
+                    console.log('name:', this.user.name);
+                    console.log('last_name1:', this.user.last_name1);
+                    console.log('last_name2:', this.user.last_name2);
+                    console.log('contraseña:', this.user.password);
+                    console.log('phone_number:', this.user.phone_number);
+                    console.log('date_of_birth:', date_of_birth);
+                    console.log('gender:', this.user.gender);
+                    console.log('country:', 'México');
+                    console.log('state:', this.user.state);
+                    console.log('municipality:', this.user.municipality);
+                    console.log('suburb:', this.user.suburb);
+                    console.log('street:', this.user.street);
+                    console.log('ext_num:', this.user.ext_num);
+                    console.log('int_num:', this.user.int_num);
+                    console.log('postal_code:', this.user.postal_code);
+                    console.log('texture:', textureValue);
+                    console.log('shine:', shineValue);
+                    console.log('dermatitis:', dermatitisValue);
+                    console.log('tightness:', this.user.tightness);
+                    console.log('rosasea:', this.user.rosasea);
+                    console.log('peeling:', this.user.peeling);
+                    console.log('hives:', this.user.hives);
+                    console.log('acne:', this.user.acne);
+                    console.log('enlarged_pores:', this.user.enlarged_pores);
+                    console.log('sun_spots:', this.user.sun_spots);
+                    console.log('cloth:', this.user.cloth);
+                    console.log('blackheads:', this.user.blackheads);
+                    console.log('roughness:', this.user.roughness);
+                    console.log('tone:', this.user.rangeValue);
+                    
 
-                    console.log('tono de piel:', this.user.rangeValue);
-
-                    const response = await axios.post(`${URL_DATOS}/skin-profile`, {
+                    const response = await axios.post(`${URL_DATOS}/auth/register`, {
+                        email: this.user.email,
+                        name: this.user.name,
+                        lasName1: this.user.last_name1,
+                        lasName2: this.user.last_name2,
+                        plainPassword: this.user.password,
+                        phone_number: this.user.phone_number,
+                        date_of_birth: date_of_birth,
+                        gender: this.user.gender,
+                        country: 'México',
+                        state: this.user.state,
+                        municipality: this.user.municipality,
+                        suburb: this.user.suburb,
+                        street: this.user.street,
+                        ext_num: this.user.ext_num,
+                        int_num: this.user.int_num,
+                        postal_code: this.user.postal_code,
                         texture: textureValue,
                         shine: shineValue,
                         dermatitis: dermatitisValue,
