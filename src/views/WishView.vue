@@ -91,6 +91,20 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
+.page {
+  background-color: rgb(255, 255, 255);
+  height: 98vh;
+  width: calc(99.3% - 65px);
+  display: flex;
+  flex-direction: column;
+  /* Alinear elementos en columna */
+  justify-content: flex-start;
+  /* Alinear elementos arriba */
+  margin-left: 75px;
+  margin-top: 1vh;
+  border-radius: 10px;
+}
+
 .wish {
     display: flex;
     justify-content: center;

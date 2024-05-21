@@ -318,21 +318,18 @@ export default {
                 alert('Las contraseñas no coinciden.');
                 return false;
             }
+            return true;
+            
+        },
+        validarFormulario2() {
             if (!this.user.texture || !this.user.shine) {
                 alert('Por favor, complete todos los campos obligatorios.');
                 return false;
             }
             return true;
-            
         },
-        // validarFormulario2() {
-        //     if (!this.user.texture || !this.user.shine) {
-        //         alert('Por favor, complete todos los campos obligatorios.');
-        //         return false;
-        //     }
-        //     return true;
-        // },
         async continuar() {
+            if (this.validarFormulario()) {
                 try {
                     this.cambiarVisibililidad();
                     // const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
@@ -366,6 +363,7 @@ export default {
                         console.log('Error:', error.response.data);
                     }
                 }
+            }
             
         },
         updateSensibilityFlags(newSensibility) {
@@ -551,7 +549,7 @@ export default {
 }
 
 .tonoPiel input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
+    /* -webkit-appearance: none; */
     appearance: none;
     height: 25px;
     /* Altura del botón */
@@ -630,7 +628,7 @@ export default {
 }
 
 .imgLogo {
-
+    
     display: flex;
     width: 60%;
     height: 12%;

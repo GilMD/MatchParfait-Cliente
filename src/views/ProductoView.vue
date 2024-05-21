@@ -48,7 +48,8 @@
               Colores Disponibles
             </h2>
             <div class="gamadecolores1">
-              <div @click.prevent="setColor(color)" v-for="color in colorArray" :key="color" class="color-box" :style="{ backgroundColor: color }"></div>
+              <div @click.prevent="setColor(color)" v-for="color in colorArray" :key="color" class="color-box"
+                :style="{ backgroundColor: color }"></div>
             </div>
 
           </div>
@@ -217,7 +218,6 @@ export default {
 <style scoped>
 .page {
   background-color: #FFFCF7;
-  ;
   height: 98vh;
   width: calc(99.3% - 65px);
   display: flex;

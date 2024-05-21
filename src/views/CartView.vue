@@ -6,33 +6,37 @@
                 <div class="titulo">
                     <h1>Bolsa de compras</h1>
                 </div>
-                <div v-for="product in products" :key="product.id" class="producto">
-                    <div class="imagen_producto">
-                        <img :src="product.photos" alt="Imagen del producto">
-                    </div>
-                    <div class="informacion_producto">
-                        <div class="nombre_marca">
-                            <td class="nombre">{{ product.productName }}</td>
-                            <td class="marca">{{ product.productBrand }}</td>
+                <div class="productos">
+                    <div v-for="product in products" :key="product.id" class="producto">
+                        <div class="imagen_producto">
+                            <img :src="product.photo" alt="Imagen del producto">
                         </div>
-                        <div class="precio_botones">
-                            <td class="precio">{{ product.price | currency }}</td>
-                            <div class="dec_inc">
-                                <button @click="decrement(product)">-</button>
-                                <td>{{ product.quantity }}</td>
-                                <button @click="increment(product)">+</button>
+                        <div class="informacion_producto">
+                            <div class="nombre_marca">
+                                <td class="nombre">{{ product.productName }}</td>
+                                <td class="marca">{{ product.productBrand }}</td>
                             </div>
-                            <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
+                            <div class="precio_botones">
+                                <td class="precio">{{ product.price | currency }}</td>
+                                <div class="dec_inc">
+                                    <button @click="decrement(product)">-</button>
+                                    <td>{{ product.quantity }}</td>
+                                    <button @click="increment(product)">+</button>
+                                </div>
+                                <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="informacion_envio">
                 <div class="formulario">
-                    <div id="div1" class="direccion">
-                        <h1>Dirección de envío</h1>
-                        <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span>
-                        <td @click="cambiarVisibililidad()">Editar</td>
+                    <div class="dic">
+                        <div id="div1" class="direccion">
+                            <h1>Dirección de envío</h1>
+                            <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span>
+                            <td @click="cambiarVisibililidad()">Editar</td>
+                        </div>
                     </div>
                     <div id="div2" class="direccionInputs">
                         <h1>Dirección de envío</h1>
@@ -56,14 +60,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="subtotal_pago">
-                    <span>Subtotal: $200.0</span>
-                    <hr class="linea-horizontal">
-                    <div>
-                        <input @click.prevent="continuar()" class="btnSubtotalPago" type="submit"
-                            value="Proceder al pago">
+                <div class="subtotal_pagoDelimitacion">
+                    <div class="subtotal_pago">
+                        <span>Subtotal: $200.0</span>
+                        <hr class="linea-horizontal">
+                        <div>
+                            <input @click.prevent="continuar()" class="btnSubtotalPago" type="submit"
+                                value="Proceder al pago">
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -78,7 +83,8 @@ import { URL_DATOS } from '@/Utils/constantes';
 export default {
     data() {
         return {
-            products: []
+            products: [],
+            direccion: [],
         }
     },
     name: 'CartView',
@@ -95,6 +101,7 @@ export default {
     },
     mounted() {
         this.productList();
+        this.obtenerDireccion();
     },
     methods: {
         async productList() {
@@ -112,6 +119,26 @@ export default {
                     .then(response => {
                         p = response.data.data;
                         this.products = p;
+                    })
+            } catch (error) {
+                console.error('Error al obtener la información de los productos:', error);
+            }
+        },
+        async obtenerDireccion() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            try {
+                let d = [];
+                const response = await axios.get(`${URL_DATOS}/user`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                })
+                    // headers: {
+                    //   Authorization: `Bearer ${localStorage.getItem('token')}`
+                    // }
+                    .then(response => {
+                        p = response.data.data;
+                        this.direccion = d;
                     })
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
@@ -151,6 +178,20 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
+.page {
+  background-color: rgb(255, 255, 255);
+  height: 98vh;
+  width: calc(99.3% - 65px);
+  display: flex;
+  flex-direction: column;
+  /* Alinear elementos en columna */
+  justify-content: flex-start;
+  /* Alinear elementos arriba */
+  margin-left: 75px;
+  margin-top: 1vh;
+  border-radius: 10px;
+}
+
 #div1 {
     display: block;
     width: 100%;
@@ -186,21 +227,52 @@ export default {
     width: 50%;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
+    
 
+}
+
+.productos {
+    /* background-color: #f0f0f0; */
+    height: 90%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    /* Espacio entre los elementos */
+    margin-top: 3%;
+    border-radius: 10px;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.productos::-webkit-scrollbar {
+  width: 12px;
+}
+
+.productos::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+.productos::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border-radius: 6px;
 }
 
 .producto {
     gap: 2vh;
     /* background-color: #6441b6; */
-    height: 24%;
-    width: 80%;
+    height: 35vh;
+    width: 95%;
     display: flex;
     flex-direction: row;
     /* Cambiado para que los elementos estén en fila */
     margin-top: 3%;
     border-radius: 10px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+    
 
 }
 
@@ -227,14 +299,17 @@ export default {
 }
 
 .imagen_producto {
-    width: 30%;
-    height: 100%;
+    width: auto;
+    height: auto;
     display: flex;
-    object-fit: cover;
+    
 }
 
 .imagen_producto img {
+    width: 20vh;
+    height: 20vh;
     border-radius: 10px 0 0 10px;
+    object-fit: cover;
 }
 
 .informacion_producto {
@@ -257,7 +332,7 @@ export default {
 .nombre_marca .nombre {
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 22px;
+    font-size: 17px;
     color: #391414;
     text-align: left;
 }
@@ -318,14 +393,20 @@ export default {
     margin-bottom: 1%;
 }
 
+.dic{
+    /* background-color: #E7E4DE; */
+    width: 90%;
+    height: 28%;
+    display: flex;
+}
+
 .direccion {
     /* background-color: #1d1c5d; */
-    width: 80%;
-    height: 21%;
+    width: 90%;
+    height: 80%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    margin-top: 17%;
+    justify-content: space-between;
     border-radius: 12px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
 }
@@ -335,8 +416,10 @@ export default {
     font-weight: 400;
     font-size: 1.5rem;
     color: #440707;
-    text-align: center;
     text-align: left;
+    margin: 0;
+    padding-bottom: 1vh;
+    padding-left: 2%;
 }
 
 .direccion span {
@@ -345,23 +428,40 @@ export default {
     font-size: 1rem;
     color: #440707;
     text-align: left;
+    margin: 0;
+    padding-bottom: 1vh;
+    padding-left: 2%;
 }
 
 .direccion td {
-    
+
     /* background-color: aqua; */
     font-family: 'dm sans', sans-serif;
     font-weight: 400;
     font-size: 1rem;
     color: #9B0E28;
     cursor: pointer;
-    margin-left: 50px;
+    margin: 0;
+    padding-top: 1vh;
+    padding-left: 30%;
 }
 
 .direccion td:hover {
     color: #440707;
     transform: scale(1.1);
     transition: 0.3s;
+}
+
+.direccionInputs {
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    margin-top: -22%;
+    /* Añadido espacio entre los elementos */
+    
 }
 
 .direccionInputs h1 {
@@ -437,6 +537,7 @@ export default {
     transition-duration: 1s;
     transform: scale(1.1);
     box-shadow: 0px 0px 20px 0px rgba(230, 84, 84, 0.85);
+    cursor: pointer;
 }
 
 .btnGuardar {
@@ -457,9 +558,9 @@ export default {
     display: flex;
     flex-direction: column;
     font-family: "DM Sans", sans-serif;
-    margin-top: 20%;
+    margin-top: 15%;
     margin-left: 5%;
-    
+
 }
 
 .formulario input {
@@ -472,14 +573,25 @@ export default {
     font-family: "DM Sans", sans-serif;
 }
 
+.subtotal_pagoDelimitacion {
+    display: flex;
+    /* background-color: #9B0E28; */
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+    width: 85%;
+    margin-top: 5%;
+}
+
 .subtotal_pago {
     position: relative;
     background-color: #FFFCF7;
-    height: 15%;
+    height: 80%;
     width: 85%;
     display: flex;
     flex-direction: column;
-    margin-top: 5%;
+
+
     border-radius: 12px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     margin-left: 0%;
