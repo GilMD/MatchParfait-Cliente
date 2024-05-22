@@ -367,18 +367,18 @@ export default {
             
         },
         updateSensibilityFlags(newSensibility) {
-            this.user.tightness = newSensibility.includes('Tirantez') ? 1 : 0;
-            this.user.rosasea = newSensibility.includes('Rosacea') ? 1 : 0;
-            this.user.peeling = newSensibility.includes('Descamación') ? 1 : 0;
-            this.user.hives = newSensibility.includes('Urticaria') ? 1 : 0;
+            this.user.tightness = newSensibility.includes('Tirantez') ? '1' : '0';
+            this.user.rosasea = newSensibility.includes('Rosacea') ? '1' : '0';
+            this.user.peeling = newSensibility.includes('Descamación') ? '1' : '0';
+            this.user.hives = newSensibility.includes('Urticaria') ? '1' : '0';
         },
         updateImperfectionFlags(newImperfection) {
-            this.user.acne = newImperfection.includes('Acné') ? 1 : 0;
-            this.user.enlarged_pores = newImperfection.includes('Poros dilatados') ? 1 : 0;
-            this.user.sun_spots = newImperfection.includes('Manchas de sol') ? 1 : 0;
-            this.user.cloth = newImperfection.includes('Paño') ? 1 : 0;
-            this.user.blackheads = newImperfection.includes('Puntos negros') ? 1 : 0;
-            this.user.roughness = newImperfection.includes('Sensación aspera') ? 1 : 0;
+            this.user.acne = newImperfection.includes('Acné') ? '1' : '0';
+            this.user.enlarged_pores = newImperfection.includes('Poros dilatados') ? '1' : '0';
+            this.user.sun_spots = newImperfection.includes('Manchas de sol') ? '1' : '0';
+            this.user.cloth = newImperfection.includes('Paño') ? '1' : '0';
+            this.user.blackheads = newImperfection.includes('Puntos negros') ? '1' : '0';
+            this.user.roughness = newImperfection.includes('Sensación aspera') ? '1' : '0';
         },
         validarFormulario2() {
             if (!this.user.texture || !this.user.shine) {
@@ -392,15 +392,15 @@ export default {
             if (this.validarFormulario2()) {
                 try {
                     const textureMapping = {
-                        'Normal': 1,
-                        'Sensible': 2,
-                        'Seca': 3,
-                        'Grasa': 4,
-                        'Mixta': 5
+                        'Normal': '1',
+                        'Sensible': '2',
+                        'Seca': '3',
+                        'Grasa': '4',
+                        'Mixta': '5'
                     };
-                    const textureValue = textureMapping[this.user.texture] || 1;
-                    const shineValue = this.Brightness.includes(this.user.shine) ? 1 : 0;
-                    const dermatitisValue = this.Dermatitis.includes(this.user.dermatitis) ? 1 : 0;
+                    const textureValue = textureMapping[this.user.texture] || '1';
+                    const shineValue = this.Brightness.includes(this.user.shine) ? '1' : '0';
+                    const dermatitisValue = this.Dermatitis.includes(this.user.dermatitis) ? '1' : '0';
                     const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
                     // Format the date as ISO string
                     const date_of_birth = birthDate.toISOString();
@@ -439,13 +439,12 @@ export default {
                     const response = await axios.post(`${URL_DATOS}/auth/register`, {
                         email: this.user.email,
                         name: this.user.name,
-                        lasName1: this.user.last_name1,
-                        lasName2: this.user.last_name2,
+                        lastName1: this.user.last_name1,
+                        lastName2: this.user.last_name2,
                         plainPassword: this.user.password,
                         phone_number: this.user.phone_number,
                         date_of_birth: date_of_birth,
                         gender: this.user.gender,
-                        country: 'México',
                         state: this.user.state,
                         municipality: this.user.municipality,
                         suburb: this.user.suburb,
@@ -456,8 +455,8 @@ export default {
                         texture: textureValue,
                         shine: shineValue,
                         dermatitis: dermatitisValue,
-                        thighness: this.user.tightness,
-                        rosasea: this.user.rosasea,
+                        tightness: this.user.tightness,
+                        rosacea: this.user.rosasea,
                         peeling: this.user.peeling,
                         hives: this.user.hives,
                         acne: this.user.acne,
