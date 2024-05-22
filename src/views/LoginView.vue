@@ -52,7 +52,7 @@ export default {
                 });
                 console.log('Response:', response.data);
                 localStorage.setItem('vue2.token', JSON.stringify(response.data.tokenSession));
-
+                localStorage.setItem('vue2.userData', JSON.stringify(response.data.data));
                 this.$router.push('/home');
             } catch (error) {
                 console.error('Error:', error);
@@ -167,6 +167,7 @@ export default {
     color: #ffff;
     height: 45px;
     transition-duration: 1s;
+    cursor: pointer;
 }
 
 .login-container_tabform_button:hover {

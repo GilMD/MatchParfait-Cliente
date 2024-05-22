@@ -4,7 +4,7 @@
         <div class="contenedor">
             <div class="lista_productos">
                 <div class="titulo">
-                    <h1>wishlist</h1>
+                    <h1>Wishlist</h1>
                 </div>
                 <div v-for="product in products" :key="product.id" class="producto">
                     <div class="imagen_producto">
@@ -12,8 +12,8 @@
                     </div>
                     <div class="informacion_producto">
                         <div class="nombre_marca">
-                            <td class="nombre">{{ product.name }}</td>
-                            <td class="marca">{{ product.brand }}</td>
+                            <td class="nombre">{{ product.productName }}</td>
+                            <td class="marca">{{ product.productBrand }}</td>
                         </div>
                         <div class="precio_botones">
                             <td class="precio">{{ product.price | currency }}</td>
