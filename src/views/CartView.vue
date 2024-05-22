@@ -7,7 +7,7 @@
                     <h1>Bolsa de compras</h1>
                 </div>
                 <div class="productos">
-                    <div v-for="product in products" :key="product.id" class="producto">
+                    <div v-for="(product, index) in products" :key="product.cartId" class="producto">
                         <div class="imagen_producto">
                             <img :src="product.photo" alt="Imagen del producto">
                         </div>
@@ -19,11 +19,11 @@
                             <div class="precio_botones">
                                 <td class="precio">{{ product.price | currency }}</td>
                                 <div class="dec_inc">
-                                    <button @click="decrement(product)">-</button>
-                                    <td>{{ product.quantity }}</td>
-                                    <button @click="increment(product)">+</button>
+                                    <button @click="cambiarCantidad('-', index)">-</button>
+                                    <td>{{ parseInt(product.cantidad) }}</td>
+                                    <button @click="cambiarCantidad('+', index)">+</button>
                                 </div>
-                                <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
+                                <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd(product.cartId)">
                             </div>
                         </div>
                     </div>
@@ -101,14 +101,14 @@ export default {
     },
     mounted() {
         this.productList();
-        this.obtenerDireccion();
+        // this.obtenerDireccion();
     },
     methods: {
         async productList() {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
             try {
                 let p = [];
-                const response = await axios.get(`${URL_DATOS}/products`, {
+                const response = await axios.get(`${URL_DATOS}/shoppingCart`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     }
@@ -118,6 +118,7 @@ export default {
                     // }
                     .then(response => {
                         p = response.data.data;
+                        console.log(p);
                         this.products = p;
                     })
             } catch (error) {
@@ -144,17 +145,52 @@ export default {
                 console.error('Error al obtener la información de los productos:', error);
             }
         },
-        increment(product) {
-            product.quantity += 1;
+        cambiarCantidad(op, index) {
+            let aux = this.products[index].price / this.products[index].cantidad;
+            if (op === '+') {
+                this.products[index].cantidad += 1;
+            } else if (this.products[index].cantidad !== 1) {
+                this.products[index].cantidad -= 1;
+            }
+            this.products[index].price = aux * this.products[index].cantidad;
+            this.actualizarCantidad(index);
         },
-        decrement(product) {
-            if (product.quantity > 1) {
-                product.quantity -= 1;
+        async actualizarCantidad(index) {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            try {
+                const response = await axios.put(
+                    `${URL_DATOS}/shoppingCart`,
+                    {
+                        cartId: this.products[index].cartId,
+                        cantidad: this.products[index].cantidad
+                    },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                );
+                console.log(response.data.data[0]);
+            } catch (error) {
+                console.log(error);
             }
         },
-        borrarProd() {
-            this.productos = this.products.filter(p => p.id !== product.id);
-            console.log('Producto eliminado', product);
+        async borrarProd(idCart) {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            this.products = this.products.filter(p => p.cartId !== idCart);
+            console.log('Producto eliminado');
+
+            try {
+                const response = await axios.delete(`${URL_DATOS}/shoppingCart`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    },
+                    data: { cartId: idCart }
+                });
+                console.log(response.data.data[0]);
+            } catch (error) {
+                console.log(error);
+            }
         },
         cambiarVisibililidad() {
             var div1 = document.getElementById('div1');
@@ -319,7 +355,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding:1rem;
+    padding: 1rem;
     /* Añadido padding horizontal */
 }
 
@@ -645,5 +681,11 @@ export default {
     transition-duration: 1s;
     transform: scale(1.1);
     box-shadow: 0px 0px 20px 0px rgba(230, 84, 84, 0.85);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

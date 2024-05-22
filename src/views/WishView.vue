@@ -6,18 +6,48 @@
                 <div class="titulo">
                     <h1>Wishlist</h1>
                 </div>
+                <!-- <div class="producto">
+                    <div class="imagen_producto">
+                        <img src="@/assets/img/FDM_1.jpeg" alt="Imagen del producto">
+                    </div>
+                    <div class="informacion_producto">
+                        <div class="nombre_marca">
+                            <td class="nombre"> si jaja 
+                                <div class="sparkles">
+                                    <img src="@/assets/img/sparkles_red.svg" alt=""> 
+                                </div>
+                            </td>
+                            <td class="marca"> si x2 </td>
+                        </div>
+                        <div class="precio_botones">
+                            <td class="precio">$425.50 <div class="color-box" :style="{ backgroundColor: color }"></div>
+                            </td>
+                            <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
+                        </div>
+                        <div>
+                            <button @click.prevent="agregarCarrito" class="carrito-btn">
+                                <img src="@/assets/img/cesta_ico.png" alt="">
+                                Comprar
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
                 <div v-for="product in products" :key="product.id" class="producto">
                     <div class="imagen_producto">
                         <img :src="product.photo" alt="Imagen del producto">
                     </div>
                     <div class="informacion_producto">
                         <div class="nombre_marca">
-                            <td class="nombre">{{ product.productName }}</td>
+                            <td class="nombre"> {{ product.productName }} 
+                                <div class="sparkles">
+                                    <img src="@/assets/img/sparkles_red.svg" alt=""> 
+                                </div>
+                            </td>
                             <td class="marca">{{ product.productBrand }}</td>
                         </div>
                         <div class="precio_botones">
                             <td class="precio">{{ product.price | currency }}</td>
-                            <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
+                            <div class="color-box" :style="{ backgroundColor: '#'+product.color }"></div>
                         </div>
                         <div>
                             <button @click.prevent="agregarCarrito" class="carrito-btn">
@@ -200,6 +230,9 @@ export default {
 }
 
 .nombre_marca .nombre {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
     font-size: 22px;
@@ -214,7 +247,18 @@ export default {
     color: #391414;
     text-align: left;
 }
-
+.sparkles {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 5vh;
+    height: 100%;
+}
+.sparkles img {
+    padding-top: 10px;
+    max-width: 100%;
+    text-align: right;
+}
 .precio_botones {
     display: flex;
     align-items: center;
@@ -223,6 +267,7 @@ export default {
 }
 
 .precio_botones .precio {
+    display: flex;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
     font-size: 20px;
@@ -289,5 +334,13 @@ export default {
 
 .carrito-btn img {
     max-width: 30%
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  /* padding-left: 10%; */
+  border-radius: 50%;
+  cursor: pointer;
 }
 </style>

@@ -192,7 +192,7 @@ export default {
     },
     async agregarCarrito() {
       const token = JSON.parse(localStorage.getItem('vue2.token'))
-      const response = await axios.post(`${URL_DATOS}/shippingCart/`, {
+      const response = await axios.post(`${URL_DATOS}/shoppingCart`, {
         productId: this.id,
         color: this.colorSelected,
         cantidad: parseInt(this.cantidad)
