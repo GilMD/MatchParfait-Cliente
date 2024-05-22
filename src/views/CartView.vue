@@ -13,8 +13,8 @@
                         </div>
                         <div class="informacion_producto">
                             <div class="nombre_marca">
-                                <td class="nombre">{{ product.productName }}</td>
-                                <td class="marca">{{ product.productBrand }}</td>
+                                <span class="nombre">{{ product.productName }}</span>
+                                <span class="marca">{{ product.productBrand }}</span>
                             </div>
                             <div class="precio_botones">
                                 <td class="precio">{{ product.price | currency }}</td>
@@ -262,13 +262,13 @@ export default {
     height: 100%;
     width: 50%;
     flex-direction: column;
-    align-items: center;
-
-
+    /* align-items: center; */
 }
 
+
+
 .productos {
-    background-color: #3db599;
+    /* background-color: #3db599; */
     height: 90%;
     width: 95%;
     display: flex;
@@ -282,6 +282,7 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1rem;
+    margin-left: 2.6%;
 }
 
 .productos::-webkit-scrollbar {
@@ -301,22 +302,23 @@ export default {
 
 
 .titulo {
+    display: flex;
+    text-align: left;
     /* background-color: #f0f0f0; */
-    width: 80%;
-    height: 6%;
+    /* width: 80%;
+    height: 6%; */
     /* Ocultar cualquier contenido que se salga */
     margin-top: 2%;
-    word-wrap: break-word;
+    margin-left: 6%;
+
+
 }
 
 .titulo h1 {
-    width: 100%;
     font-family: 'Playfair Display', serif;
     font-weight: 400;
     font-size: 2rem;
     color: #9B0E28;
-    text-align: center;
-    text-align: left;
     /* Centrar el texto */
     box-sizing: border-box;
     /* Incluye padding y borde en el ancho y alto */
@@ -324,7 +326,7 @@ export default {
 
 .producto {
     /* background-color: #6441b6; */
-    height: 35vh;
+    height: 20vh;
     width: 95%;
     display: flex;
     flex-direction: row;
@@ -335,7 +337,7 @@ export default {
 }
 
 .imagen_producto {
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
     width: 31vh;
     height: 100%;
     display: flex;
@@ -349,7 +351,7 @@ export default {
 }
 
 .informacion_producto {
-    background-color: blueviolet;
+    /* background-color: blueviolet; */
     width: 100%;
     height: 100%;
     display: flex;
@@ -361,20 +363,22 @@ export default {
 
 .nombre_marca {
     display: flex;
+    justify-content: center;
     flex-direction: column;
     gap: 1vh;
+    overflow: hidden;
     /* Añadido espacio entre los elementos */
 }
 
-.nombre_marca .nombre {
+.nombre {
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #391414;
     text-align: left;
 }
 
-.nombre_marca .marca {
+.marca {
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
     font-size: 1rem;
@@ -446,9 +450,10 @@ export default {
     justify-content: space-between;
     border-radius: 12px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+    overflow: hidden;
 }
 
-.direccion h1 {
+.divnombre h1 {
     font-family: 'dm sans', sans-serif;
     font-weight: 400;
     font-size: 1.5rem;
@@ -459,7 +464,7 @@ export default {
     padding-left: 2%;
 }
 
-.direccion span {
+.adreess span {
     font-family: 'dm sans', sans-serif;
     font-weight: 400;
     font-size: 1rem;
@@ -470,7 +475,7 @@ export default {
     padding-left: 2%;
 }
 
-.direccion td {
+.btnEditar td {
 
     /* background-color: aqua; */
     font-family: 'dm sans', sans-serif;
@@ -618,20 +623,20 @@ export default {
     height: 20%;
     width: 85%;
     margin-top: 5%;
+    overflow: hidden;
 }
 
 .subtotal_pago {
-    position: relative;
+
     background-color: #FFFCF7;
     height: 80%;
     width: 85%;
     display: flex;
     flex-direction: column;
-
-
     border-radius: 12px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     margin-left: 0%;
+    overflow: hidden;
 }
 
 .subtotal_pago span {
@@ -685,7 +690,7 @@ export default {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 </style>

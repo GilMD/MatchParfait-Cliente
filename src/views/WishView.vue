@@ -124,15 +124,15 @@ export default {
 .page {
   background-color: rgb(255, 255, 255);
   height: 98vh;
-  width: calc(99.3% - 65px);
+  width: calc(99.3% - 7vh);
   display: flex;
   flex-direction: column;
   /* Alinear elementos en columna */
   justify-content: flex-start;
   /* Alinear elementos arriba */
-  margin-left: 75px;
+  margin-left: 8vh;
   margin-top: 1vh;
-  border-radius: 10px;
+  border-radius: 2vh;
 }
 
 .wish {

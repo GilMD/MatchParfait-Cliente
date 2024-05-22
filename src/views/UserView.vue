@@ -121,13 +121,13 @@ html {
   background-image: url("@/assets/img/login-background.png");
     background-size: 100% 100%;
   height: 100vh;
-  width: calc(99.3% - 65px);
+  width: calc(99.3% - 7vh);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-left: 8vh;
-  border-radius: 10px;
+  border-radius: 2vh;
 }
 
 
