@@ -2,12 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
-import  CartView  from '../views/CartView';
-import  WishView  from '../views/WishView';
+import CartView from '../views/CartView';
+import WishView from '../views/WishView';
 import UserView from "../views/UserView";
 import ProductoView from "../views/ProductoView";
 import LoginView from "../views/LoginView";
 import SignUpView from "../views/SignUpView";
+import MaquillajeView from "../views/MaquillajeView";
 
 
 
@@ -33,7 +34,7 @@ const routes = [
     path: '/home',
     name: 'home',
     component: HomeView
-    
+
   },
   {
     path: '/cart',
@@ -50,6 +51,11 @@ const routes = [
     name: 'producto',
     component: ProductoView,
     props: true
+  },
+  {
+    path: '/maquillaje',
+    name: 'maquillaje',
+    component: MaquillajeView
   },
   {
     path: '/about',

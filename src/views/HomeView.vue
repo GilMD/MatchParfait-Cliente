@@ -1,5 +1,4 @@
 <template>
-
   <div id="app" class="home page">
     <sidebar />
     <div class="pagina">
@@ -19,7 +18,7 @@
 
       <div class="clasificaciones">
         <div class="imagenes">
-          <img src="../assets/img/maquillaje.png" alt="" class="imgclasif" onclick="imagenClicada('maquillaje')">
+          <img src="../assets/img/maquillaje.png" alt="" class="imgclasif" @click.prevent="MaquillajeView()">
           <img src="../assets/img/uñas.png" alt="" class="imgclasif" onclick="imagenClicada('uñas')">
           <img src="../assets/img/cabello.png" alt="" class="imgclasif" onclick="imagenClicada('cabello')">
           <img src="../assets/img/wish_list.png" alt="" class="imgclasif" onclick="imagenClicada('wish_list')">
@@ -234,7 +233,8 @@ export default {
     //   }
     // },
 
-    imagenClicada(maquillaje) {
+    MaquillajeView(){
+      this.$router.push(`/maquillaje`);
     },
     imagenClicada(uñas) {
     },
@@ -266,7 +266,7 @@ export default {
   /* Alinear elementos arriba */
   margin-left: 8vh;
   margin-top: 1vh;
-  border-radius: 2vh;
+  border-radius: 2vh 1vh 1vh 2vh;
 }
 
 .pagina {

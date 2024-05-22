@@ -42,12 +42,16 @@ export default {
 
 html,
 body {
-  height: 100%;
+  height: 99vh;
   width: 100%;
   margin: 0;
   padding: 0;
   background-color: #f00d38;
-  overflow: hidden;
+  overflow-y: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: .5vh;
 }
 
 #app {
@@ -57,7 +61,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  overflow: hidden;
+  
 }
 
 .Sidebar {
