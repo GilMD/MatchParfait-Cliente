@@ -179,17 +179,17 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 .page {
-  background-color: rgb(255, 255, 255);
-  height: 98vh;
-  width: calc(99.3% - 65px);
-  display: flex;
-  flex-direction: column;
-  /* Alinear elementos en columna */
-  justify-content: flex-start;
-  /* Alinear elementos arriba */
-  margin-left: 75px;
-  margin-top: 1vh;
-  border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    height: 98vh;
+    width: calc(99.3% - 7vh);
+    display: flex;
+    flex-direction: column;
+    /* Alinear elementos en columna */
+    justify-content: flex-start;
+    /* Alinear elementos arriba */
+    margin-left: 8vh;
+    margin-top: 1vh;
+    border-radius: 2vh;
 }
 
 #div1 {
@@ -227,12 +227,12 @@ export default {
     width: 50%;
     flex-direction: column;
     align-items: center;
-    
+
 
 }
 
 .productos {
-    /* background-color: #f0f0f0; */
+    background-color: #3db599;
     height: 90%;
     width: 95%;
     display: flex;
@@ -241,40 +241,28 @@ export default {
     gap: 2vh;
     /* Espacio entre los elementos */
     margin-top: 3%;
-    border-radius: 10px;
+    border-radius: 2vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 1rem;
 }
 
 .productos::-webkit-scrollbar {
-  width: 12px;
+    width: 1.4vh;
 }
 
 .productos::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 6px;
+    background-color: #888;
+    border-radius: 1vh;
 }
 
 .productos::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-  border-radius: 6px;
+    background-color: #f0f0f0;
+    border-radius: 1vh;
 }
 
-.producto {
-    gap: 2vh;
-    /* background-color: #6441b6; */
-    height: 35vh;
-    width: 95%;
-    display: flex;
-    flex-direction: row;
-    /* Cambiado para que los elementos estén en fila */
-    margin-top: 3%;
-    border-radius: 10px;
-    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
-    
 
-}
 
 .titulo {
     /* background-color: #f0f0f0; */
@@ -298,27 +286,40 @@ export default {
     /* Incluye padding y borde en el ancho y alto */
 }
 
-.imagen_producto {
-    width: auto;
-    height: auto;
+.producto {
+    /* background-color: #6441b6; */
+    height: 35vh;
+    width: 95%;
     display: flex;
-    
+    flex-direction: row;
+    /* Cambiado para que los elementos estén en fila */
+    margin-top: 3%;
+    border-radius: 2vh;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+}
+
+.imagen_producto {
+    background-color: antiquewhite;
+    width: 31vh;
+    height: 100%;
+    display: flex;
 }
 
 .imagen_producto img {
-    width: 20vh;
-    height: 20vh;
+    width: 100%;
+    height: 100%;
     border-radius: 10px 0 0 10px;
     object-fit: cover;
 }
 
 .informacion_producto {
+    background-color: blueviolet;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding: 0 1rem;
+    padding:1rem;
     /* Añadido padding horizontal */
 }
 
@@ -332,7 +333,7 @@ export default {
 .nombre_marca .nombre {
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 17px;
+    font-size: 1.3rem;
     color: #391414;
     text-align: left;
 }
@@ -340,7 +341,7 @@ export default {
 .nombre_marca .marca {
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 15px;
+    font-size: 1rem;
     color: #391414;
     text-align: left;
 }
@@ -355,14 +356,14 @@ export default {
 .precio_botones .precio {
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 1.3rem;
     color: #391414;
     text-align: left;
 }
 
 .dec_inc {
     width: 20%;
-    height: 110%;
+    height: 100%;
     align-items: center;
     justify-content: space-evenly;
     display: flex;
@@ -374,7 +375,7 @@ export default {
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1rem;
     margin-bottom: 2%;
 }
 
@@ -393,7 +394,7 @@ export default {
     margin-bottom: 1%;
 }
 
-.dic{
+.dic {
     /* background-color: #E7E4DE; */
     width: 90%;
     height: 28%;
@@ -461,7 +462,7 @@ export default {
     gap: 2vh;
     margin-top: -22%;
     /* Añadido espacio entre los elementos */
-    
+
 }
 
 .direccionInputs h1 {
