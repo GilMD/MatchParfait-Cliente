@@ -13,11 +13,16 @@
                         </div>
                         <div class="informacion_producto">
                             <div class="nombre_marca">
-                                <span class="nombre">{{ product.productName }}</span>
+                                <td class="nombre">{{ product.productName }}
+                                    <div class="sparkles">
+                                        <img src="@/assets/img/sparkles_red.svg" alt="">
+                                    </div>
+                                </td>
                                 <span class="marca">{{ product.productBrand }}</span>
                             </div>
                             <div class="precio_botones">
                                 <td class="precio">{{ product.price | currency }}</td>
+                                <div class="color-box" :style="{ backgroundColor: '#' + product.color }"></div>
                                 <div class="dec_inc">
                                     <button @click="cambiarCantidad('-', index)">-</button>
                                     <td>{{ parseInt(product.cantidad) }}</td>
@@ -34,28 +39,30 @@
                     <div class="dic">
                         <div id="div1" class="direccion">
                             <h1>Dirección de envío</h1>
-                            <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span>
+                            <span>{{ this.address }}</span>
+                            <!-- <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span> -->
                             <td @click="cambiarVisibililidad()">Editar</td>
                         </div>
                     </div>
                     <div id="div2" class="direccionInputs">
                         <h1>Dirección de envío</h1>
                         <div class="estadoMunicipioInputs">
-                            <input type="text" placeholder="Estado">
-                            <input type="text" placeholder="Municipio">
+                            <input v-model="userData.state" type="text" placeholder="Estado">
+                            <input v-model="userData.municipality" type="text" placeholder="Municipio">
                         </div>
                         <div class="coloniaCalleInputs">
-                            <input type="text" placeholder="Colonia">
-                            <input type="text" placeholder="Calle">
+                            <input v-model="userData.suburb" type="text" placeholder="Colonia">
+                            <input v-model="userData.street" type="text" placeholder="Calle">
                         </div>
                         <div class="numsExtIntInputs">
-                            <input type="number" placeholder="Número externo">
-                            <input type="number" placeholder="Número interno">
+                            <input v-model="userData.ext_num" type="number" placeholder="Número externo">
+                            <input v-model="userData.int_num" type="number" placeholder="Número interno">
                         </div>
                         <div class="cpInput">
-                            <input type="number" class="cpNumber" placeholder="Código postal">
-                            <input @click.prevent="continuar()" class="signup-container_tabform_button" type="submit"
-                                value="Guardar">
+                            <input v-model="userData.postal_code" type="number" class="cpNumber"
+                                placeholder="Código postal">
+                            <input @click.prevent="guardarDireccion()" class="signup-container_tabform_button"
+                                type="submit" value="Guardar">
                             <!-- <input type="button" value="Guardar" class="btnGuardar"> -->
                         </div>
                     </div>
@@ -85,6 +92,8 @@ export default {
         return {
             products: [],
             direccion: [],
+            userData: [],
+            address: ''
         }
     },
     name: 'CartView',
@@ -101,6 +110,8 @@ export default {
     },
     mounted() {
         this.productList();
+        this.cargarDatosUsuario();
+        this.formatoDireccion();
         // this.obtenerDireccion();
     },
     methods: {
@@ -125,25 +136,33 @@ export default {
                 console.error('Error al obtener la información de los productos:', error);
             }
         },
-        async obtenerDireccion() {
+        async guardarDireccion() {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
             try {
-                let d = [];
-                const response = await axios.get(`${URL_DATOS}/user`, {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
+                const response = await axios.put(
+                    `${URL_DATOS}/shoppingCart/address`,
+                    {
+                        state: this.userData.state,
+                        municipality: this.userData.municipality,
+                        suburb: this.userData.suburb,
+                        street: this.userData.street,
+                        ext_num: this.userData.ext_num,
+                        int_num: this.userData.int_num,
+                        postal_code: this.userData.postal_code
+                    },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
                     }
-                })
-                    // headers: {
-                    //   Authorization: `Bearer ${localStorage.getItem('token')}`
-                    // }
-                    .then(response => {
-                        p = response.data.data;
-                        this.direccion = d;
-                    })
+                )
+                localStorage.setItem('vue2.userData', JSON.stringify(this.userData));
+
+                this.cambiarVisibililidad();
             } catch (error) {
-                console.error('Error al obtener la información de los productos:', error);
+                console.error('Error al guardar la dirección:', error);
             }
+            this.formatoDireccion();
         },
         cambiarCantidad(op, index) {
             let aux = this.products[index].price / this.products[index].cantidad;
@@ -202,11 +221,21 @@ export default {
                 div1.style.display = 'none';
                 div2.style.display = 'block';
             }
-            document.getElementById('toggleForm').addEventListener('submit', function (event) {
-                event.preventDefault();  // Evita el envío del formulario
-                // continuar(); 
-            });
         },
+        cargarDatosUsuario() {
+            this.userData = JSON.parse(localStorage.getItem('vue2.userData'));
+            // if(this.userData.int_num === null){
+            //     this.userData.int_num = '';
+            // }
+            console.log('Datos usuario', this.userData);
+        },
+        formatoDireccion() {
+            this.address = this.userData.postal_code + ', ' + this.userData.street + ' #' + this.userData.ext_num;
+            if (this.userData.int_num !== '') {
+                this.address += ', #' + this.userData.int_num;
+            }
+            this.address += ", " + this.userData.suburb + ', ' + this.userData.municipality + ', ' + this.userData.state + ', ' + this.userData.country;
+        }
     },
 }
 </script>
@@ -371,6 +400,9 @@ export default {
 }
 
 .nombre {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
     font-size: 1.2rem;
@@ -661,7 +693,13 @@ export default {
 
 }
 
-
+.color-box {
+    width: 20px;
+    height: 20px;
+    /* padding-left: 10%; */
+    border-radius: 50%;
+    cursor: pointer;
+}
 
 .btnSubtotalPago {
     width: 41%;
@@ -686,6 +724,19 @@ export default {
     transition-duration: 1s;
     transform: scale(1.1);
     box-shadow: 0px 0px 20px 0px rgba(230, 84, 84, 0.85);
+}
+
+.sparkles {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 5vh;
+    height: 100%;
+}
+.sparkles img {
+    padding-top: 10px;
+    max-width: 100%;
+    text-align: right;
 }
 
 input::-webkit-outer-spin-button,
