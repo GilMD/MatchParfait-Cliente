@@ -30,7 +30,7 @@
       <div class="carrusel">
         <h2 class="fdm">Favoritos del mes</h2>
         <div class="container">
-          <div class="child" v-for="(producto, index) in products" :key="producto.productId"
+          <div class="child" v-for="(producto, index) in productosfm" :key="producto.productId"
             @click.prevent="detalleProducto(producto.productId)">
             <div class="img_container">
               <img :src="producto.photo" class="img" />
@@ -64,11 +64,6 @@
           </div>
         </div>
       </div>
-
-      <div>
-        <button @click="Producto">Ir a Otra Página</button>
-      </div>
-
     </div>
   </div>
 </template>
@@ -82,7 +77,6 @@ import sidebar from '@/components/sidebar.vue'
 export default {
   data() {
     return {
-      products: [],
       images: [],
       productosfm: [],
       productosvr: [],
@@ -93,7 +87,6 @@ export default {
   },
 
   mounted() {
-    this.obtenerProductos();
     this.startScrolling();
 
     // Carga imágenes
@@ -115,6 +108,7 @@ export default {
   },
   created() {
     this.obtenerProductsFM();
+    this.obtenerProductsVR();
   },
   beforeDestroy() {
     this.stopScrolling();
@@ -129,13 +123,51 @@ export default {
       // this.$router.push(`/producto/${productId}`);
       this.$router.push({ name: 'producto', params: { id: productId } });
     },
-
     async obtenerProductsFM() {
       const token = JSON.parse(localStorage.getItem('vue2.token'))
-
       try {
         let p = [];
         const response = await axios.get(`${URL_DATOS}/products`, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        })
+          // headers: {
+          //   Authorization: `Bearer ${localStorage.getItem('token')}`
+          // }
+          .then(response => {
+            p = response.data.data;
+            this.productosfm = p;
+          })
+      } catch (error) {
+        console.error('Error al obtener la información de los productos:', error);
+      }
+    },
+    async obtenerProductsVR() {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      try {
+        let p = [];
+        const response = await axios.get(`${URL_DATOS}/products`, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        })
+          // headers: {
+          //   Authorization: `Bearer ${localStorage.getItem('token')}`
+          // }
+          .then(response => {
+            p = response.data.data;
+            this.productosvr = p;
+          })
+      } catch (error) {
+        console.error('Error al obtener la información de los productos:', error);
+      }
+    },
+    async obtenerProductsVR() {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      try {
+        let p = [];
+        const response = await axios.get(`${URL_DATOS}/products/recent`, {
           headers: {
             Authorization: 'Bearer ' + token,
           }
@@ -150,9 +182,7 @@ export default {
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);
       }
-      2
     },
-
     startScrolling() {
       this.interval = setInterval(() => {
         const carrusel = this.$refs.carruselItems;
@@ -162,7 +192,6 @@ export default {
         }
       }, 10);
     },
-
     stopScrolling() {
       if (this.interval) {
         clearInterval(this.interval);
@@ -171,44 +200,39 @@ export default {
     },
 
 
-    async obtenerProductos() {
-      try {
-        const response = await fetch('productosFav.json');
-        if (!response.ok) {
-          throw new Error('No se pudo cargar el archivo JSON');
-        }
-        const data = await response.json();
+    // async obtenerProductos() {
+    //   try {
+    //     const response = await fetch('productosFav.json');
+    //     if (!response.ok) {
+    //       throw new Error('No se pudo cargar el archivo JSON');
+    //     }
+    //     const data = await response.json();
 
-        // Asignar los productos de "FavMes" a this.productosFavMes
-        // this.productosfm = data.FavMes;
-        this.productosfm = data.FavMes.map(producto => ({
-          nombre: producto.nombre,
-          marca: producto.marca,
-          rating: producto.rating,
-          imagen: require('@/assets/' + producto.imagen)
-        }));
+    //     // Asignar los productos de "FavMes" a this.productosFavMes
+    //     // this.productosfm = data.FavMes;
+    //     this.productosfm = data.FavMes.map(producto => ({
+    //       nombre: producto.nombre,
+    //       marca: producto.marca,
+    //       rating: producto.rating,
+    //       imagen: require('@/assets/' + producto.imagen)
+    //     }));
 
 
 
 
         // Asignar los productos de "vistoreciente" a this.productosVistoReciente
         // this.productosvr = data.vistoreciente;
-        this.productosvr = data.vistoreciente.map(producto => ({
-          nombre: producto.nombre,
-          marca: producto.marca,
-          rating: producto.rating,
-          imagen: require('@/assets/' + producto.imagen)
-        }));
+    //     this.productosvr = data.vistoreciente.map(producto => ({
+    //       nombre: producto.nombre,
+    //       marca: producto.marca,
+    //       rating: producto.rating,
+    //       imagen: require('@/assets/' + producto.imagen)
+    //     }));
 
-      } catch (error) {
-        console.error('Error al obtener la información de los productos:', error);
-      }
-    },
-
-
-    Producto() {
-      this.$router.push('/producto')
-    },
+    //   } catch (error) {
+    //     console.error('Error al obtener la información de los productos:', error);
+    //   }
+    // },
 
     imagenClicada(maquillaje) {
     },
@@ -234,15 +258,15 @@ export default {
 .page {
   background-color: rgb(255, 255, 255);
   height: 98vh;
-  width: calc(99.3% - 65px);
+  width: calc(99.3% - 7vh);
   display: flex;
   flex-direction: column;
   /* Alinear elementos en columna */
   justify-content: flex-start;
   /* Alinear elementos arriba */
-  margin-left: 75px;
+  margin-left: 8vh;
   margin-top: 1vh;
-  border-radius: 10px;
+  border-radius: 2vh;
 }
 
 .pagina {
@@ -397,6 +421,7 @@ export default {
   margin-right: 25%;
   margin-left: 3%;
   text-align: left;
+  padding-bottom: 2vh;
 }
 
 /* carruseles */
