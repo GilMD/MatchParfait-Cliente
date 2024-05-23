@@ -12,6 +12,8 @@ import MaquillajeView from "../views/MaquillajeView";
 import CabelloView from '@/views/CabelloView.vue';
 import SkinCareView from '@/views/SkinCareView.vue';
 import UñasView from '@/views/UñasView.vue';
+import MtdPagoView from '@/views/MtdPagoView.vue';
+import HistorialView from '@/views/HistorialView.vue';
 
 
 
@@ -74,6 +76,16 @@ const routes = [
     path: '/skincare',
     name: 'skincare',
     component: SkinCareView
+  },
+  {
+    path: '/metodoPago',
+    name: 'metodoPago',
+    component: MtdPagoView
+  },
+  {
+    path: '/historial',
+    name: 'historial',
+    component: HistorialView
   },
   {
     path: '/about',

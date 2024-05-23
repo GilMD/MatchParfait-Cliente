@@ -17,8 +17,8 @@
                     </div>
                     <hr class="linea-horizontal">
                     <div class="buttons">
-                        <button class="historial">Historial</button>
-                        <button class="Metodos_pago">Metodos de pago</button>
+                        <button @click.prevent="historial()" class="historial">Historial</button>
+                        <button  @click.prevent="mtdPago()" class="Metodos_pago">Metodos de pago</button>
                         <button @click.prevent="cerrarSesion()" class="logout">Cerrar sesión</button>
                     </div>
                 </div>
@@ -141,9 +141,14 @@ export default {
             localStorage.removeItem('vue2.token');
             localStorage.removeItem('vue2.userData');
             this.$router.push('/');
-        }
+        },
+        mtdPago(){
+            this.$router.push('/metodoPago');
+        },
+        historial(){
+            this.$router.push('/historial');
+        },
     }
-
 }
 </script>
 
@@ -173,6 +178,7 @@ html {
   align-items: center;
   margin-left: 8vh;
   border-radius: 2vh;
+  margin-top: .5%;
 }
 
 
@@ -193,7 +199,7 @@ html {
     align-items: center;
     justify-content: center;
     /* gap: 20vh; */
-    border-radius: 12px;
+    border-radius: 2vh;
     box-shadow: 0px 4px 4px 0px #00000040;
     gap: 1vh;
     
