@@ -39,25 +39,25 @@
               <span class="titulos">{{ producto.productBrand }}</span><br>
               <div class="rating">
                 <span v-for="star in 5" :key="star" class="star"
-                  :class="{ filled: star <= producto.rating }">&#9733;</span>
+                  :class="{ filled: star <= producto.stars }">&#9733;</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="carrusel">
-        <h2 class="vr">Visto reciente</h2>
+        <h2 class="fdm">Visto reciente</h2>
         <div class="container">
-          <div class="child" v-for="(producto, index) in productosvr" :key="index">
+          <div class="child" v-for="(producto, index) in productosvr" :key="producto.productId">
             <div class="img_container">
-              <img :src="producto.imagen" class="img" />
+              <img :src="producto.photo" class="img" />
             </div>
             <div class="detalles">
-              <span>{{ producto.nombre }}</span><br>
-              <span>{{ producto.marca }}</span><br>
+              <span class="titulos">{{ producto.productName }}</span><br>
+              <span class="titulos">{{ producto.productBrand }}</span><br>
               <div class="rating">
                 <span v-for="star in 5" :key="star" class="star"
-                  :class="{ filled: star <= producto.rating }">&#9733;</span>
+                  :class="{ filled: star <= producto.stars }">&#9733;</span>
               </div>
             </div>
           </div>
@@ -90,7 +90,8 @@ export default {
 
   mounted() {
     this.startScrolling();
-
+    this.obtenerProductsFM();
+    this.obtenerProductsVR();
     // Carga imágenes
     fetch('rutaimagenes.json')
       .then(response => response.json()) // Convierte la respuesta a formato JSON
@@ -148,28 +149,23 @@ export default {
       this.filtrarMatch();
     },
     async obtenerProductsVR() {
-      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      const token = JSON.parse(localStorage.getItem('vue2.token'));
       try {
-        let p = [];
-        const response = await axios.get(`${URL_DATOS}/products/recent`, {
+        const response = await axios.get(`${URL_DATOS}/recentProducts`, {
           headers: {
             Authorization: 'Bearer ' + token,
           }
-        })
-          // headers: {
-          //   Authorization: `Bearer ${localStorage.getItem('token')}`
-          // }
-          .then(response => {
-            p = response.data.data;
-            this.productsvr = p;
-          })
+        });
+        console.log('respuesta completa', response);
+        this.productosvr = response.data.data;
+        console.log('recientes', this.productosvr);
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);
       }
     },
     filtrarMatch() {
       this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
-            console.log('userCss',this.userClassification);
+      console.log('userCss', this.userClassification);
       const matchingProducts = this.productosfm.filter(product => this.userClassification === product.classification);
       const nonMatchingProducts = this.productosfm.filter(product => this.userClassification !== product.classification);
       this.productosfm = matchingProducts.concat(nonMatchingProducts);
