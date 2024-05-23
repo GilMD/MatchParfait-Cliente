@@ -56,7 +56,7 @@ export default {
         return {
             products: [],
             // categories: ['Rostro', 'Ojos', 'Labios'],
-            selectedCategory: 'Rostro',
+            selectedCategory: '',
             OpcionProducto: ['Rostro', 'Ojos', 'Labios']
         };
     },

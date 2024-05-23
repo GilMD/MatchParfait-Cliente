@@ -139,6 +139,7 @@ export default {
           .then(response => {
             p = response.data.data;
             this.productosfm = p;
+            console.log(this.productosfm);
           })
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);

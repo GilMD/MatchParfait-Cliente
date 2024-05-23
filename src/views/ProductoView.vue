@@ -3,7 +3,7 @@
     <sidebar />
 
     <div class="container">
-      <div class="column">
+      <div class="column1">
         <div class="previewImg ">
           <div class="panel">
             <div v-for="(image, index) in imageArray" :key="index" class="image-item">
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="column">
+      <div class="column2">
         <div class="centered-container">
           <div class="imgsProduct">
             <div v-for="(image, index) in imageArray" :key="index" class="image-item2">
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div class="column">
+      <div class="column3">
         <div class="info">
 
           <!-- <div class="rating">
@@ -48,8 +48,13 @@
               Colores Disponibles
             </h2>
             <div class="gamadecolores1">
-              <div @click.prevent="setColor(color)" v-for="color in colorArray" :key="color" class="color-box"
-                :style="{ backgroundColor: color }"></div>
+              <div
+              v-for="(color, index) in colorArray"
+              :key="color" 
+              :class="{'color-box1': selectedIndex === index, 'color-box': selectedIndex !== index}"
+              :style="{ backgroundColor: color }"
+              @click.prevent="setColor(color, index)">
+            </div>
             </div>
 
           </div>
@@ -121,7 +126,9 @@ export default {
       imageArray: [], // Array para almacenar las rutas de las imágenes
       productos: [],
       cantidad: 1,
-      colorSelected: ''
+      colorSelected: '',
+      selectedIndex: 0,
+      claseColor: 'color-box'
     };
   },
   created() {
@@ -129,6 +136,7 @@ export default {
   },
   mounted() {
     this.traeDetalleProducto();
+    this.aplicarClaseColor();
   },
   components: {
     sidebar
@@ -158,8 +166,10 @@ export default {
       console.log(this.colorSelected);
       // this.loadImages();
     },
-    setColor(color) {
+    setColor(color, index) {
       this.colorSelected = color.substring(1);
+      this.selectedIndex = index;
+      this.claseColor = 'color-box1';
       console.log(this.colorSelected);
     },
     cambiarCantidad(op) {
@@ -219,13 +229,13 @@ export default {
 .page {
   background-color: #FFFCF7;
   height: 98vh;
-  width: calc(99.3% - 65px);
+  width: calc(99.3% - 7vh);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-left: 75px;
+  margin-left: 8vh;
   margin-top: 1vh;
-  border-radius: 10px;
+  border-radius: 2vh;
 
 }
 
@@ -235,8 +245,8 @@ export default {
 }
 
 .image-item {
-  margin-bottom: 5%;
-  margin-top: 5%;
+  /* margin-bottom: 5%;
+  margin-top: 5%; */
   margin-left: 8%;
 }
 
@@ -258,43 +268,47 @@ export default {
   /* Altura ajustada automáticamente para mantener la proporción */
   border-radius: 3%;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+  margin-left: 10%;
 }
 
 
 .container {
   display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
 }
 
-.column {
-  flex: 1;
+.column1 {
+  width: 10%;
 }
 
-.column:first-child {
-  max-width: 25%;
+.column2 {
+  width: 50%;
 }
 
+.column3 {
+  width: 40%;
+}
 
-.centered-container,
-.info {
+.centered-container{
   display: flex;
   justify-content: flex-start;
-  height: 57%;
-  display: flex;
-  margin-right: 3%;
+  height: 100%;
   flex-direction: column;
   overflow-y: auto;
+  padding: 0 5%;
 }
 
 .info {
   margin-top: 9%;
   flex-direction: column;
-  max-height: 70%;
-  overflow-y: auto;
+  max-height: 80%;
+  overflow-y: scroll;
 }
 
 .gallery-image {
-
-  top: 20%;
+  margin-top: 20%;
   max-width: 90%;
   /* Ancho de cada imagen */
   max-height: 115px;
@@ -304,31 +318,11 @@ export default {
 
 }
 
-.panel1 {
-  position: absolute;
-  /* Posiciona el panel de fondo */
-  top: 17%;
-  /* Ajusta la posición superior */
-  left: 145px;
-  /* Ajusta la posición izquierda */
-  width: 7%;
-  /* Ajusta el ancho del panel */
-  height: 73%;
-  /* Ajusta la altura del panel */
-  background-color: #959292;
-  /* Color de fondo del panel */
-  border-radius: 15px;
-  /* Bordes redondeados */
-  z-index: 0;
-  /* Coloca el panel detrás de las imágenes */
-}
-
 .panel {
   padding: 5% 0;
-  position: absolute;
   top: 10%;
-  width: 28%;
-  height: auto;
+  width: 100%;
+  height: 80%;
   background-color: rgb(146, 143, 143);
   /* Asegura que el panel sea transparente */
   border-radius: 15px;
@@ -339,13 +333,13 @@ export default {
   position: relative;
   top: 0%;
   height: 89%;
-  left: 18%;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: center;
   z-index: 1;
-  max-width: 100%;
+  width: 100%;
+  padding: 0 10%;
 }
 
 .imgsProduct {
@@ -373,7 +367,6 @@ export default {
   width: 12px;
 
 }
-
 .info::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 6px;
@@ -382,11 +375,6 @@ export default {
 .info::-webkit-scrollbar-track {
   background-color: #f0f0f0;
   border-radius: 6px;
-}
-
-.column:nth-child(2) {
-  margin-left: -10%;
-  /* Ajusta el margen izquierdo según sea necesario */
 }
 
 /* Estilos del rating */
@@ -409,7 +397,7 @@ export default {
 /* Estilos del nombre */
 .nombre {
   display: flex;
-  font-size: 40px;
+  font-size: 24px;
   font-weight: 100;
   margin-top: 5%;
   margin-right: 25%;
@@ -460,7 +448,7 @@ export default {
   margin-right: 25%;
   margin-left: 5%;
   max-height: 5%;
-  padding-bottom: 5%;
+  padding-bottom: 3%;
   text-align: left;
   font-family: DM Sans;
   font-weight: 400;
@@ -491,7 +479,15 @@ export default {
 }
 
 .color-box {
-  margin-top: 2%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.color-box1 {
+  clip-path: polygon(50% 0, 67% 35%, 100% 48%, 68% 64%, 50% 100%, 35% 64%, 0 51%, 35% 34%);
   width: 40px;
   height: 40px;
   margin-right: 10px;
@@ -506,29 +502,34 @@ export default {
 }
 
 .botones {
+  margin-left: 5%;
   margin-top: 10px;
   display: flex;
-  justify-content: flex-start;
-  margin-left: 27%;
+  align-items: center;
+  justify-content: space-between;
+  height: 10%;
 }
 
 .action-button {
+  display: flex;
+  align-items: center;
+  
   margin-right: 10px;
   /* Ajusta el margen derecho para separar los botones */
   padding: 12px 24px;
   font-size: 16px;
-  border-radius: 15px;
+  border-radius: 50px;
   background-color: #f00d38;
   color: white;
   border: 2px solid #ccc;
-  margin: auto;
-  height: 15%;
-  width: 40%;
+  height: 60%;
+  width: 50%;
 }
 
 .action-button img {
   max-width: 15%;
-
+  max-height: 95%;
+  margin-right: 10%;
 }
 
 .star-icon {
