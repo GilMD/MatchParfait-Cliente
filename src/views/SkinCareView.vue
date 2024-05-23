@@ -3,19 +3,12 @@
         <sidebar />
         <div class="contenedor">
             <div class="titulo">
-                <h1>Maquillaje</h1>
+                <h1>Cuidado de la piel</h1>
             </div>
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
                 <input type="text" placeholder="Buscar..." class="custom-placeholder" />
             </div>
-            <v-container class="vcontainer">
-                <v-chip-group column active-class="primary--text" v-model="selectedCategory">
-                    <v-chip v-for="option in OpcionProducto" :key="option" :value="option" class="ma-2" size="x-large">
-                        {{ option }}
-                    </v-chip>
-                </v-chip-group>
-            </v-container>
             <div class="productos">
                 <div v-for="product in filteredProducts" :key="product.id" class="producto">
                     <div class="imagen_producto">
@@ -55,9 +48,6 @@ export default {
     data() {
         return {
             products: [],
-            // categories: ['Rostro', 'Ojos', 'Labios'],
-            selectedCategory: 'Rostro',
-            OpcionProducto: ['Rostro', 'Ojos', 'Labios']
         };
     },
     computed: {
@@ -140,6 +130,7 @@ export default {
     width: 100%;
     max-width: 75%;
     color: #FFFCF7;
+    border: none;
 }
 
 .searchBar img {
@@ -158,6 +149,7 @@ export default {
     border-radius: 2vh;
     color: #FFFCF7;
     font-size: 1rem;
+    border: none;
 }
 
 .custom-placeholder::placeholder {
@@ -173,30 +165,12 @@ export default {
     margin-bottom: 1.5%;
 }
 
-.v-chip-group .v-chip {
-    cursor: pointer;
-    border-radius: 50px;
-    font-family: "DM Sans", sans-serif;
-    font-size: 1.1em;
-    background-color: #F00D38;
-    color: #FFFCF7;
-    margin-top: 0%;
-}
-
-.v-chip:hover {
-    background-color: #F00D38;
-
-}
-
-.active-chip {
-
-    background-color: #d00c33 !important;
-}
 
 .productos {
+/* background-color: aquamarine; */
     display: flex;
     width: 75%;
-    height: 77%;
+    height: 80%;
     gap: 2vh;
     flex-wrap: wrap;
     margin: auto;
@@ -204,6 +178,7 @@ export default {
     border-radius: 2vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     overflow: auto;
+    margin-top: 2%;
 }
 
 .productos::-webkit-scrollbar {

@@ -19,10 +19,10 @@
       <div class="clasificaciones">
         <div class="imagenes">
           <img src="../assets/img/maquillaje.png" alt="" class="imgclasif" @click.prevent="MaquillajeView()">
-          <img src="../assets/img/uñas.png" alt="" class="imgclasif" onclick="imagenClicada('uñas')">
-          <img src="../assets/img/cabello.png" alt="" class="imgclasif" onclick="imagenClicada('cabello')">
-          <img src="../assets/img/wish_list.png" alt="" class="imgclasif" onclick="imagenClicada('wish_list')">
-          <img src="../assets/img/healty_skin.png" alt="" class="imgclasif" onclick="imagenClicada('healty_skin')">
+          <img src="../assets/img/uñas.png" alt="" class="imgclasif" @click.prevent="UñasView()">
+          <img src="../assets/img/cabello.png" alt="" class="imgclasif" @click.prevent="CabelloView()">
+          <img src="../assets/img/wish_list.png" alt="" class="imgclasif" @click.prevent="wishListView()">
+          <img src="../assets/img/healty_skin.png" alt="" class="imgclasif" @click.prevent="SkinCareView()">
         </div>
       </div>
 
@@ -72,6 +72,8 @@
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
 import sidebar from '@/components/sidebar.vue'
+import SkinCareView from './SkinCareView.vue';
+import CabelloView from './CabelloView.vue';
 
 export default {
   data() {
@@ -236,13 +238,17 @@ export default {
     MaquillajeView(){
       this.$router.push(`/maquillaje`);
     },
-    imagenClicada(uñas) {
+    UñasView(){
+      this.$router.push(`/uñas`);
     },
-    imagenClicada(cabello) {
+    wishListView(){
+      this.$router.push(`/wishList`);
     },
-    imagenClicada(wish_list) {
+    SkinCareView(){
+      this.$router.push(`/SkinCare`);
     },
-    imagenClicada(healty_skin) {
+    CabelloView(){
+      this.$router.push(`/Cabello`);
     }
 
   }

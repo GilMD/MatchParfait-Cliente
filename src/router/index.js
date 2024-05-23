@@ -9,6 +9,9 @@ import ProductoView from "../views/ProductoView";
 import LoginView from "../views/LoginView";
 import SignUpView from "../views/SignUpView";
 import MaquillajeView from "../views/MaquillajeView";
+import CabelloView from '@/views/CabelloView.vue';
+import SkinCareView from '@/views/SkinCareView.vue';
+import UñasView from '@/views/UñasView.vue';
 
 
 
@@ -56,6 +59,21 @@ const routes = [
     path: '/maquillaje',
     name: 'maquillaje',
     component: MaquillajeView
+  },
+  {
+    path: '/cabello',
+    name: 'cabello',
+    component: CabelloView
+  },
+  {
+    path: '/uñas',
+    name: 'uñas',
+    component: UñasView
+  },
+  {
+    path: '/skincare',
+    name: 'skincare',
+    component: SkinCareView
   },
   {
     path: '/about',
