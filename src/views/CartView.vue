@@ -69,7 +69,7 @@
                 </div>
                 <div class="subtotal_pagoDelimitacion">
                     <div class="subtotal_pago">
-                        <span>Subtotal: $200.0</span>
+                        <span>Subtotal: {{ subtotal | currency }}</span>
                         <hr class="linea-horizontal">
                         <div>
                             <input @click.prevent="continuar()" class="btnSubtotalPago" type="submit"
@@ -93,6 +93,7 @@ export default {
             products: [],
             direccion: [],
             userData: [],
+            subtotal: '',
             address: ''
         }
     },
@@ -135,6 +136,7 @@ export default {
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
             }
+            this.calcularSubTotal();
         },
         async guardarDireccion() {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
@@ -173,6 +175,7 @@ export default {
             }
             this.products[index].price = aux * this.products[index].cantidad;
             this.actualizarCantidad(index);
+            this.calcularSubTotal();
         },
         async actualizarCantidad(index) {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
@@ -235,6 +238,13 @@ export default {
                 this.address += ', #' + this.userData.int_num;
             }
             this.address += ", " + this.userData.suburb + ', ' + this.userData.municipality + ', ' + this.userData.state + ', ' + this.userData.country;
+        },
+        calcularSubTotal() {
+            this.subtotal = 0;
+            for (const product of this.products) {
+                this.subtotal += product.price;
+            }
+            console.log('subtotal', this.subtotal);
         }
     },
 }
@@ -733,6 +743,7 @@ export default {
     width: 5vh;
     height: 100%;
 }
+
 .sparkles img {
     padding-top: 10px;
     max-width: 100%;
