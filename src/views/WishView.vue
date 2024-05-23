@@ -7,70 +7,6 @@
                     <h1>Wishlist</h1>
                 </div>
                 <div class="productos">
-                    <div class="producto">
-                        <div class="imagen_producto">
-                            <img src="@/assets/img/FDM_1.jpeg" alt="Imagen del producto">
-                        </div>
-                        <div class="informacion_producto">
-                            <div class="nombre_marca">
-                                <td class="celda">
-                                    <div class="nombre">
-                                        <span>si jaja</span>
-                                    </div>
-                                    <div class="sparkles">
-                                        <img src="@/assets/img/sparkles_red.svg" alt="">
-                                    </div>
-                                </td>
-                                <td class="marca"> si x2 </td>
-                            </div>
-                            <div class="precio_botones">
-                                <td class="precio">$425.50
-                                    <div class="color-box" :style="{ backgroundColor: '#CB5136' }"></div>
-                                </td>
-                            </div>
-                            <div class="carrito-Basura">
-                                <div class="carrito">
-                                    <button @click.prevent="agregarCarrito" class="carrito-btn">
-                                        <img src="@/assets/img/cesta_ico.png" alt="">
-                                        Comprar
-                                    </button>
-                                </div>
-                                <div class="basura">
-                                    <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="producto">
-                        <div class="imagen_producto">
-                            <img src="@/assets/img/FDM_1.jpeg" alt="Imagen del producto">
-                        </div>
-                        <div class="informacion_producto">
-                            <div class="nombre_marca">
-                                <td class="nombre"> si jaja
-                                    <div class="sparkles">
-                                        <img src="@/assets/img/sparkles_red.svg" alt="">
-                                    </div>
-                                </td>
-                                <td class="marca"> si x2 </td>
-                            </div>
-                            <div class="precio_botones">
-                                <td class="precio">$425.50
-                                    <div class="color-box" :style="{ backgroundColor: '#CB5136' }"></div>
-                                </td>
-                            </div>
-                            <div class="carrito-Basura">
-                                <button @click.prevent="agregarCarrito" class="carrito-btn">
-                                    <img src="@/assets/img/cesta_ico.png" alt="">
-                                    Comprar
-                                </button>
-                                <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
-                            </div>
-                        </div>
-
-                    </div>
-
                     <div v-for="(product, index) in products" :key="product.id" class="producto">
                         <div class="imagen_producto">
                             <img :src="product.photo" alt="Imagen del producto">
@@ -163,7 +99,6 @@ export default {
         async borrarProd(wishId) {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
             this.products = this.products.filter(p => p.wish_listId !== wishId);
-            console.log('Producto eliminado', product);
 
             try {
                 const response = await axios.delete(`${URL_DATOS}/wishlist`, {
@@ -180,7 +115,7 @@ export default {
         async agregarCarrito(index) {
             const token = JSON.parse(localStorage.getItem('vue2.token'))
             const response = await axios.post(`${URL_DATOS}/shoppingCart`, {
-                productId: this.products[index].id,
+                productId: this.products[index].productId,
                 color: this.products[index].color,
                 cantidad: 1
             },
@@ -198,7 +133,6 @@ export default {
                     console.log(error)
                 });
                 this.borrarProd(this.products[index].wish_listId)
-                this.products.splice(index, 1);
         },
         cargarDatosUsuario() {
             this.userData = JSON.parse(localStorage.getItem('vue2.userData'));
@@ -268,7 +202,7 @@ export default {
     display: flex;
     width: 85%;
     height: 77%;
-    gap: 2vh;
+    gap: 1vh;
     flex-wrap: wrap;
     margin: auto;
     /* Espacio entre los elementos */
@@ -278,7 +212,7 @@ export default {
 }
 
 .producto {
-    gap: 2vh;
+   
     background-color: #FFFCF7;
     height: 23%;
     width: 40%;
@@ -286,9 +220,9 @@ export default {
     display: flex;
     flex-direction: row;
     /* Cambiado para que los elementos estén en fila */
-    margin-top: 3%;
     border-radius: 10px;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+
 
 }
 
