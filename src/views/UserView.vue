@@ -9,17 +9,17 @@
                 </div>
                 <div class="info_user">
                     <div class="info">
-                        <span class="nombre">Gilberto Maldonado Dominguez</span>
+                        <span class="nombre">{{this.userData.name+' '+this.userData.last_name1+' '+this.userData.last_name2}}</span>
                         <span class="correolbl">Correo</span>
-                        <span class="correo">gilberto_mal@gmail.com</span>
+                        <span class="correo">{{this.userData.email}}</span>
                         <span class="phonelbl">Celular</span>
-                        <span class="phone">6677888990</span>
+                        <span class="phone">{{this.userData.phone_number}}</span>
                     </div>
                     <hr class="linea-horizontal">
                     <div class="buttons">
                         <button class="historial">Historial</button>
                         <button class="Metodos_pago">Metodos de pago</button>
-                        <button class="logout">Cerrar sesión</button>
+                        <button @click.prevent="cerrarSesion()" class="logout">Cerrar sesión</button>
                     </div>
                 </div>
                 
@@ -29,31 +29,32 @@
                     <div class="dic">
                         <div id="div1" class="direccion">
                             <h1>Dirección de envío</h1>
-                            <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span>
+                            <span>{{ this.address }}</span>
                             <td @click="cambiarVisibililidad()">Editar</td>
                         </div>
                     </div>
                     <div id="div2" class="direccionInputs">
                         <h1>Dirección de envío</h1>
                         <div class="estadoMunicipioInputs">
-                            <input type="text" placeholder="Estado">
-                            <input type="text" placeholder="Municipio">
+                            <input v-model="userData.state" type="text" placeholder="Estado">
+                            <input v-model="userData.municipality" type="text" placeholder="Municipio">
                         </div>
                         <div class="coloniaCalleInputs">
-                            <input type="text" placeholder="Colonia">
-                            <input type="text" placeholder="Calle">
+                            <input v-model="userData.suburb" type="text" placeholder="Colonia">
+                            <input v-model="userData.street" type="text" placeholder="Calle">
                         </div>
                         <div class="numsExtIntInputs">
-                            <input type="number" placeholder="Número externo">
-                            <input type="number" placeholder="Número interno">
+                            <input v-model="userData.ext_num" type="number" placeholder="Número externo">
+                            <input v-model="userData.int_num" type="number" placeholder="Número interno">
                         </div>
                         <div class="cpInput">
-                            <input type="number" class="cpNumber" placeholder="Código postal">
-                            <input @click.prevent="guardar()" class="signup-container_tabform_button" type="submit"
-                                value="Guardar">
+                            <input v-model="userData.postal_code" type="number" class="cpNumber"
+                                placeholder="Código postal">
+                            <input @click.prevent="guardarDireccion()" class="signup-container_tabform_button"
+                                type="submit" value="Guardar">
                         </div>
                         <div class="cancelar">
-                            <td @click="cancelar()" class="btnCancelar">Cancelar</td>
+                            <td @click="cambiarVisibililidad()" class="btnCancelar">Cancelar</td>
                         </div>
                     </div>
                 </div>
@@ -72,8 +73,15 @@ export default {
     },
     data() {
         return {
-            visible: false
+            visible: false,
+            userData: [],
+            address: ''
         }
+    },
+    mounted() {
+        this.cargarDatosUsuario();
+        this.formatoDireccion();
+        // this.obtenerDireccion();
     },
     methods: {
         cambiarVisibililidad() {
@@ -87,15 +95,52 @@ export default {
                 this.visible = false;
             }
         },
-        guardar() {
-            document.getElementById('div1').style.display = 'block';
-            document.getElementById('div2').style.display = 'none';
-            this.visible = false;
+        cargarDatosUsuario() {
+            this.userData = JSON.parse(localStorage.getItem('vue2.userData'));
+            // if(this.userData.int_num === null){
+            //     this.userData.int_num = '';
+            // }
+            console.log('Datos usuario', this.userData);
         },
-        cancelar() {
-            document.getElementById('div1').style.display = 'block';
-            document.getElementById('div2').style.display = 'none';
-            this.visible = false;
+        formatoDireccion() {
+            this.address = this.userData.postal_code + ', ' + this.userData.street + ' #' + this.userData.ext_num;
+            if (this.userData.int_num !== '') {
+                this.address += ', #' + this.userData.int_num;
+            }
+            this.address += ", " + this.userData.suburb + ', ' + this.userData.municipality + ', ' + this.userData.state + ', ' + this.userData.country;
+        },
+        async guardarDireccion() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            try {
+                const response = await axios.put(
+                    `${URL_DATOS}/shoppingCart/address`,
+                    {
+                        state: this.userData.state,
+                        municipality: this.userData.municipality,
+                        suburb: this.userData.suburb,
+                        street: this.userData.street,
+                        ext_num: this.userData.ext_num,
+                        int_num: this.userData.int_num,
+                        postal_code: this.userData.postal_code
+                    },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                )
+                localStorage.setItem('vue2.userData', JSON.stringify(this.userData));
+
+                this.cambiarVisibililidad();
+            } catch (error) {
+                console.error('Error al guardar la dirección:', error);
+            }
+            this.formatoDireccion();
+        },
+        cerrarSesion(){
+            localStorage.removeItem('vue2.token');
+            localStorage.removeItem('vue2.userData');
+            this.$router.push('/');
         }
     }
 
