@@ -27,14 +27,14 @@
         <div class="info">
 
           <!-- <div class="rating">
-            <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= producto.rating }">&#9733;</span>
+            <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= producto.stars }">&#9733;</span>
           </div> -->
 
           <div class="nombre">
             <span>
               {{ productos.productName }}
             </span>
-            <img style="display: none;" src="@/assets/img/sparkles_red.svg">
+            <img id="sparkles" class="sparkles" src="@/assets/img/sparkles_red.svg">
           </div>
 
           <div class="marca">
@@ -48,13 +48,10 @@
               Colores Disponibles
             </h2>
             <div class="gamadecolores1">
-              <div
-              v-for="(color, index) in colorArray"
-              :key="color" 
-              :class="{'color-box1': selectedIndex === index, 'color-box': selectedIndex !== index}"
-              :style="{ backgroundColor: color }"
-              @click.prevent="setColor(color, index)">
-            </div>
+              <div v-for="(color, index) in colorArray" :key="color"
+                :class="{ 'color-box1': selectedIndex === index, 'color-box': selectedIndex !== index }"
+                :style="{ backgroundColor: color }" @click.prevent="setColor(color, index)">
+              </div>
             </div>
 
           </div>
@@ -74,8 +71,6 @@
             </div>
           </div>
 
-          <hr class="linea-horizontal">
-
           <div class="ingredientes">
             <h2 class="titulodetalles">
               Detalles del Producto
@@ -85,8 +80,6 @@
             </div>
 
           </div>
-
-          <hr class="linea-horizontal">
 
           <div class="ingredientes">
             <h2 class="tituloingredientes">
@@ -128,7 +121,8 @@ export default {
       cantidad: 1,
       colorSelected: '',
       selectedIndex: 0,
-      claseColor: 'color-box'
+      claseColor: 'color-box',
+      userClassification: ''
     };
   },
   created() {
@@ -136,7 +130,6 @@ export default {
   },
   mounted() {
     this.traeDetalleProducto();
-    this.aplicarClaseColor();
   },
   components: {
     sidebar
@@ -164,6 +157,7 @@ export default {
       this.imageArray = this.productos.photos.split(",");
       this.colorSelected = this.colorArray[0].substring(1);
       console.log(this.colorSelected);
+      this.revisarMatch();
       // this.loadImages();
     },
     setColor(color, index) {
@@ -220,6 +214,18 @@ export default {
         .catch(function (error) {
           console.log(error)
         });
+    },
+    revisarMatch() {
+      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
+            console.log('userCss',this.userClassification);
+      if (this.userClassification === this.productos.classification) {
+        document.getElementById('sparkles').style.display = 'block';
+        return;
+      }
+      else {
+        document.getElementById('sparkles').style.display = 'none';
+      }
+
     }
   }
 }
@@ -291,7 +297,7 @@ export default {
   width: 40%;
 }
 
-.centered-container{
+.centered-container {
   display: flex;
   justify-content: flex-start;
   height: 100%;
@@ -367,6 +373,7 @@ export default {
   width: 12px;
 
 }
+
 .info::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 6px;
@@ -424,7 +431,7 @@ export default {
   margin-top: 3%;
   border: 0;
   border-radius: 5px;
-  border-top: 5px solid #211d1d;
+  border-top: 2px solid #E7E4DE;
   width: 90%;
   margin-left: 5%;
 }
@@ -513,7 +520,7 @@ export default {
 .action-button {
   display: flex;
   align-items: center;
-  
+
   margin-right: 10px;
   /* Ajusta el margen derecho para separar los botones */
   padding: 12px 24px;
@@ -598,5 +605,13 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.sparkles {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  width: 20%;
+
 }
 </style>

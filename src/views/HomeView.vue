@@ -81,6 +81,7 @@ export default {
       images: [],
       productosfm: [],
       productosvr: [],
+      userClassification: '',
       swiper: null,
       interval: null,
       step: 1,
@@ -144,26 +145,7 @@ export default {
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);
       }
-    },
-    async obtenerProductsVR() {
-      const token = JSON.parse(localStorage.getItem('vue2.token'))
-      try {
-        let p = [];
-        const response = await axios.get(`${URL_DATOS}/products`, {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          }
-        })
-          // headers: {
-          //   Authorization: `Bearer ${localStorage.getItem('token')}`
-          // }
-          .then(response => {
-            p = response.data.data;
-            this.productosvr = p;
-          })
-      } catch (error) {
-        console.error('Error al obtener la información de los productos:', error);
-      }
+      this.filtrarMatch();
     },
     async obtenerProductsVR() {
       const token = JSON.parse(localStorage.getItem('vue2.token'))
@@ -179,11 +161,18 @@ export default {
           // }
           .then(response => {
             p = response.data.data;
-            this.products = p;
+            this.productsvr = p;
           })
       } catch (error) {
         console.error('Error al obtener la información de los productos:', error);
       }
+    },
+    filtrarMatch() {
+      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
+            console.log('userCss',this.userClassification);
+      const matchingProducts = this.productosfm.filter(product => this.userClassification === product.classification);
+      const nonMatchingProducts = this.productosfm.filter(product => this.userClassification !== product.classification);
+      this.productosfm = matchingProducts.concat(nonMatchingProducts);
     },
     startScrolling() {
       this.interval = setInterval(() => {
@@ -200,7 +189,6 @@ export default {
         this.interval = null;
       }
     },
-
 
     // async obtenerProductos() {
     //   try {
@@ -222,8 +210,8 @@ export default {
 
 
 
-        // Asignar los productos de "vistoreciente" a this.productosVistoReciente
-        // this.productosvr = data.vistoreciente;
+    // Asignar los productos de "vistoreciente" a this.productosVistoReciente
+    // this.productosvr = data.vistoreciente;
     //     this.productosvr = data.vistoreciente.map(producto => ({
     //       nombre: producto.nombre,
     //       marca: producto.marca,
@@ -236,19 +224,19 @@ export default {
     //   }
     // },
 
-    MaquillajeView(){
+    MaquillajeView() {
       this.$router.push(`/maquillaje`);
     },
-    UñasView(){
+    UñasView() {
       this.$router.push(`/uñas`);
     },
-    wishListView(){
+    wishListView() {
       this.$router.push(`/wishList`);
     },
-    SkinCareView(){
+    SkinCareView() {
       this.$router.push(`/SkinCare`);
     },
-    CabelloView(){
+    CabelloView() {
       this.$router.push(`/Cabello`);
     }
 
