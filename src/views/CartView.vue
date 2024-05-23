@@ -47,19 +47,19 @@
                     <div id="div2" class="direccionInputs">
                         <h1>Dirección de envío</h1>
                         <div class="estadoMunicipioInputs">
-                            <input v-model="userData.state" type="text" placeholder="Estado">
-                            <input v-model="userData.municipality" type="text" placeholder="Municipio">
+                            <input v-model="userData[0].state" type="text" placeholder="Estado">
+                            <input v-model="userData[0].municipality" type="text" placeholder="Municipio">
                         </div>
                         <div class="coloniaCalleInputs">
-                            <input v-model="userData.suburb" type="text" placeholder="Colonia">
-                            <input v-model="userData.street" type="text" placeholder="Calle">
+                            <input v-model="userData[0].suburb" type="text" placeholder="Colonia">
+                            <input v-model="userData[0].street" type="text" placeholder="Calle">
                         </div>
                         <div class="numsExtIntInputs">
-                            <input v-model="userData.ext_num" type="number" placeholder="Número externo">
-                            <input v-model="userData.int_num" type="number" placeholder="Número interno">
+                            <input v-model="userData[0].ext_num" type="number" placeholder="Número externo">
+                            <input v-model="userData[0].int_num" type="number" placeholder="Número interno">
                         </div>
                         <div class="cpInput">
-                            <input v-model="userData.postal_code" type="number" class="cpNumber"
+                            <input v-model="userData[0].postal_code" type="number" class="cpNumber"
                                 placeholder="Código postal">
                             <input @click.prevent="guardarDireccion()" class="signup-container_tabform_button"
                                 type="submit" value="Guardar">
@@ -213,6 +213,7 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+            this.calcularSubTotal();
         },
         cambiarVisibililidad() {
             var div1 = document.getElementById('div1');
@@ -233,11 +234,17 @@ export default {
             console.log('Datos usuario', this.userData);
         },
         formatoDireccion() {
-            this.address = this.userData.postal_code + ', ' + this.userData.street + ' #' + this.userData.ext_num;
-            if (this.userData.int_num !== '') {
-                this.address += ', #' + this.userData.int_num;
+            if (this.userData.length > 0) {
+                const user = this.userData[0];
+                this.address = user.postal_code + ', ' + user.street + ' #' + user.ext_num;
+                if (user.int_num !== '') {
+                    this.address += ', #' + user.int_num;
+                }
+                this.address += ', ' + user.suburb + ', ' + user.municipality + ', ' + user.state + ', ' + user.country;
+                console.log('direccion', this.address);
+            } else {
+                console.log('No user data available');
             }
-            this.address += ", " + this.userData.suburb + ', ' + this.userData.municipality + ', ' + this.userData.state + ', ' + this.userData.country;
         },
         calcularSubTotal() {
             this.subtotal = 0;

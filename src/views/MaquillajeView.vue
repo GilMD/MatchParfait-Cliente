@@ -40,8 +40,6 @@
     </div>
 </template>
 
-
-
 <script>
 import sidebar from '@/components/sidebar.vue'
 import axios from 'axios';
@@ -57,14 +55,18 @@ export default {
             products: [],
             // categories: ['Rostro', 'Ojos', 'Labios'],
             selectedCategory: '',
-            OpcionProducto: ['Rostro', 'Ojos', 'Labios']
+            OpcionProducto: ['Rostro', 'Ojos', 'Labios'],
+            userClassification: ''
         };
     },
     computed: {
         filteredProducts() {
             console.log('Selected Category:', this.selectedCategory);
-            console.log('Filtered Products:', this.products.filter(product => product.category === this.selectedCategory));
-            return this.products.filter(product => product.category === this.selectedCategory);
+            if (this.selectedCategory !== '') {
+                console.log('Filtered Products:', this.products.filter(product => product.category === this.selectedCategory));
+                return this.products.filter(product => product.category === this.selectedCategory);
+            }
+            return this.products;
         }
     },
     mounted() {
@@ -83,11 +85,37 @@ export default {
                     .then(response => {
                         p = response.data.data;
                         this.products = p;
+                        console.log('productos', this.products);
                     })
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
             }
+            this.filtrarMatch();
         },
+        regresarCategoria(product) {
+            const rostro = ['Polvos', 'Fijadores', 'Base', 'Primer', 'Corrector', ' Contorno', 'Bronceador',
+                'Iluminadores'];
+            const ojos = ['Paletas de ojos', 'Sombras liquidas', 'Sombras individuales', 'glitters',
+                'Mascara de pestanas', 'Delineadores'];
+            const labios = ['Labiales', 'gloses '];
+            if (rostro.includes(product.type)) {
+                return 'Rostro';
+            }
+            if (ojos.includes(product.type)) {
+                return 'Ojos';
+            }
+            if (labios.includes(product.type)) {
+                return 'Labios';
+            }
+            return 'Otra Categoría'; // Puedes devolver otro valor o hacer algo más si no es "Rostro"
+        },
+        filtrarMatch() {
+            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
+            console.log('userCss',this.userClassification);
+            const matchingProducts = this.products.filter(product => this.userClassification === product.classification);
+            const nonMatchingProducts = this.products.filter(product => this.userClassification !== product.classification);
+            this.products = matchingProducts.concat(nonMatchingProducts);
+        }
     },
 }
 </script>
