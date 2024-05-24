@@ -130,6 +130,7 @@ export default {
   },
   mounted() {
     this.traeDetalleProducto();
+    this.agregarRecientes();
   },
   components: {
     sidebar
@@ -226,6 +227,25 @@ export default {
         document.getElementById('sparkles').style.display = 'none';
       }
 
+    },
+    async agregarRecientes() {
+      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      const response = await axios.post(`${URL_DATOS}/recentProducts`, {
+        productId: this.id
+      },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          }
+        }
+      )
+        .then(function (response) {
+          console.log(response.data.data[0]);
+
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
     }
   }
 }
