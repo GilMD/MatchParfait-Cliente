@@ -1,6 +1,7 @@
 <template>
     <div class="pago">
         <sidebar />
+        <modal-reseñas v-show="ModalReseñas" />
         <div class="contenedor">
             <div class="titulo">
                 <img src="@/assets/img/IMG-LOGO-RED.png" alt="">
@@ -106,7 +107,7 @@
                                         <span class="precio">$200.00</span>
                                     </div>
                                     <div class="boton">
-                                        <button>Agregar comentario</button>
+                                        <button @click.prevent="abrirModal()">Agregar comentario</button>
                                     </div>
                                 </div>
                             </div>
@@ -127,22 +128,29 @@
 import sidebar from '@/components/sidebar.vue'
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import ModalReseñas from '@/components/modalReseñas.vue';
 
 export default {
     name: 'HistorialView',
     components: {
-        sidebar
+        sidebar,    
+        ModalReseñas,
     },
+
     data: function () {
         return {
             user: {
                 email: '',
                 password: ''
-            }
+            },
+            ModalReseñas: false,
         }
-
+        
     },
     methods: {
+        abrirModal() {
+            this.ModalReseñas = !this.ModalReseñas
+        }
     }
 }
 </script>
