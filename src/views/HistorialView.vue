@@ -17,7 +17,7 @@
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
+                                    <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
                         </div>
@@ -29,11 +29,10 @@
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
+                                    <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card">
+                        </div><div class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: HF93JO</span>
@@ -41,11 +40,10 @@
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
+                                    <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card">
+                        </div><div class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: HF93JO</span>
@@ -53,11 +51,10 @@
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
+                                    <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card">
+                        </div><div class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: HF93JO</span>
@@ -65,11 +62,10 @@
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
+                                    <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card">
+                        </div><div class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: HF93JO</span>
@@ -77,19 +73,7 @@
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="cardInfo">
-                                <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
-                                </div>
-                                <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total">Total: $500.00</span>
+                                    <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +102,7 @@
                                 </div>
                                 <div class="colorPrecioBoton">
                                     <div class="colorPrecio">
-                                        <span class="color">Color: 01</span>
+                                        <div class="color-box" :style="{ backgroundColor: '#' + '9B0E28' }"></div>
                                         <span class="precio">$200.00</span>
                                     </div>
                                     <div class="boton">
@@ -129,6 +113,7 @@
                         </div>
                         <hr class="linea-horizontal">
                         <div class="totaldiv">
+                            <span class="rastrear">Rastrear</span>
                             <span class="total">Total: $500.00</span>
                         </div>
                     </div>
@@ -166,6 +151,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 .pago {
+    position: relative;
     background-image: url("@/assets/img/login-background.png");
     background-size: 100% 100%;
     height: 98vh;
@@ -180,6 +166,7 @@ export default {
 }
 
 .contenedor {
+    position: relative;
     display: flex;
     flex-direction: column;
     background-color: #FFFCF7;
@@ -192,6 +179,7 @@ export default {
 }
 
 .titulo {
+    position: relative;
     /* background-color: #7fca65; */
     font-family: 'Playfair Display', serif;
     display: flex;
@@ -206,6 +194,8 @@ export default {
 }
 
 .titulo img {
+    position: relative;
+    width: 10vh;
     height: 10vh;
     margin-left: 2vh;
 }
@@ -223,6 +213,7 @@ export default {
 
 .columnas {
     /* background-color: aqua; */
+    position: relative;
     display: flex;
     flex-direction: row;
     height: 84.9%;
@@ -231,6 +222,7 @@ export default {
 }
 
 .columna1, .columna2 {
+    position: relative;
     /* background-color:beige; */
     display: flex;
     flex-direction: column;
@@ -240,6 +232,7 @@ export default {
 }
 
 .cards {
+    position: relative;
     width: 78%;
     height: 95%;
     /* background-color: blueviolet; */
@@ -268,6 +261,7 @@ export default {
 }
 
 .card {
+    position: relative;
     background-color: #FFFCF7;
     width: 96%;
     height: 20%;
@@ -281,6 +275,8 @@ export default {
 }
 
 .cardInfo {
+    width: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 2vh;
@@ -290,6 +286,7 @@ export default {
 }
 
 .pedido_status {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 2vh;
@@ -308,9 +305,13 @@ export default {
 }
 
 .fecha_total {
+    /* background-color: aqua; */
+    width: 100%;
+    position: relative;
     display: flex;
     flex-direction: row;
-    gap: 28vh;
+    justify-content: space-between;
+    
 }
 
 .fecha {
@@ -319,13 +320,15 @@ export default {
     color: #391414;
 }
 
-.total {
+.total1 {
     font-family: 'DM Sans', sans-serif;
     font-size: 2vh;
     color: #391414;
+    margin-right: 3%;
 }
 
 .cardDetails {
+    position: relative;
     background-color: #FFFCF7;
     width: 96%;
     height: 95%;
@@ -340,11 +343,14 @@ export default {
 }
 
 .pedido_fecha {
+    /* background-color: aqua; */
+    position: relative;
     display: flex;
     flex-direction: row;
-    gap: 45vh;
     margin-left: 2.5vh;
     margin-top: 2vh;
+    justify-content: space-between;
+    margin-right: 3%;
 }
 
 .pedido2 {
@@ -360,6 +366,7 @@ export default {
 }
 
 .statusdiv {
+    position: relative;
     display: flex;
     flex-direction: row;
     gap: 45vh;
@@ -373,6 +380,7 @@ export default {
 }
 
 .cardProductDetails {
+    position: relative;
     width: 96%;
     height: 20%;
     /* background-color: bisque; */
@@ -384,6 +392,7 @@ export default {
 }
 
 .imagen {
+    position: relative;
     width: 33%;
     height: 100%;
     background-color: #FFFCF7;
@@ -394,6 +403,7 @@ export default {
 }
 
 .imagen img {
+    position: relative;
     width: 80%;
     height: 80%;
     object-fit: cover;
@@ -401,6 +411,7 @@ export default {
 }
 
 .info2 {
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
@@ -409,11 +420,13 @@ export default {
 }
 
 .nombre_sparkles {
+    position: relative;
     display: flex;
     flex-direction: row;
-    gap: 35vh;
+    justify-content: space-between;
     margin-left: 1.3vh;
     margin-top: 1vh;
+    margin-right: 2vh;
 }
 
 .nombre {
@@ -423,11 +436,13 @@ export default {
 }
 
 .info2 img {
+    position: relative;
     width: 3vh;
     height: 2.8vh;
 }
 
 .marcadiv {
+    position: relative;
     display: flex;
     flex-direction: row;
     margin-left: 1.3vh;
@@ -440,17 +455,29 @@ export default {
 }
 
 .colorPrecioBoton {
+    position: relative;
     display: flex;
     flex-direction: row;
-    gap: 32vh;
+    justify-content: space-between;
     margin-top: 1vh;
     margin-left: 1.3vh;
+    margin-right: 2vh;
 }
 
 .colorPrecio {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: .5vh;
+}
+
+.color-box {
+    position: relative;
+    width: 2.3vh;
+    height: 2.3vh;
+    /* padding-left: 10%; */
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .color {
@@ -466,6 +493,7 @@ export default {
 }
 
 .boton {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -487,30 +515,39 @@ button:hover {
 }
 
 .linea-horizontal {
-    margin-top: 1%;
+    position: relative;
     border: 0;
-    border-radius: 5px;
+    border-radius: 2vh;
     box-shadow: 0 0.2vh 0.5vh rgba(0, 0, 0, 0.2);
     background: #E7E4DE;
     height: .2vh;
     width: 88%;
     margin-bottom: .5%;
-    margin-top: 42%;
-    margin-left: 4vh;
-
+    margin-top: auto;
+    align-self: center;
 }
 
 .totaldiv {
+    position: relative;
     display: flex;
     flex-direction: row;
-    margin-left: 61.2vh;
+    margin-left: 5vh;
+    justify-content: space-between;
+    margin-right: 5vh;
+    margin-bottom: 3vh;
+}
+
+.rastrear {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2vh;
+    color: #391414;
+    /* margin-top: 2vh; */
 }
 
 .total {
     font-family: 'DM Sans', sans-serif;
     font-size: 2vh;
     color: #391414;
-    margin-left: 2.5vh;
     /* margin-top: 2vh; */
 }
 
