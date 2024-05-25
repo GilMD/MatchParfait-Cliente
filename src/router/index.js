@@ -80,12 +80,18 @@ const routes = [
   {
     path: '/metodoPago',
     name: 'metodoPago',
-    component: MtdPagoView
+    component: MtdPagoView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/historial',
     name: 'historial',
-    component: HistorialView
+    component: HistorialView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/about',
@@ -103,6 +109,22 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('vue2.token'); // O utiliza Vuex
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next({
+        path: '/',
+        query: { redirect: to.fullPath }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // Asegúrate de llamar a next() siempre
+  }
+});
 
 export default router

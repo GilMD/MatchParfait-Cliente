@@ -67,6 +67,9 @@
 
 <script>
 import sidebar from '@/components/sidebar.vue'
+import axios from 'axios';
+import { URL_DATOS } from '@/Utils/constantes';
+
 export default {
     name: 'UserView',
     components: {
@@ -123,13 +126,13 @@ export default {
                 const response = await axios.put(
                     `${URL_DATOS}/shoppingCart/address`,
                     {
-                        state: this.userData.state,
-                        municipality: this.userData.municipality,
-                        suburb: this.userData.suburb,
-                        street: this.userData.street,
-                        ext_num: this.userData.ext_num,
-                        int_num: this.userData.int_num,
-                        postal_code: this.userData.postal_code
+                        state: this.userData[0].state,
+                        municipality: this.userData[0].municipality,
+                        suburb: this.userData[0].suburb,
+                        street: this.userData[0].street,
+                        ext_num: this.userData[0].ext_num,
+                        int_num: this.userData[0].int_num,
+                        postal_code: this.userData[0].postal_code
                     },
                     {
                         headers: {
