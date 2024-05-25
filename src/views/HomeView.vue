@@ -52,6 +52,7 @@
           <div class="child" v-for="(producto, index) in productosvr" :key="producto.productId">
             <div class="img_container">
               <img :src="producto.photo" class="img" />
+              <img class="sparkles" src="@/assets/img/icons/sparkles.svg" alt="">
             </div>
             <div class="detalles">
               <span class="titulos">{{ producto.productName }}</span><br>
@@ -504,8 +505,8 @@ export default {
 
 .sparkles {
   position: absolute;
-  width: 15%;
-  height: 15%;
+  width: 12%;
+  height: 12%;
   top: 0;
   right: 0;
   z-index: 1;
