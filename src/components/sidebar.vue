@@ -84,10 +84,10 @@ body::-webkit-scrollbar {
 }
 
 .Sidebar__Logo {
-  margin-top: 20px;
+  margin-top: 2.5vh;
   /* Añadido margen superior */
   width: 100%;
-  height: 10%;
+  height: 9%;
   margin-left: 8%;
 }
 

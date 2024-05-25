@@ -33,6 +33,7 @@
             @click.prevent="detalleProducto(producto.productId)">
             <div class="img_container">
               <img :src="producto.photo" class="img" />
+              <img class="sparkles" src="@/assets/img/icons/sparkles.svg" alt="">
             </div>
             <div class="detalles">
               <span class="titulos">{{ producto.productName }}</span><br>
@@ -501,7 +502,16 @@ export default {
   /* Agregar transición suave */
 }
 
-
+.sparkles {
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  margin-top: 24vh;
+  margin-right: 1vh;
+}
 
 
 

@@ -76,7 +76,8 @@ export default {
         return {
             visible: false,
             userData: [],
-            address: ''
+            address: '',
+            
         }
     },
     mounted() {

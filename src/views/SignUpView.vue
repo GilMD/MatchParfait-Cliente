@@ -19,8 +19,8 @@
                             <input v-model="user.last_name2" type="text" placeholder="Apellido materno">
                         </div>
                         <div class="passwordsInputs">
-                            <input v-model="user.password" type="text" placeholder="Contraseña">
-                            <input v-model="user.passwordConfirm" type="text" placeholder="Confirma contraseña">
+                            <input v-model="user.password" type="password" placeholder="Contraseña">
+                            <input v-model="user.passwordConfirm" type="password" placeholder="Confirma contraseña">
                         </div>
                         <div class="numberInput">
                             <input v-model="user.phone_number" type="number" placeholder="Numero telefónico">

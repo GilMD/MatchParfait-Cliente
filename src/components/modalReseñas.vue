@@ -9,19 +9,29 @@
                 <div class="txtestrellas">
                     <span class="txtPuntuacion">Puntuación</span>
                 </div>
-                <div class="rating">
-                    <span class="estrella" v-for="i in 5" :key="i" @click="setRating(i)" :class="{ 'selected': i <= rating }">&#9733;</span>
+                <div class="rating1">
+                    <div class="rating">
+                        <span v-for="star in 5" :key="star" class="star"
+                            :class="{ filled: star <= puntuacionSeleccionada }" @click="puntuacionP(star)">
+                            &#9733;
+                        </span>
+                    </div>
                 </div>
                 <div class="comentarios">
-                    <textarea placeholder="Escribe un comentario"></textarea>
+                    <textarea v-model="comentario" placeholder="Escribe un comentario"></textarea>
                 </div>
                 <div class="estrellas">
                     <span class="txtCalf">Califica que tanto hicieron match este producto y tu</span>
-                    <span class="estrella" v-for="i in 5" :key="i" @click="setRating(i)" :class="{ 'selected': i <= rating }">&#9733;</span>
+                    <div class="rating">
+                        <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= puntuacionMatch }"
+                            @click="puntuacionM(star)">
+                            &#9733;
+                        </span>
+                    </div>
                 </div>
                 <div class="botones">
                     <button @click.prevent="save()">Guardar</button>
-                    <span>Cancelar</span>
+                    <span @click="close()">Cancelar</span>
                 </div>
             </div>
         </div>
@@ -32,16 +42,34 @@
 export default {
     data() {
         return {
-            rating: 0
+            rating: 0,
+            puntuacionSeleccionada: 0,
+            puntuacionMatch: 0,
+            comentario: ''
         }
+
     },
     methods: {
-        setRating(rating) {
-            this.rating = rating
-        },
         save() {
             console.log('Rating:', this.rating)
-        }
+        },
+
+        puntuacionP(star) {
+            this.puntuacionSeleccionada = star
+        },
+        puntuacionM(star) {
+            this.puntuacionMatch = star
+        },
+        limpiar() {
+            this.rating = 0;
+            this.puntuacionSeleccionada = 0;
+            this.puntuacionMatch = 0;
+            this.comentario = '';
+        },
+        close() {
+            this.limpiar();
+            this.$emit('close');
+        },
     }
 }
 </script>
@@ -64,22 +92,23 @@ export default {
     background-color: white;
     width: 60vh;
     height: 60vh;
-    border-radius: 1vh;
+    border-radius: 2vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     align-content: center;
-    
+    border: .5vh solid var(--Subtitle, #9B0E28);
+    transition: all 250ms ease-in-out;
 }
 
 .info {
-    background-color: aqua;
+    /* background-color: aqua; */
     width: 90%;
     height: 90%;
     display: flex;
     flex-direction: column;
     gap: 1.5vh;
     margin: 0 auto;
-    
-    
+
+
 }
 
 .tituloTexto {
@@ -114,6 +143,123 @@ export default {
     color: #391414;
 }
 
+.rating1 {
+    display: flex;
+    margin-top: -2vh;
+}
+
+.rating {
+    font-size: 4vh;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star {
+    color: #ccc;
+    cursor: pointer;
+    border-radius: 5vh;
+    fill: none;
+    stroke: black;
+    stroke-width: 0.1;
+    /* Color de las estrellas vacías */
+}
+
+.star.filled {
+    color: #ffc107;
+    /* Color de las estrellas llenas */
+}
+
+.comentarios {
+    display: flex;
+    justify-content: center;
+}
+
+textarea {
+    width: 90%;
+    height: 10vh;
+    border-radius: 2vh;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2vh;
+    font-weight: 400;
+    color: #391414;
+    border: .1vh solid #7d7d7d;
+    /* Borde delgado y gris claro */
+    padding: 1vh;
+    resize: none;
+}
+
+textarea::placeholder {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2vh;
+    font-weight: 400;
+    color: #391414;
+}
+
+.estrellas {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+}
+
+.txtCalf {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2vh;
+    font-weight: 400;
+    color: #391414;
+    margin-bottom: -2%;
+}
+
+.botones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    margin-top: 2vh;
+}
+
+button {
+    width: 20vh;
+    height: 5vh;
+    border-radius: 3vh;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2vh;
+    font-weight: 400;
+    color: white;
+    background-color: #9B0E28;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #b00909;
+}
+
+.botones span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2vh;
+    font-weight: 400;
+    color: #391414;
+    cursor: pointer;
+
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+
+    .resenaInner {
+        transform: translateY(-100vh);
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 250ms ease-in-out;
+}
+
+.fade-leave-active {
+    transition-delay: 255ms;
+}
 
 
 

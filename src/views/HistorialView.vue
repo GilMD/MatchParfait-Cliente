@@ -1,7 +1,9 @@
 <template>
     <div class="pago">
         <sidebar />
-        <modal-reseñas v-show="ModalReseñas" />
+        <transition name="fade">
+            <modal-reseñas v-show="ModalReseñas" @close="abrirModal()"/>
+        </transition>
         <div class="contenedor">
             <div class="titulo">
                 <img src="@/assets/img/IMG-LOGO-RED.png" alt="">
