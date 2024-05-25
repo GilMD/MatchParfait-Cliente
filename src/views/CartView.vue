@@ -38,10 +38,19 @@
                 <div class="formulario">
                     <div class="dic">
                         <div id="div1" class="direccion">
-                            <h1>Dirección de envío</h1>
-                            <span>{{ this.address }}</span>
+                            <div class="tituloAddress">
+                                <span >Dirección de envío</span>
+                            </div>
+                            <div class="infoAddress">
+                                <span >{{ this.address }}</span>
+                            </div>
+                            <div class="btnEditarAddress" >
+                                <span @click="cambiarVisibililidad()">Editar</span>
+                            </div>
+                            
+                            
                             <!-- <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span> -->
-                            <td @click="cambiarVisibililidad()">Editar</td>
+                            
                         </div>
                     </div>
                     <div id="div2" class="direccionInputs">
@@ -64,6 +73,9 @@
                             <input @click.prevent="guardarDireccion()" class="signup-container_tabform_button"
                                 type="submit" value="Guardar">
                             <!-- <input type="button" value="Guardar" class="btnGuardar"> -->
+                        </div>
+                        <div class="cancelar">
+                            <td @click="cambiarVisibililidad()" class="btnCancelar">Cancelar</td>
                         </div>
                     </div>
                 </div>
@@ -460,7 +472,7 @@ export default {
     /* Añadido espacio entre los elementos */
     border-radius: 15px;
     overflow: hidden;
-    margin-left: 10%;
+    margin-left: 11%;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
@@ -491,15 +503,50 @@ export default {
 }
 
 .direccion {
-    /* background-color: #1d1c5d; */
+    /* background-color: #706ed6; */
     width: 90%;
     height: 80%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    border-radius: 12px;
+    border-radius: 1.2vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     overflow: hidden;
+}
+
+.tituloAddress {
+    /* background-color: aqua; */
+    font-family: 'dm sans', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #440707;
+    text-align: left;
+    margin: 0;
+    padding-top: 1vh;
+    padding-left: 2%;
+    margin-bottom: 1vh;
+}
+
+.infoAddress {
+    /* background-color: aqua; */
+    font-family: 'dm sans', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #440707;
+    text-align: left;
+    margin: 0;
+    padding-left: 2%;
+    margin-bottom: 1vh;
+}
+
+.btnEditarAddress {
+    /* background-color: aqua; */
+    font-family: 'dm sans', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #9B0E28;
+    cursor: pointer;
+    margin: 0;
+    padding-left: 2%;
 }
 
 .divnombre h1 {
@@ -530,7 +577,7 @@ export default {
     font-family: 'dm sans', sans-serif;
     font-weight: 400;
     font-size: 1rem;
-    color: #9B0E28;
+    color: #ba1936;
     cursor: pointer;
     margin: 0;
     padding-top: 1vh;
@@ -642,6 +689,30 @@ export default {
     cursor: pointer;
 }
 
+.cancelar {
+    /* background-color: #ff0000; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%;
+}
+
+.btnCancelar {
+    /* background-color: aqua; */
+    border: none;
+    color: #9B0E28;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-left: 31.2%;
+    margin-top: -5%;
+}
+
+.btnCancelar:hover {
+    transition-duration: 1s;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
 .formulario {
     /* background-color: #916a26; */
     height: 55%;
@@ -651,7 +722,6 @@ export default {
     font-family: "DM Sans", sans-serif;
     margin-top: 15%;
     margin-left: 5%;
-
 }
 
 .formulario input {
@@ -711,8 +781,8 @@ export default {
 }
 
 .color-box {
-    width: 20px;
-    height: 20px;
+    width: 2vh;
+    height: 2vh;
     /* padding-left: 10%; */
     border-radius: 50%;
     cursor: pointer;
