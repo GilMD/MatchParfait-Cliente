@@ -514,8 +514,6 @@ export default {
   margin-right: 1vh;
 }
 
-
-
 .detalles {
   /* background-color: #81b7b7; */
   width: 100%;
