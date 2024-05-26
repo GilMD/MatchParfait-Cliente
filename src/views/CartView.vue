@@ -36,24 +36,24 @@
             </div>
             <div class="informacion_envio">
                 <div class="formulario">
-                    <div class="dic">
-                        <div id="div1" class="direccion">
+                    <div id="form1div1" class="dic">
+                        <div class="direccion">
                             <div class="tituloAddress">
-                                <span >Dirección de envío</span>
+                                <span>Dirección de envío</span>
                             </div>
                             <div class="infoAddress">
-                                <span >{{ this.address }}</span>
+                                <span>{{ this.address }}</span>
                             </div>
-                            <div class="btnEditarAddress" >
-                                <span @click="cambiarVisibililidad()">Editar</span>
+                            <div class="btnEditarAddress">
+                                <span @click="cambiarVisibililidadform1()">Editar</span>
                             </div>
-                            
-                            
+
+
                             <!-- <span>80197, A Robles. #3384, Felipe Angeles, Culiacan, Sinaloa, México.</span> -->
-                            
+
                         </div>
                     </div>
-                    <div id="div2" class="direccionInputs">
+                    <div id="form1div2" class="direccionInputs">
                         <h1>Dirección de envío</h1>
                         <div class="estadoMunicipioInputs">
                             <input v-model="userData[0].state" type="text" placeholder="Estado">
@@ -75,7 +75,54 @@
                             <!-- <input type="button" value="Guardar" class="btnGuardar"> -->
                         </div>
                         <div class="cancelar">
-                            <td @click="cambiarVisibililidad()" class="btnCancelar">Cancelar</td>
+                            <td @click="cambiarVisibililidadform1()" class="btnCancelar">Cancelar</td>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formulario2">
+                    <div id="form2div1" class="dic2">
+                        <div class="direccion">
+                            <div class="tituloAddress2">
+                                <span>Método de pago</span>
+                            </div>
+                            <div v-if="titularTarjeta!==''" class="infoAddress">
+                                <span id="conMetodoPago">Titular: {{ titularTarjeta }}</span>
+                                <span id="conMetodoPago">{{ numeroTarjeta }}</span>
+                                
+                            </div>
+                            <div v-else="titularTarjeta!==''" class="infoAddress">
+                
+                                <span id="sinMetodoPago">Ops, necesitas agregar una tarjeta para
+                                    continuar.</span>
+                            </div>
+                            <div class="btnEditarAddress">
+                                <span v-if="tarjetaDatos" id="conMetodoPago"
+                                    @click="cambiarVisibililidadform2()">Editar</span>
+                                <span v-else id="sinMetodoPago" @click="cambiarVisibililidadform2()">Agregar</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="form2div2" class="direccionInputs2">
+                        <h1>Método de pago</h1>
+                        <div class="coloniaCalleInputs">
+                            <input v-model="titularTarjeta" type="text" placeholder="Nombre completo">
+                            <input v-model="numeroTarjeta" type="number" placeholder="Número de tarjeta" min="1"
+                                max="12">
+                        </div>
+                        <div class="numsExtIntInputs">
+                            <input v-model="mes" type="number" placeholder="Mes">
+                            <input v-model="year" type="number" placeholder="Año">
+                            <input v-model="cvv" type="number" class="cpNumber" placeholder="CVV"
+                                min="1" max="4">
+                        </div>
+                        <div class="cpInput">
+                            <input @click.prevent="agregarTarjeta()" class="signup-container_tabform_button"
+                                type="submit" value="Guardar">
+                            <!-- <input type="button" value="Guardar" class="btnGuardar"> -->
+                        </div>
+                        <div class="cancelar2">
+                            <td @click="cambiarVisibililidadform2()" class="btnCancelar2">Cancelar</td>
                         </div>
                     </div>
                 </div>
@@ -106,7 +153,13 @@ export default {
             direccion: [],
             userData: [],
             subtotal: '',
-            address: ''
+            address: '',
+            tarjetaDatos: null,
+            numeroTarjeta: '',
+            titularTarjeta: '',
+            cvv: '',
+            mes: '',
+            year: '',
         }
     },
     name: 'CartView',
@@ -126,6 +179,7 @@ export default {
         this.cargarDatosUsuario();
         this.formatoDireccion();
         // this.obtenerDireccion();
+        this.cargarDatosTarjeta();
     },
     methods: {
         async productList() {
@@ -172,7 +226,7 @@ export default {
                 )
                 localStorage.setItem('vue2.userData', JSON.stringify(this.userData));
 
-                this.cambiarVisibililidad();
+                this.cambiarVisibililidadform1();
             } catch (error) {
                 console.error('Error al guardar la dirección:', error);
             }
@@ -188,6 +242,7 @@ export default {
             this.products[index].price = aux * this.products[index].cantidad;
             this.actualizarCantidad(index);
             this.calcularSubTotal();
+            this.cargarDatosTarjeta();
         },
         async actualizarCantidad(index) {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
@@ -227,15 +282,44 @@ export default {
             }
             this.calcularSubTotal();
         },
-        cambiarVisibililidad() {
-            var div1 = document.getElementById('div1');
-            var div2 = document.getElementById('div2');
-            if (div1.style.display == 'none') {
-                div1.style.display = 'block';
-                div2.style.display = 'none';
+        cambiarVisibililidadform1() {
+            var form1div1 = document.getElementById('form1div1');
+            var form1div2 = document.getElementById('form1div2');
+            var form2div1 = document.getElementById('form2div1');
+            var form2div2 = document.getElementById('form2div2');
+
+            if (form1div1.style.display == 'none') {
+                form1div1.style.display = 'block';
+                form1div2.style.display = 'none';
+                form2div1.style.display = 'block';
+                form2div2.style.display = 'none';
             } else {
-                div1.style.display = 'none';
-                div2.style.display = 'block';
+                form1div1.style.display = 'none';
+                form1div2.style.display = 'block';
+                form2div1.style.display = 'none';
+                form2div2.style.display = 'none';
+            }
+
+        },
+
+        cambiarVisibililidadform2() {
+            var form1div1 = document.getElementById('form1div1');
+            var form1div2 = document.getElementById('form1div2');
+            var form2div1 = document.getElementById('form2div1');
+            var form2div2 = document.getElementById('form2div2');
+            var form2div1_1 = document.getElementById('form2div1_1');
+
+            if (form2div1.style.display == 'none') {
+                form2div1.style.display = 'block';
+                form2div2.style.display = 'none';
+                form1div1.style.display = 'block';
+                form1div2.style.display = 'none';
+            } else {
+                form2div1.style.display = 'none';
+                form2div2.style.display = 'block';
+                form1div1.style.display = 'block';
+                form1div2.style.display = 'none';
+
             }
         },
         cargarDatosUsuario() {
@@ -264,7 +348,45 @@ export default {
                 this.subtotal += product.price;
             }
             console.log('subtotal', this.subtotal);
-        }
+        },
+        async cargarDatosTarjeta() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            try {
+                const response = await axios.get(`${URL_DATOS}/cards`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                })
+                this.tarjetaDatos = response.data.data[0];
+                console.log('tarjetaaa', this.tarjetaDatos);
+            } catch (error) {
+                console.error('Error al obtener la información de los productos:', error);
+            }
+
+        },
+        async agregarTarjeta() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'))
+            const response = await axios.post(`${URL_DATOS}/cards`, {
+                titular: this.titularTarjeta,
+                cardNumber: parseInt(this.numeroTarjeta),
+                cvv: this.cvv,
+                expDate: this.mes + '/' + this.year
+            },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                }
+            )
+                .then(function (response) {
+                    console.log(response.data.data[0]);
+
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
+
+        },
     },
 }
 </script>
@@ -286,12 +408,14 @@ export default {
     border-radius: 2vh;
 }
 
-#div1 {
+#form1div1,
+#form2div1,
+#form2div1_1 {
     display: block;
-    width: 100%;
 }
 
-#div2 {
+#form1div2,
+#form2div2 {
     display: none;
 }
 
@@ -309,7 +433,7 @@ export default {
     width: 90%;
     align-items: center;
     justify-content: center;
-    gap: 20vh;
+    gap: 19vh;
     /* Espacio entre los elementos */
 }
 
@@ -498,19 +622,30 @@ export default {
 .dic {
     /* background-color: #E7E4DE; */
     width: 90%;
-    height: 28%;
+    height: 90%;
     display: flex;
+    justify-content: space-between;
+}
+
+.dic2 {
+    /* background-color: #E7E4DE; */
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+
 }
 
 .direccion {
     /* background-color: #706ed6; */
-    width: 90%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 1.2vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     overflow: hidden;
+    padding: 1rem;
 }
 
 .tituloAddress {
@@ -526,6 +661,20 @@ export default {
     margin-bottom: 1vh;
 }
 
+.tituloAddress2 {
+    /* background-color: aqua; */
+    font-family: 'dm sans', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #440707;
+    text-align: left;
+    margin: 0;
+    padding-top: 0vh;
+    padding-left: 2%;
+    margin-bottom: 1vh;
+
+}
+
 .infoAddress {
     /* background-color: aqua; */
     font-family: 'dm sans', sans-serif;
@@ -536,6 +685,9 @@ export default {
     margin: 0;
     padding-left: 2%;
     margin-bottom: 1vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
 }
 
 .btnEditarAddress {
@@ -584,6 +736,7 @@ export default {
     padding-left: 30%;
 }
 
+
 .direccion td:hover {
     color: #440707;
     transform: scale(1.1);
@@ -597,12 +750,34 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 2vh;
-    margin-top: -22%;
+    margin-top: 0%;
     /* Añadido espacio entre los elementos */
+    z-index: 1;
 
 }
 
 .direccionInputs h1 {
+    font-family: 'dm sans', sans-serif;
+    font-weight: 400;
+    font-size: 1.3rem;
+    color: #440707;
+    text-align: left;
+    margin-bottom: 2%;
+}
+
+.direccionInputs2 {
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    margin-top: 0%;
+    /* Añadido espacio entre los elementos */
+
+}
+
+.direccionInputs2 h1 {
     font-family: 'dm sans', sans-serif;
     font-weight: 400;
     font-size: 1.3rem;
@@ -697,6 +872,14 @@ export default {
     margin-top: 2%;
 }
 
+.cancelar2 {
+    /* background-color: #ff0000; */
+    display: flex;
+
+
+    margin-top: 2%;
+}
+
 .btnCancelar {
     /* background-color: aqua; */
     border: none;
@@ -713,9 +896,25 @@ export default {
     cursor: pointer;
 }
 
+.btnCancelar2 {
+    /* background-color: aqua; */
+    border: none;
+    color: #9B0E28;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-left: 10vh;
+    margin-top: -5%;
+}
+
+.btnCancelar2:hover {
+    transition-duration: 1s;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
 .formulario {
     /* background-color: #916a26; */
-    height: 55%;
+    height: 18%;
     width: 85%;
     display: flex;
     flex-direction: column;
@@ -734,6 +933,27 @@ export default {
     font-family: "DM Sans", sans-serif;
 }
 
+.formulario2 {
+    /* background-color: #916a26; */
+    height: 18%;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    font-family: "DM Sans", sans-serif;
+    margin-top: 8%;
+    margin-left: 5%;
+}
+
+.formulario2 input {
+    border-radius: 50px;
+    margin-bottom: 25px;
+    font-size: 17px;
+}
+
+.formulario2 input::placeholder {
+    font-family: "DM Sans", sans-serif;
+}
+
 .subtotal_pagoDelimitacion {
     display: flex;
     /* background-color: #9B0E28; */
@@ -741,8 +961,9 @@ export default {
     align-items: center;
     height: 20%;
     width: 85%;
-    margin-top: 5%;
+    margin-top: auto;
     overflow: hidden;
+    margin-bottom: 1vh;
 }
 
 .subtotal_pago {
@@ -832,4 +1053,13 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+
+/* #sinMetodoPago {
+    display: block;
+}
+
+#conMetodoPago {
+    display: none;
+} */
 </style>
