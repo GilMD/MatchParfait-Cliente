@@ -86,18 +86,19 @@
                             <div class="tituloAddress2">
                                 <span>Método de pago</span>
                             </div>
-                            <div v-if="titularTarjeta!==''" class="infoAddress">
-                                <span id="conMetodoPago">Titular: {{ titularTarjeta }}</span>
-                                <span id="conMetodoPago">{{ numeroTarjeta }}</span>
-                                
+                            <div v-if="tarjetaExiste" class="infoAddress">
+                                <span id="conMetodoPago">Titular: {{ tarjetaDatos.titular }}</span>
+                                <span id="conMetodoPago">{{ numTarjeta
+                                    }}</span>
+
                             </div>
                             <div v-else="titularTarjeta!==''" class="infoAddress">
-                
+
                                 <span id="sinMetodoPago">Ops, necesitas agregar una tarjeta para
                                     continuar.</span>
                             </div>
                             <div class="btnEditarAddress">
-                                <span v-if="tarjetaDatos" id="conMetodoPago"
+                                <span v-if="tarjetaExiste" id="conMetodoPago"
                                     @click="cambiarVisibililidadform2()">Editar</span>
                                 <span v-else id="sinMetodoPago" @click="cambiarVisibililidadform2()">Agregar</span>
                             </div>
@@ -106,18 +107,18 @@
                     <div id="form2div2" class="direccionInputs2">
                         <h1>Método de pago</h1>
                         <div class="coloniaCalleInputs">
-                            <input v-model="titularTarjeta" type="text" placeholder="Nombre completo">
-                            <input v-model="numeroTarjeta" type="number" placeholder="Número de tarjeta" min="1"
-                                max="12">
+                            <input v-model="tarjetaDatos.titular" type="text" placeholder="Nombre completo">
+                            <input v-model="tarjetaDatos.cardNumber" type="text" placeholder="Número de tarjeta"
+                                minlength="12" maxlength="12" @keypress="isNumber">
                         </div>
                         <div class="numsExtIntInputs">
                             <input v-model="mes" type="number" placeholder="Mes">
                             <input v-model="year" type="number" placeholder="Año">
-                            <input v-model="cvv" type="number" class="cpNumber" placeholder="CVV"
-                                min="1" max="4">
+                            <input v-model="tarjetaDatos.cvv" type="number" class="cpNumber" placeholder="CVV" min="1"
+                                max="4">
                         </div>
                         <div class="cpInput">
-                            <input @click.prevent="agregarTarjeta()" class="signup-container_tabform_button"
+                            <input @click.prevent="guardarTarjeta()" class="signup-container_tabform_button"
                                 type="submit" value="Guardar">
                             <!-- <input type="button" value="Guardar" class="btnGuardar"> -->
                         </div>
@@ -131,7 +132,7 @@
                         <span>Subtotal: {{ subtotal | currency }}</span>
                         <hr class="linea-horizontal">
                         <div>
-                            <input @click.prevent="continuar()" class="btnSubtotalPago" type="submit"
+                            <input @click.prevent="realizarCompra" class="btnSubtotalPago" type="submit"
                                 value="Proceder al pago">
                         </div>
                     </div>
@@ -145,6 +146,7 @@
 import sidebar from '@/components/sidebar.vue';
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import { isEmptyObject } from 'jquery';
 
 export default {
     data() {
@@ -154,10 +156,9 @@ export default {
             userData: [],
             subtotal: '',
             address: '',
-            tarjetaDatos: null,
-            numeroTarjeta: '',
-            titularTarjeta: '',
-            cvv: '',
+            tarjetaExiste: false,
+            tarjetaDatos: [],
+            numTarjeta: '',
             mes: '',
             year: '',
         }
@@ -174,12 +175,14 @@ export default {
             return `$${value.toFixed(2)}`;
         }
     },
-    mounted() {
-        this.productList();
+    created() {
         this.cargarDatosUsuario();
         this.formatoDireccion();
-        // this.obtenerDireccion();
+    },
+    mounted() {
+        this.productList();
         this.cargarDatosTarjeta();
+        // this.obtenerDireccion();
     },
     methods: {
         async productList() {
@@ -196,7 +199,7 @@ export default {
                     // }
                     .then(response => {
                         p = response.data.data;
-                        console.log(p);
+                        console.log('productos', p);
                         this.products = p;
                     })
             } catch (error) {
@@ -242,7 +245,6 @@ export default {
             this.products[index].price = aux * this.products[index].cantidad;
             this.actualizarCantidad(index);
             this.calcularSubTotal();
-            this.cargarDatosTarjeta();
         },
         async actualizarCantidad(index) {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
@@ -301,7 +303,6 @@ export default {
             }
 
         },
-
         cambiarVisibililidadform2() {
             var form1div1 = document.getElementById('form1div1');
             var form1div2 = document.getElementById('form1div2');
@@ -358,18 +359,37 @@ export default {
                     }
                 })
                 this.tarjetaDatos = response.data.data[0];
-                console.log('tarjetaaa', this.tarjetaDatos);
+                console.log('tarjeta', this.tarjetaDatos);
+                console.log(typeof this.tarjetaDatos);
+                if (!isEmptyObject(this.tarjetaDatos)) {
+                    this.obtenerFechas();
+                    this.tarjetaExiste = true;
+                }
+                else {
+                    this.tarjetaDatos = [];
+                    this.tarjetaExiste = false;
+                    console.log(this.tarjetaExiste);
+                }
             } catch (error) {
-                console.error('Error al obtener la información de los productos:', error);
+                console.error('Error al obtener la información de tarjetas:', error);
             }
 
+        },
+        guardarTarjeta() {
+            if (this.tarjetaExiste) {
+                console.log('Llego aqui');
+                this.actualizarTarjeta();
+            } else {
+                this.agregarTarjeta();
+            }
+            this.cambiarVisibililidadform2();
         },
         async agregarTarjeta() {
             const token = JSON.parse(localStorage.getItem('vue2.token'))
             const response = await axios.post(`${URL_DATOS}/cards`, {
-                titular: this.titularTarjeta,
-                cardNumber: parseInt(this.numeroTarjeta),
-                cvv: this.cvv,
+                titular: this.tarjetaDatos.titular,
+                cardNumber: parseInt(this.tarjetaDatos.cardNumber),
+                cvv: this.tarjetaDatos.cvv,
                 expDate: this.mes + '/' + this.year
             },
                 {
@@ -379,8 +399,64 @@ export default {
                 }
             )
                 .then(function (response) {
-                    console.log(response.data.data[0]);
+                    console.log(response);
+                    this.tarjetaDatos.expDate = this.mes + '/' + this.year;
+                    this.tarjetaExiste = true;
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
 
+        },
+        async actualizarTarjeta() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            try {
+                const response = await axios.put(
+                    `${URL_DATOS}/cards`,
+                    {
+                        cardId: this.tarjetaDatos.cardId,
+                        titular: this.tarjetaDatos.titular,
+                        cardNumber: parseInt(this.tarjetaDatos.cardNumber),
+                        cvv: this.tarjetaDatos.cvv,
+                        expDate: this.mes + '/' + this.year
+                    },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                );
+                console.log(response.data.data[0]);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        obtenerFechas() {
+            const partes = this.tarjetaDatos.expDate.split('/');
+            this.mes = partes[0];
+            this.year = partes[1];
+            this.numTarjeta = 'XXXX-XXXX-XXXX-' + this.tarjetaDatos.cardNumber.substring(8, 12);
+        },
+        isNumber(event) {
+            const char = String.fromCharCode(event.keyCode);
+            if (!/[0-9]/.test(char)) {
+                event.preventDefault();
+            }
+        },
+        async realizarCompra() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'))
+            const response = await axios.post(`${URL_DATOS}/sale/transaction`, {
+                cardId: this.tarjetaDatos.cardId,
+                totalAmount: parseFloat(this.subtotal)
+            },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                }
+            )
+                .then(function (response) {
+                    console.log('realizada',response);
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -1006,7 +1082,6 @@ export default {
     height: 2vh;
     /* padding-left: 10%; */
     border-radius: 50%;
-    cursor: pointer;
 }
 
 .btnSubtotalPago {

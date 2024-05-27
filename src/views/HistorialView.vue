@@ -2,7 +2,7 @@
     <div class="pago">
         <sidebar />
         <transition name="fade">
-            <modal-reseñas v-show="ModalReseñas" @close="abrirModal()"/>
+            <modal-reseñas v-show="ModalReseñas" @close="abrirModal()" />
         </transition>
         <div class="contenedor">
             <div class="titulo">
@@ -12,19 +12,19 @@
             <div class="columnas">
                 <div class="columna1">
                     <div class="cards">
-                        <div class="card">
+                        <div v-for="(sale, index) in history" :key="sale.saleId" @click="selectOrder(index)" class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
+                                    <span class="pedido">Pedido: {{ sale.orderSale }}</span>
+                                    <span class="status">Estatus: {{ sale.status }}</span>
                                 </div>
                                 <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total1">Total: $500.00</span>
+                                    <span class="fecha">Fecha: {{ formatDate(sale.estimatedDate) }}</span>
+                                    <span class="total1">Total: {{ sale.totalAmount | currency }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
+                        <!-- <div class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: HF93JO</span>
@@ -35,78 +35,34 @@
                                     <span class="total1">Total: $500.00</span>
                                 </div>
                             </div>
-                        </div><div class="card">
-                            <div class="cardInfo">
-                                <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
-                                </div>
-                                <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total1">Total: $500.00</span>
-                                </div>
-                            </div>
-                        </div><div class="card">
-                            <div class="cardInfo">
-                                <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
-                                </div>
-                                <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total1">Total: $500.00</span>
-                                </div>
-                            </div>
-                        </div><div class="card">
-                            <div class="cardInfo">
-                                <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
-                                </div>
-                                <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total1">Total: $500.00</span>
-                                </div>
-                            </div>
-                        </div><div class="card">
-                            <div class="cardInfo">
-                                <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
-                                </div>
-                                <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total1">Total: $500.00</span>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="columna2">
                     <div class="cardDetails">
                         <div class="pedido_fecha">
-                            <span class="pedido2">Pedido: HF93JO</span>
-                            <span class="fecha2">Fecha: 12/12/2021</span>
+                            <span class="pedido2">Pedido: {{ordenSeleccionado}}</span>
+                            <span class="fecha2">Fecha: {{fechaSeleccionado}}</span>
                         </div>
                         <div class="statusdiv">
-                            <span class="status2">Estatus: Entregado</span>
+                            <span class="status2">Estatus: {{estatusSeleccionado}}</span>
                         </div>
-                        <div class="cardProductDetails">
+                        <div v-for="(product, index) in productosSeleccionados" :key="index" class="cardProductDetails">
                             <div class="imagen">
-                                <img src="@/assets/img/FDM_1.jpeg" alt="">
+                                <img :src="product.photo" alt="">
                             </div>
                             <div class="info2">
                                 <div class="nombre_sparkles">
-                                    <span class="nombre">The Everyday Palette</span>
+                                    <span class="nombre">{{product.productName}}</span>
                                     <img src="@/assets/img/icons/sparkles.svg" alt="">
                                 </div>
                                 <div class="marcadiv">
-                                    <span class="marca">Beauty Creations</span>
+                                    <span class="marca">{{product.productBrand}}</span>
                                 </div>
                                 <div class="colorPrecioBoton">
                                     <div class="colorPrecio">
-                                        <div class="color-box" :style="{ backgroundColor: '#' + '9B0E28' }"></div>
-                                        <span class="precio">$200.00</span>
+                                        <div class="color-box" :style="{ backgroundColor: '#' + product.color }"></div>
+                                        <span class="precio">{{ product.price | currency }}</span>
                                     </div>
                                     <div class="boton">
                                         <button @click.prevent="abrirModal()">Agregar comentario</button>
@@ -117,7 +73,7 @@
                         <hr class="linea-horizontal">
                         <div class="totaldiv">
                             <span class="rastrear">Rastrear</span>
-                            <span class="total">Total: $500.00</span>
+                            <span class="total">Total: {{totalSeleccionado | currency}}</span>
                         </div>
                     </div>
                 </div>
@@ -135,23 +91,68 @@ import ModalReseñas from '@/components/modalReseñas.vue';
 export default {
     name: 'HistorialView',
     components: {
-        sidebar,    
+        sidebar,
         ModalReseñas,
     },
-
-    data: function () {
+    filters: {
+        currency(value) {
+            if (typeof value !== "number") {
+                return value;
+            }
+            return `$${value.toFixed(2)}`;
+        }
+    },
+    data() {
         return {
-            user: {
-                email: '',
-                password: ''
-            },
+            history: [],
+            ordenSeleccionado: '',
+            fechaSeleccionado: '',
+            estatusSeleccionado: '',
+            totalSeleccionado: 0,
+            productosSeleccionados: [],
             ModalReseñas: false,
         }
-        
+
+    },
+    mounted() {
+        this.getHistory();
     },
     methods: {
         abrirModal() {
             this.ModalReseñas = !this.ModalReseñas
+        },
+        async getHistory() {
+            const token = JSON.parse(localStorage.getItem('vue2.token'));
+            try {
+                let p = [];
+                const response = await axios.get(`${URL_DATOS}/sale/history`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                })
+                    // headers: {
+                    //   Authorization: `Bearer ${localStorage.getItem('token')}`
+                    // }
+                    .then(response => {
+                        p = response.data.data.sales;
+                        console.log('historial', p);
+                        this.history = p;
+                        this.selectOrder(1);
+                    })
+            } catch (error) {
+                console.error('Error al obtener la información de los productos:', error);
+            }
+        },
+        selectOrder(index) {
+            this.ordenSeleccionado = this.history[index].orderSale;
+            this.fechaSeleccionado = this.formatDate(this.history[index].estimatedDate);
+            this.estatusSeleccionado = this.history[index].status;
+            this.totalSeleccionado = this.history[index].totalAmount;
+            this.productosSeleccionados= this.history[index].products;
+        },
+        formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
         }
     }
 }
@@ -231,14 +232,15 @@ export default {
     /* gap: 1vh; */
 }
 
-.columna1, .columna2 {
+.columna1,
+.columna2 {
     position: relative;
     /* background-color:beige; */
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 50%;
-    
+
 }
 
 .cards {
@@ -321,7 +323,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
+
 }
 
 .fecha {
@@ -417,7 +419,7 @@ export default {
     width: 80%;
     height: 80%;
     object-fit: cover;
-    
+
 }
 
 .info2 {
@@ -426,7 +428,7 @@ export default {
     height: 100%;
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .nombre_sparkles {
@@ -560,5 +562,4 @@ button:hover {
     color: #391414;
     /* margin-top: 2vh; */
 }
-
 </style>

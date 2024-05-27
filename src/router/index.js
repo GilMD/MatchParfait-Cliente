@@ -68,10 +68,10 @@ const routes = [
     component: CabelloView
   },
   {
-    path: '/uñas',
-    name: 'uñas',
+    path: '/unas',
+    name: 'unas',
     component: UñasView
-  },
+  }, 
   {
     path: '/skincare',
     name: 'skincare',
