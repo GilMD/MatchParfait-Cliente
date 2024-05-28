@@ -90,7 +90,6 @@
                                 <span id="conMetodoPago">Titular: {{ tarjetaDatos.titular }}</span>
                                 <span id="conMetodoPago">{{ numTarjeta
                                     }}</span>
-
                             </div>
                             <div v-else="titularTarjeta!==''" class="infoAddress">
 
@@ -129,7 +128,7 @@
                 </div>
                 <div class="subtotal_pagoDelimitacion">
                     <div class="subtotal_pago">
-                        <span>Subtotal: {{ subtotal | currency }}</span>
+                        <span>Total: {{ subtotal | currency }}</span>
                         <hr class="linea-horizontal">
                         <div>
                             <input @click.prevent="realizarCompra" class="btnSubtotalPago" type="submit"
@@ -444,25 +443,39 @@ export default {
             }
         },
         async realizarCompra() {
-            const token = JSON.parse(localStorage.getItem('vue2.token'))
-            const response = await axios.post(`${URL_DATOS}/sale/transaction`, {
-                cardId: this.tarjetaDatos.cardId,
-                totalAmount: parseFloat(this.subtotal)
-            },
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
+            if (this.validarCampos()) {
+                const token = JSON.parse(localStorage.getItem('vue2.token'))
+                const response = await axios.post(`${URL_DATOS}/sale/transaction`, {
+                    cardId: this.tarjetaDatos.cardId,
+                    totalAmount: parseFloat(this.subtotal)
+                },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token,
+                        }
                     }
-                }
-            )
-                .then(function (response) {
-                    console.log('realizada',response);
-                })
-                .catch(function (error) {
-                    console.log(error)
-                });
-
+                )
+                    .then(function (response) {
+                        console.log('realizada', response);
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            }
         },
+        validarCampos() {
+            if (this.products.length===0) {
+                alert('El carrito está vacio');
+                console.log('productosvacios');
+                return false;
+            }
+            if (!this.tarjetaExiste) {
+                alert('Agregue una tarjeta para realizar el pago');
+                console.log('sintarjeta');
+                return false;
+            }
+            return true;
+        }
     },
 }
 </script>
@@ -1044,13 +1057,12 @@ export default {
 
 .subtotal_pago {
 
-    background-color: #FFFCF7;
     height: 80%;
     width: 85%;
     display: flex;
     flex-direction: column;
     border-radius: 12px;
-    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
+    color: #440707;
     margin-left: 0%;
     overflow: hidden;
 }

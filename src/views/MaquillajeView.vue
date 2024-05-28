@@ -27,7 +27,9 @@
                             <div class="marca">{{ product.productBrand }}</div>
                         </div>
                         <div class="precio_botones">
-                            <div class="precio">{{ product.price }}</div>
+                            <div class="precio">{{ product.price | currency }}</div>
+                        </div>
+                        <div>
                             <button class="btnAgregarWishList" @click.prevent="agregarWishlist">
                                 <img src="@/assets/img/sparkles.svg" alt="">
                                 Agregar a wishlist
@@ -56,18 +58,56 @@ export default {
             // categories: ['Rostro', 'Ojos', 'Labios'],
             selectedCategory: '',
             OpcionProducto: ['Rostro', 'Ojos', 'Labios'],
-            userClassification: ''
+            userClassification: '',
+            rostro: [
+                'Polvos / Fijadores / Base / Primer / Corrector',
+                'Contorno / Bronceador / Iluminadores / Blush',
+                'Blush', 'Polvos', 'Fijadores', 'Base', 'Primer',
+                'Corrector', 'Contorno', 'Bronceador', 'Iluminadores'],
+
+
+            ojos: ['Paletas de ojos', 'Sombras liquidas',
+                'Sombras individuales', 'glitters', 'Mascara de pestanas',
+                'Delineadores', 'Paletas de ojos / Sombras liquidas / Sombras individuales / glitters',
+                'Mascara de pestanas / Delineadores'],
+
+            labios: ['Labiales', 'gloses ', 'Labiales / gloses'],
         };
+    },
+    filters: {
+        currency(value) {
+            if (typeof value !== "number") {
+                return value;
+            }
+            return `$${value.toFixed(2)}`;
+        }
     },
     computed: {
         filteredProducts() {
             console.log('Selected Category:', this.selectedCategory);
-            if (this.selectedCategory !== '') {
-                console.log('Filtered Products:', this.products.filter(product => product.category === this.selectedCategory));
-                return this.products.filter(product => product.category === this.selectedCategory);
+            switch (this.selectedCategory) {
+                case 'Rostro':
+                    return this.products.filter(product => this.rostro.includes(product.type));
+                    break;
+                case 'Ojos':
+                    return this.products.filter(product => this.ojos.includes(product.type));
+                    break;
+                case 'Labios':
+                    return this.products.filter(product => this.labios.includes(product.type));
+                    break;
+                default:
+                    return this.products;
+                    break;
             }
-            return this.products;
-        }
+        },
+        // filteredProducts() {
+        //     console.log('Selected Category:', this.selectedCategory);
+        //     if (this.selectedCategory !== '') {
+        //         console.log('Filtered Products:', this.products.filter(product => product.type === this.selectedCategory));
+        //         return this.products.filter(product => product.category === this.selectedCategory);
+        //     }
+        //     return this.products;
+        // }
     },
     mounted() {
         this.fetchProducts();
@@ -91,27 +131,17 @@ export default {
                 console.error('Error al obtener la información de los productos:', error);
             }
             this.filtrarMatch();
+            this.regresarCategoria();
         },
-        regresarCategoria(product) {
-            const rostro = ['Polvos', 'Fijadores', 'Base', 'Primer', 'Corrector', ' Contorno', 'Bronceador',
-                'Iluminadores'];
-            const ojos = ['Paletas de ojos', 'Sombras liquidas', 'Sombras individuales', 'glitters',
-                'Mascara de pestanas', 'Delineadores'];
-            const labios = ['Labiales', 'gloses '];
-            if (rostro.includes(product.type)) {
-                return 'Rostro';
-            }
-            if (ojos.includes(product.type)) {
-                return 'Ojos';
-            }
-            if (labios.includes(product.type)) {
-                return 'Labios';
-            }
-            return 'Otra Categoría'; // Puedes devolver otro valor o hacer algo más si no es "Rostro"
+        regresarCategoria() {
+            const xd = this.products.filter(product => this.rostro.includes(product.type));
+            const xd2 = xd.concat(this.products.filter(product => this.ojos.includes(product.type)));
+            this.products = xd2.concat(this.products.filter(product => this.labios.includes(product.type)));
+            console.log('maquillaje', this.products);
         },
         filtrarMatch() {
             this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
-            console.log('userCss',this.userClassification);
+            console.log('userCss', this.userClassification);
             const matchingProducts = this.products.filter(product => this.userClassification === product.classification);
             const nonMatchingProducts = this.products.filter(product => this.userClassification !== product.classification);
             this.products = matchingProducts.concat(nonMatchingProducts);
@@ -222,12 +252,15 @@ export default {
 }
 
 .productos {
-    display: flex;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 75%;
-    height: 77%;
+    height: 75%;
     gap: 2vh;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     margin: auto;
+    padding-bottom: 2vh;
     /* Espacio entre los elementos */
     border-radius: 2vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
@@ -249,7 +282,6 @@ export default {
 }
 
 .producto {
-    background-color: aquamarine;
     display: flex;
     width: 60vh;
     height: 19vh;
@@ -298,7 +330,7 @@ export default {
     justify-content: space-between;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #391414;
     text-align: left;
 }
@@ -309,6 +341,13 @@ export default {
     font-size: 1rem;
     color: #391414;
     text-align: left;
+}
+
+.precio_botones {
+    display: flex;
+    align-items: center;
+    gap: 1vh;
+    /* Añadido espacio entre los elementos */
 }
 
 .precio_boton .precio {
@@ -326,7 +365,7 @@ export default {
     color: #fffcf7;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1.5rem;
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
     font-size: 1rem;
