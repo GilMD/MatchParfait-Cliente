@@ -11,8 +11,8 @@
                         </div>
                         <span class="signup-information_tab_span">Información personal</span>
                         <div class="correoNombreInputs">
-                            <input v-model="user.email" type="text" placeholder="Correo">
-                            <input v-model="user.name" type="text" placeholder="Nombre(s)">
+                            <input v-model="user.email" type="text" placeholder="Correo" required>
+                            <input v-model="user.name" type="text" placeholder="Nombre(s)" required>
                         </div>
                         <div class="apellidosInputs">
                             <input v-model="user.last_name1" type="text" placeholder="Apellido paterno">
@@ -190,6 +190,7 @@
 <script>
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import Swal from 'sweetalert2';
 
 export default {
     name: 'LoginView',
@@ -311,15 +312,25 @@ export default {
                 !this.user.day || !this.user.month || !this.user.year || !this.user.gender ||
                 !this.user.state || !this.user.municipality || !this.user.suburb ||
                 !this.user.street || !this.user.ext_num || !this.user.postal_code || !this.user.acceptTerms) {
-                alert('Por favor, complete todos los campos obligatorios.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: 'Por favor, complete todos los campos obligatorios.',
+                    confirmButtonText: 'Entendido'
+                });
                 return false;
             }
             if (this.user.password !== this.user.passwordConfirm) {
-                alert('Las contraseñas no coinciden.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Contraseña',
+                    text: 'Las contraseñas no coinciden.',
+                    confirmButtonText: 'Entendido'
+                });
                 return false;
             }
             return true;
-            
+
         },
         validarFormulario2() {
             if (!this.user.texture || !this.user.shine) {
@@ -332,31 +343,6 @@ export default {
             if (this.validarFormulario()) {
                 try {
                     this.cambiarVisibililidad();
-                    // const birthDate = new Date(this.user.year, this.user.month - 1, this.user.day);
-                    // // Format the date as ISO string
-                    // const date_of_birth = birthDate.toISOString();
-                    // console.log('Date of birth:', date_of_birth);
-
-                    // const response = await axios.post(`${URL_DATOS}/auth/register`, {
-                    //     email: this.user.email,
-                    //     name: this.user.name,
-                    //     lasName1: this.user.last_name1,
-                    //     lasName2: this.user.last_name2,
-                    //     plainPassword: this.user.password,
-                    //     phone_number: this.user.phone_number,
-                    //     date_of_birth: date_of_birth,
-                    //     gender: this.user.gender,
-                    //     country: 'México',
-                    //     state: this.user.state,
-                    //     municipality: this.user.municipality,
-                    //     suburb: this.user.suburb,
-                    //     street: this.user.street,
-                    //     ext_num: this.user.ext_num,
-                    //     int_num: this.user.int_num,
-                    //     postal_code: this.user.postal_code
-                    // });
-
-                    // console.log('Registration successful:', response.data.data);
                 } catch (error) {
                     console.error('Error:', error);
                     if (error.response && error.response.data) {
@@ -364,7 +350,7 @@ export default {
                     }
                 }
             }
-            
+
         },
         updateSensibilityFlags(newSensibility) {
             this.user.tightness = newSensibility.includes('Tirantez') ? '1' : '0';
@@ -382,7 +368,12 @@ export default {
         },
         validarFormulario2() {
             if (!this.user.texture || !this.user.shine) {
-                alert('Por favor, complete todos los campos obligatorios.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: 'Por favor, complete todos los campos obligatorios.',
+                    confirmButtonText: 'Entendido'
+                });
                 return false;
             }
             return true;
@@ -434,7 +425,7 @@ export default {
                     console.log('blackheads:', this.user.blackheads);
                     console.log('roughness:', this.user.roughness);
                     console.log('tone:', this.user.rangeValue);
-                    
+
 
                     const response = await axios.post(`${URL_DATOS}/auth/register`, {
                         email: this.user.email,
@@ -489,7 +480,7 @@ export default {
 
 #div1 {
     display: block;
-    
+
 }
 
 #div2 {
@@ -627,7 +618,7 @@ export default {
 }
 
 .imgLogo {
-    
+
     display: flex;
     width: 60%;
     height: 12%;
