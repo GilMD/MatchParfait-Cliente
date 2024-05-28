@@ -12,11 +12,13 @@
             <div class="productos">
                 <div v-for="product in filteredProducts" :key="product.id" class="producto">
                     <div class="imagen_producto">
-                        <img :src="product.photo" alt="Imagen del producto" />
+                        <img @click.prevent="detalleProducto(product.productId)" :src="product.photo"
+                            alt="Imagen del producto" />
                     </div>
                     <div class="informacion_producto">
                         <div class="nombre_marca">
-                            <div class="nombre">{{ product.productName }}</div>
+                            <div @click.prevent="detalleProducto(product.productId)" class="nombre">{{
+                                product.productName }}</div>
                             <div class="marca">{{ product.productBrand }}</div>
                         </div>
                         <div class="precio_botones">
@@ -71,6 +73,10 @@ export default {
         this.fetchProducts();
     },
     methods: {
+        detalleProducto(productId) {
+            // this.$router.push(`/producto/${productId}`);
+            this.$router.push({ name: 'producto', params: { id: productId } });
+        },
         async fetchProducts() {
             const token = JSON.parse(localStorage.getItem('vue2.token'))
             try {
@@ -215,6 +221,12 @@ export default {
     margin: 2vh auto;
 }
 
+.producto:hover {
+  transition: 0.3s;
+  transform: scale(1.1);
+  z-index: 1;
+}
+
 .imagen_producto {
     /* background-color: antiquewhite; */
     width: 31vh;
@@ -227,6 +239,10 @@ export default {
     height: 100%;
     border-radius: 10px 0 0 10px;
     object-fit: cover;
+}
+
+.imagen_producto img:hover {
+  cursor: pointer;
 }
 
 .informacion_producto {
@@ -258,6 +274,10 @@ export default {
     font-size: 1.1rem;
     color: #391414;
     text-align: left;
+}
+
+.nombre:hover {
+  cursor: pointer;
 }
 
 .marca {

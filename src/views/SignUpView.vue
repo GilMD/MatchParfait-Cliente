@@ -426,7 +426,6 @@ export default {
                     console.log('roughness:', this.user.roughness);
                     console.log('tone:', this.user.rangeValue);
 
-
                     const response = await axios.post(`${URL_DATOS}/auth/register`, {
                         email: this.user.email,
                         name: this.user.name,
@@ -458,7 +457,7 @@ export default {
                         roughness: this.user.roughness,
                         tone: this.user.rangeValue
                     });
-
+                    this.$router.push('/');
                 } catch (error) {
                     console.error('Error:', error);
                     if (error.response && error.response.data) {

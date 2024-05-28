@@ -25,18 +25,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="card">
-                            <div class="cardInfo">
-                                <div class="pedido_status">
-                                    <span class="pedido">Pedido: HF93JO</span>
-                                    <span class="status">Estatus: Entregado</span>
-                                </div>
-                                <div class="fecha_total">
-                                    <span class="fecha">Fecha: 12/12/2021</span>
-                                    <span class="total1">Total: $500.00</span>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
                 <div class="columna2">
@@ -146,13 +134,15 @@ export default {
                         p = response.data.data.sales;
                         console.log('historial', p);
                         this.history = p;
-                        this.selectOrder(1);
+                        this.history.sort((a, b) =>b.orderSale - a.orderSale);
+                        this.selectOrder(0);
                     })
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
             }
         },
         selectOrder(index) {
+            
             this.ordenSeleccionado = this.history[index].orderSale;
             this.fechaSeleccionado = this.formatDate(this.history[index].estimatedDate);
             this.estatusSeleccionado = this.history[index].status;

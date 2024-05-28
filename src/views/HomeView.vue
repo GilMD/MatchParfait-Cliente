@@ -4,7 +4,7 @@
     <div class="pagina">
       <div class="title">
         <img src="../assets/img/estrellas.png" alt="">
-        <h1 class="t1">Acercándote a la perfección</h1>
+        <span>Acercándote a la perfección</span>
         <img src="../assets/img/estrellas.png" alt="">
       </div>
 
@@ -33,7 +33,7 @@
             @click.prevent="detalleProducto(producto.productId)">
             <div class="img_container">
               <img :src="producto.photo" class="img" />
-              <img class="sparkles" src="@/assets/img/icons/sparkles.svg" alt="">
+              <img v-if="revisarMatch(producto)" class="sparkles" src="@/assets/img/icons/sparkles.svg" alt="">
             </div>
             <div class="detalles">
               <span class="titulos">{{ producto.productName }}</span><br>
@@ -49,10 +49,11 @@
       <div class="carrusel">
         <h2 class="fdm">Visto reciente</h2>
         <div class="container">
-          <div class="child" v-for="(producto, index) in productosvr" :key="producto.productId">
+          <div class="child" v-for="(producto, index) in productosvr" :key="producto.productId"
+            @click.prevent="detalleProducto(producto.productId)">
             <div class="img_container">
               <img :src="producto.photo" class="img" />
-              <img class="sparkles" src="@/assets/img/icons/sparkles.svg" alt="">
+              <img v-if="revisarMatch(producto)" class="sparkles" src="@/assets/img/icons/sparkles.svg" alt="">
             </div>
             <div class="detalles">
               <span class="titulos">{{ producto.productName }}</span><br>
@@ -166,11 +167,19 @@ export default {
       }
     },
     filtrarMatch() {
-      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
-      console.log('userCss', this.userClassification);
+      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification
+      console.log('userCssfiltro', this.userClassification);
       const matchingProducts = this.productosfm.filter(product => this.userClassification === product.classification);
       const nonMatchingProducts = this.productosfm.filter(product => this.userClassification !== product.classification);
       this.productosfm = matchingProducts.concat(nonMatchingProducts);
+    },
+    revisarMatch(product) {
+      if (typeof product.classification !== 'undefined') {
+        if (product.classification !== this.userClassification) {
+          return false;
+        }
+      }
+      return true;
     },
     startScrolling() {
       this.interval = setInterval(() => {
@@ -187,41 +196,6 @@ export default {
         this.interval = null;
       }
     },
-
-    // async obtenerProductos() {
-    //   try {
-    //     const response = await fetch('productosFav.json');
-    //     if (!response.ok) {
-    //       throw new Error('No se pudo cargar el archivo JSON');
-    //     }
-    //     const data = await response.json();
-
-    //     // Asignar los productos de "FavMes" a this.productosFavMes
-    //     // this.productosfm = data.FavMes;
-    //     this.productosfm = data.FavMes.map(producto => ({
-    //       nombre: producto.nombre,
-    //       marca: producto.marca,
-    //       rating: producto.rating,
-    //       imagen: require('@/assets/' + producto.imagen)
-    //     }));
-
-
-
-
-    // Asignar los productos de "vistoreciente" a this.productosVistoReciente
-    // this.productosvr = data.vistoreciente;
-    //     this.productosvr = data.vistoreciente.map(producto => ({
-    //       nombre: producto.nombre,
-    //       marca: producto.marca,
-    //       rating: producto.rating,
-    //       imagen: require('@/assets/' + producto.imagen)
-    //     }));
-
-    //   } catch (error) {
-    //     console.error('Error al obtener la información de los productos:', error);
-    //   }
-    // },
-
     MaquillajeView() {
       this.$router.push(`/maquillaje`);
     },
@@ -288,13 +262,13 @@ export default {
   /* Centrar elementos horizontalmente */
   margin-top: -1%;
   /* Ajustar margen superior según sea necesario */
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
+  font-family: Playfair Display;
+  font-weight: 400;
 }
 
-.title h1 {
+.title span {
   font-size: 2.5vw;
-  color: #333;
+  color: #440707;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   margin-left: 1%;
   font-weight: 450;
@@ -480,6 +454,7 @@ export default {
   transition: 0.3s;
   transform: scale(1.1);
   z-index: 1;
+  cursor: pointer;
 }
 
 .child>.img_container {

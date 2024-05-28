@@ -34,7 +34,10 @@
             <span>
               {{ productos.productName }}
             </span>
-            <img id="sparkles" class="sparkles" src="@/assets/img/sparkles_red.svg">
+            <div>
+              <img id="sparkles" class="sparkles" src="@/assets/img/sparkles_red.svg">
+            </div>
+            
           </div>
 
           <div class="marca">
@@ -217,8 +220,9 @@ export default {
         });
     },
     revisarMatch() {
-      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
+      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification
             console.log('userCss',this.userClassification);
+            console.log('prodcss',this.productos.classification);
       if (this.userClassification === this.productos.classification) {
         document.getElementById('sparkles').style.display = 'block';
         return;
@@ -630,7 +634,7 @@ input::-webkit-inner-spin-button {
 .sparkles {
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: start;
   width: 20%;
 
 }

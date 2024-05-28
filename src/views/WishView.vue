@@ -9,12 +9,12 @@
                 <div class="productos">
                     <div v-for="(product, index) in products" :key="product.id" class="producto">
                         <div class="imagen_producto">
-                            <img :src="product.photo" alt="Imagen del producto">
+                            <img @click.prevent="detalleProducto(product.productId)" :src="product.photo" alt="Imagen del producto">
                         </div>
                         <div class="informacion_producto">
                             <div class="nombre_marca">
-                                <td class="nombre"> {{ product.productName }}
-                                    <div id="sparkles" class="sparkles">
+                                <td @click.prevent="detalleProducto(product.productId)" class="nombre"> {{ product.productName }}
+                                    <div v-if="revisarMatch(product)" id="sparkles" class="sparkles">
                                         <img src="@/assets/img/sparkles_red.svg" alt="">
                                     </div>
                                 </td>
@@ -75,6 +75,10 @@ export default {
         this.revisarMatch();
     },
     methods: {
+        detalleProducto(productId) {
+            // this.$router.push(`/producto/${productId}`);
+            this.$router.push({ name: 'producto', params: { id: productId } });
+        },
         async productList() {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
             try {
@@ -141,12 +145,11 @@ export default {
             // }
             console.log('Datos usuario', this.userData);
         },
-        revisarMatch() {
-            for (product in this.products) {
-                if (this.userData.classification === product.classification) {
-                    document.getElementById('sparkles').style.display = 'block';
-                }
+        revisarMatch(product) {
+            if (product.classification !== this.userData[0].classification) {
+                return false;
             }
+            return true;
         }
     }
 }
@@ -221,6 +224,13 @@ export default {
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     margin: 2vh auto;
 }
+
+.producto:hover {
+  transition: 0.3s;
+  transform: scale(1.1);
+  z-index: 1;
+}
+
 .titulo {
     /* background-color: #f0f0f0; */
     width: 80%;
@@ -253,6 +263,10 @@ export default {
 
 .imagen_producto img {
     border-radius: 10px 0 0 10px;
+}
+
+.imagen_producto img:hover {
+  cursor: pointer;
 }
 
 .informacion_producto {
@@ -297,16 +311,16 @@ export default {
     width: 80%;
 }
 
+.nombre:hover {
+  cursor: pointer;
+}
+
 .sparkles {
     display: flex;
     flex-direction: column;
     align-items: end;
     width: 20%;
 
-}
-
-#sparkles {
-    display: none;
 }
 
 .sparkles img {
@@ -411,8 +425,8 @@ export default {
     margin-right: 8%;
 }
 
-.Basura {
-    width: 30%;
+.basura img:hover {
+    cursor: pointer;
 }
 
 .color-box {
