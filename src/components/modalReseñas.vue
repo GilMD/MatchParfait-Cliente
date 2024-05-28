@@ -39,32 +39,67 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { URL_DATOS } from '@/Utils/constantes';
 export default {
+    props: {
+        productId: String // Asegúrate de que la información del producto es pasada como una prop
+    },
     data() {
         return {
             rating: 0,
             puntuacionSeleccionada: 0,
             puntuacionMatch: 0,
-            comentario: ''
+            comentario: '',
+            error: '',
+            errorMatch: ''
         }
-
     },
     methods: {
-        save() {
-            console.log('Rating:', this.rating)
+        async save() {
+            if (this.puntuacionSeleccionada === 0) {
+                alert('Por favor, selecciona una puntuación antes de guardar.');
+                return;
+            }
+
+            if (this.puntuacionMatch === 0) {
+                alert('Por favor, selecciona una puntuación de match antes de guardar.');
+                return;
+            }
+            try {
+                const token = JSON.parse(localStorage.getItem('vue2.token'));
+                const response = await axios.post(`${URL_DATOS}/comments`, {
+                    productId: this.productId,
+                    score: this.puntuacionSeleccionada,
+                    matchScore: this.puntuacionMatch,
+                    comment: this.comentario,
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                });
+                console.log('Reseña guardada:', response.data);
+                this.close();
+            } catch (error) {
+                console.error('Error al guardar la reseña:', error);
+            }
         },
 
         puntuacionP(star) {
-            this.puntuacionSeleccionada = star
+            this.puntuacionSeleccionada = star;
+            this.error = '';
         },
         puntuacionM(star) {
-            this.puntuacionMatch = star
+            this.puntuacionMatch = star;
+            this.errorMatch = '';
         },
         limpiar() {
             this.rating = 0;
             this.puntuacionSeleccionada = 0;
             this.puntuacionMatch = 0;
             this.comentario = '';
+            this.error = '';
+            this.errorMatch = '';
         },
         close() {
             this.limpiar();

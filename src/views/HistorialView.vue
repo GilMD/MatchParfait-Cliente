@@ -2,7 +2,7 @@
     <div class="pago">
         <sidebar />
         <transition name="fade">
-            <modal-reseñas v-show="ModalReseñas" @close="abrirModal()" />
+            <modal-reseñas v-show="ModalReseñas" :productId="productoSeleccionado" @close="abrirModal()" />
         </transition>
         <div class="contenedor">
             <div class="titulo">
@@ -12,7 +12,8 @@
             <div class="columnas">
                 <div class="columna1">
                     <div class="cards">
-                        <div v-for="(sale, index) in history" :key="sale.saleId" @click="selectOrder(index)" class="card">
+                        <div v-for="(sale, index) in history" :key="sale.saleId" @click="selectOrder(index)"
+                            class="card">
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: {{ sale.orderSale }}</span>
@@ -41,41 +42,47 @@
                 <div class="columna2">
                     <div class="cardDetails">
                         <div class="pedido_fecha">
-                            <span class="pedido2">Pedido: {{ordenSeleccionado}}</span>
-                            <span class="fecha2">Fecha: {{fechaSeleccionado}}</span>
+                            <span class="pedido2">Pedido: {{ ordenSeleccionado }}</span>
+                            <span class="fecha2">Fecha: {{ fechaSeleccionado }}</span>
                         </div>
                         <div class="statusdiv">
-                            <span class="status2">Estatus: {{estatusSeleccionado}}</span>
+                            <span class="status2">Estatus: {{ estatusSeleccionado }}</span>
                         </div>
-                        <div v-for="(product, index) in productosSeleccionados" :key="index" class="cardProductDetails">
-                            <div class="imagen">
-                                <img :src="product.photo" alt="">
-                            </div>
-                            <div class="info2">
-                                <div class="nombre_sparkles">
-                                    <span class="nombre">{{product.productName}}</span>
-                                    <img src="@/assets/img/icons/sparkles.svg" alt="">
+                        <div class="contenedorcards">
+                            <div v-for="(product, index) in productosSeleccionados" :key="index"
+                                class="cardProductDetails">
+                                <div class="imagen">
+                                    <img :src="product.photo" alt="">
                                 </div>
-                                <div class="marcadiv">
-                                    <span class="marca">{{product.productBrand}}</span>
-                                </div>
-                                <div class="colorPrecioBoton">
-                                    <div class="colorPrecio">
-                                        <div class="color-box" :style="{ backgroundColor: '#' + product.color }"></div>
-                                        <span class="precio">{{ product.price | currency }}</span>
+                                <div class="info2">
+                                    <div class="nombre_sparkles">
+                                        <span class="nombre">{{ product.productName }}</span>
+                                        <img src="@/assets/img/icons/sparkles.svg" alt="">
                                     </div>
-                                    <div class="boton">
-                                        <button @click.prevent="abrirModal()">Agregar comentario</button>
+                                    <div class="marcadiv">
+                                        <span class="marca">{{ product.productBrand }}</span>
+                                    </div>
+                                    <div class="colorPrecioBoton">
+                                        <div class="colorPrecio">
+                                            <div class="color-box" :style="{ backgroundColor: '#' + product.color }">
+                                            </div>
+                                            <span class="precio">{{ product.price | currency }}</span>
+                                        </div>
+                                        <div class="boton">
+                                            <button @click.prevent="abrirModal(product.productId)">Agregar comentario</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <hr class="linea-horizontal">
                         <div class="totaldiv">
                             <span class="rastrear">Rastrear</span>
-                            <span class="total">Total: {{totalSeleccionado | currency}}</span>
+                            <span class="total">Total: {{ totalSeleccionado | currency }}</span>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -110,6 +117,7 @@ export default {
             estatusSeleccionado: '',
             totalSeleccionado: 0,
             productosSeleccionados: [],
+            productoSeleccionado: '',
             ModalReseñas: false,
         }
 
@@ -118,7 +126,8 @@ export default {
         this.getHistory();
     },
     methods: {
-        abrirModal() {
+        abrirModal(productId) {
+            this.productoSeleccionado = productId;
             this.ModalReseñas = !this.ModalReseñas
         },
         async getHistory() {
@@ -148,7 +157,7 @@ export default {
             this.fechaSeleccionado = this.formatDate(this.history[index].estimatedDate);
             this.estatusSeleccionado = this.history[index].status;
             this.totalSeleccionado = this.history[index].totalAmount;
-            this.productosSeleccionados= this.history[index].products;
+            this.productosSeleccionados = this.history[index].products;
         },
         formatDate(dateString) {
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -245,7 +254,7 @@ export default {
 
 .cards {
     position: relative;
-    width: 78%;
+    width: 80%;
     height: 95%;
     /* background-color: blueviolet; */
     display: flex;
@@ -254,9 +263,11 @@ export default {
     /* margin-top: 2vh;
     margin-left: 2%; */
     align-self: center;
-    margin-left: 10%;
+    margin-left: 12%;
     overflow: auto;
 }
+
+
 
 .cards::-webkit-scrollbar {
     width: 1vh;
@@ -275,7 +286,7 @@ export default {
 .card {
     position: relative;
     background-color: #FFFCF7;
-    width: 96%;
+    width: 94%;
     height: 20%;
     display: flex;
     flex-direction: row;
@@ -284,6 +295,13 @@ export default {
     box-shadow: 0vh 0.4vh 0.4vh 0vh #00000040;
     margin-top: 1%;
     margin-bottom: 1%;
+    margin-left: 2.1vh;
+}
+
+.card:hover {
+    cursor: pointer;
+    transition-duration: .5s;
+    transform: scale(1.05);
 }
 
 .cardInfo {
@@ -343,7 +361,7 @@ export default {
     position: relative;
     background-color: #FFFCF7;
     width: 96%;
-    height: 95%;
+    height: 98vh;
     display: flex;
     flex-direction: column;
     gap: 2vh;
@@ -352,6 +370,7 @@ export default {
     margin-top: .5%;
     margin-bottom: 1%;
     margin-left: -.8%;
+
 }
 
 .pedido_fecha {
@@ -391,10 +410,23 @@ export default {
     color: #391414;
 }
 
+.contenedorcards {
+    /* background-color: aqua  ; */
+    height: 51vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    margin-top: 0vh;
+    margin-left: 2.5vh;
+    margin-right: 2vh;
+    overflow: auto;
+}
+
 .cardProductDetails {
     position: relative;
     width: 96%;
-    height: 20%;
+    height: 31%;
     /* background-color: bisque; */
     display: flex;
     flex-direction: row;
@@ -402,6 +434,7 @@ export default {
     box-shadow: 0vh 0.4vh 0.4vh 0vh #00000040;
     border-radius: 2vh;
 }
+
 
 .imagen {
     position: relative;

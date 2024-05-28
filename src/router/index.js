@@ -14,6 +14,7 @@ import SkinCareView from '@/views/SkinCareView.vue';
 import UñasView from '@/views/UñasView.vue';
 import MtdPagoView from '@/views/MtdPagoView.vue';
 import HistorialView from '@/views/HistorialView.vue';
+import modalReseñas from '@/components/modalReseñas.vue';
 
 
 
@@ -55,6 +56,12 @@ const routes = [
     path: '/producto/:id',
     name: 'producto',
     component: ProductoView,
+    props: true
+  },
+  {
+    path: '/reseñas',
+    name: 'modalReseñas',
+    component: modalReseñas,
     props: true
   },
   {
