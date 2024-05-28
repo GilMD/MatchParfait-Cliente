@@ -9,11 +9,13 @@
                 <div class="productos">
                     <div v-for="(product, index) in products" :key="product.id" class="producto">
                         <div class="imagen_producto">
-                            <img @click.prevent="detalleProducto(product.productId)" :src="product.photo" alt="Imagen del producto">
+                            <img @click.prevent="detalleProducto(product.productId)" :src="product.photo"
+                                alt="Imagen del producto">
                         </div>
                         <div class="informacion_producto">
                             <div class="nombre_marca">
-                                <td @click.prevent="detalleProducto(product.productId)" class="nombre"> {{ product.productName }}
+                                <td @click.prevent="detalleProducto(product.productId)" class="nombre"> {{
+                                    product.productName }}
                                     <div v-if="revisarMatch(product)" id="sparkles" class="sparkles">
                                         <img src="@/assets/img/sparkles_red.svg" alt="">
                                     </div>
@@ -28,7 +30,7 @@
                                 <div class="carrito">
                                     <button @click.prevent="agregarCarrito(index)" class="carrito-btn">
                                         <img src="@/assets/img/cesta_ico.png" alt="">
-                                        Comprar
+                                        <span>Agregar al carrito</span>
                                     </button>
                                 </div>
                                 <div class="basura">
@@ -48,6 +50,7 @@
 import sidebar from '@/components/sidebar.vue';
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -118,25 +121,42 @@ export default {
         },
         async agregarCarrito(index) {
             const token = JSON.parse(localStorage.getItem('vue2.token'))
-            const response = await axios.post(`${URL_DATOS}/shoppingCart`, {
-                productId: this.products[index].productId,
-                color: this.products[index].color,
-                cantidad: 1
-            },
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                    }
-                }
-            )
-                .then(function (response) {
-                    console.log(response.data.data[0]);
+            try {
+                const response = await axios.post(`${URL_DATOS}/shoppingCart`, {
+                    productId: this.products[index].productId,
+                    color: this.products[index].color,
+                    cantidad: 1
+                },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token,
+                        }
+                    });
 
-                })
-                .catch(function (error) {
-                    console.log(error)
+                // Producto agregado al carrito con éxito
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Producto Agregado',
+                    text: 'El producto se ha agregado a tu carrito de compras con éxito.',
+                    confirmButtonText: 'Entendido'
                 });
-                this.borrarProd(this.products[index].wish_listId)
+
+                console.log(response.data.data[0]);
+
+                // Borrar producto de la lista de deseos
+                this.borrarProd(this.products[index].wish_listId);
+
+            } catch (error) {
+                // Error al agregar el producto al carrito
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al Agregar',
+                    text: 'No se pudo agregar el producto al carrito de compras. Por favor, inténtalo de nuevo.',
+                    confirmButtonText: 'Entendido'
+                });
+
+                console.log(error);
+            }
         },
         cargarDatosUsuario() {
             this.userData = JSON.parse(localStorage.getItem('vue2.userData'));
@@ -208,7 +228,7 @@ export default {
     height: 75%;
     gap: 2vh;
     /* flex-wrap: wrap; */
-  
+
     padding-bottom: 2vh;
     /* Espacio entre los elementos */
     border-radius: 2vh;
@@ -225,11 +245,11 @@ export default {
     margin: 2vh auto;
 }
 
-.producto:hover {
+/* .producto:hover {
   transition: 0.3s;
   transform: scale(1.1);
   z-index: 1;
-}
+} */
 
 .titulo {
     /* background-color: #f0f0f0; */
@@ -266,7 +286,9 @@ export default {
 }
 
 .imagen_producto img:hover {
-  cursor: pointer;
+    cursor: pointer;
+    transform: scale(1.02);
+    transition: 0.3s;
 }
 
 .informacion_producto {
@@ -312,7 +334,9 @@ export default {
 }
 
 .nombre:hover {
-  cursor: pointer;
+    cursor: pointer;
+    transform: scale(1.02);
+    transition: 0.3s;
 }
 
 .sparkles {
@@ -400,7 +424,7 @@ export default {
 .carrito {
     display: flex;
     flex-direction: row;
-    align-items: start;
+    align-items: center;
 }
 
 .carrito-btn {
@@ -409,13 +433,24 @@ export default {
     align-items: center;
     padding: 5px 5px;
     font-size: 15px;
-    font-family: DM Sans;
+    font-family: 'DM Sans', sans-serif;
     border-radius: 15px;
     background-color: #9B0E28;
     color: #FFFFFF;
     height: 4vh;
-    width: 15vh;
+    width: 20vh;
     object-fit: cover;
+}
+
+.carrito-btn:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+    transition: 0.3s;
+}
+
+.carrito-btn span {
+
+    margin-left: -1%;
 }
 
 .carrito-btn img {
@@ -427,6 +462,8 @@ export default {
 
 .basura img:hover {
     cursor: pointer;
+    transform: scale(1.04);
+    transition: 0.3s;
 }
 
 .color-box {

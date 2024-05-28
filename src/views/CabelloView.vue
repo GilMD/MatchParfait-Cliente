@@ -3,8 +3,8 @@
         <sidebar />
         <div class="contenedor">
             <div class="titulo">
-                <h1>Cabello</h1>
-            </div>
+                <span>Cabello</span>
+            </div> 
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
                 <input type="text" placeholder="Buscar..." class="custom-placeholder" />
@@ -25,7 +25,7 @@
                         <div>
                             <button class="btnAgregarWishList" @click.prevent="agregarWishlist">
                                 <img src="@/assets/img/sparkles.svg" alt="">
-                                Agregar a wishlist
+                                Wishlist
                             </button>
                         </div>
                     </div>
@@ -121,7 +121,6 @@ export default {
     width: 98%;
     height: 98%;
     overflow: hidden;
-
 }
 
 .titulo {
@@ -130,8 +129,8 @@ export default {
     text-align: left;
     margin: 2vh auto;
     font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 400;
     color: #9B0E28;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -141,7 +140,7 @@ export default {
     /* background-color: antiquewhite; */
     position: relative;
     margin: auto;
-    padding-bottom: 2vh;
+    margin-bottom: 3vh;
     width: 100%;
     max-width: 75%;
     color: #FFFCF7;
@@ -182,11 +181,12 @@ export default {
 
 
 .productos {
+    /* background-color: antiquewhite; */
     /* display: flex; */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 75%;
-    height: 75%;
+    height: 80%;
     gap: 2vh;
     /* flex-wrap: wrap; */
     margin: auto;
@@ -310,7 +310,7 @@ export default {
     color: #fffcf7;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1.5rem;
     cursor: pointer;
     font-family: "DM Sans", sans-serif;
     font-size: 1rem;

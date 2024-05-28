@@ -1,21 +1,14 @@
 <template>
-    <div id="app" class="maquillaje page">
+    <div id="app" class="search page">
         <sidebar />
         <div class="contenedor">
             <div class="titulo">
-                <span>Maquillaje</span>
-            </div>
+                <span>Buscar</span>
+            </div> 
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
-                <input type="text" placeholder="Buscar..." class="custom-placeholder" />
+                <input  v-model="searchTerm" type="text" placeholder="Buscar..." class="custom-placeholder" />
             </div>
-            <v-container class="vcontainer">
-                <v-chip-group column active-class="primary--text" v-model="selectedCategory">
-                    <v-chip v-for="option in OpcionProducto" :key="option" :value="option" class="ma-2" size="x-large">
-                        {{ option }}
-                    </v-chip>
-                </v-chip-group>
-            </v-container>
             <div class="productos">
                 <div v-for="product in filteredProducts" :key="product.id" class="producto">
                     <div class="imagen_producto">
@@ -30,9 +23,9 @@
                             <div class="precio">{{ product.price | currency }}</div>
                         </div>
                         <div>
-                            <button class="btnAgregarWishList" @click.prevent="agregarWishlist">
+                            <button class="btnAgregarWishList" @click.prevent="agregarWishlist(product)">
                                 <img src="@/assets/img/sparkles.svg" alt="">
-                                Wishlist
+                                Agregar a wishlist
                             </button>
                         </div>
                     </div>
@@ -42,36 +35,23 @@
     </div>
 </template>
 
+
+
 <script>
 import sidebar from '@/components/sidebar.vue'
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import Swal from 'sweetalert2';
 
 export default {
-    name: 'MaquillajeView',
+    name: 'SearchView',
     components: {
         sidebar
     },
     data() {
         return {
             products: [],
-            // categories: ['Rostro', 'Ojos', 'Labios'],
-            selectedCategory: '',
-            OpcionProducto: ['Rostro', 'Ojos', 'Labios'],
-            userClassification: '',
-            rostro: [
-                'Polvos / Fijadores / Base / Primer / Corrector',
-                'Contorno / Bronceador / Iluminadores / Blush',
-                'Blush', 'Polvos', 'Fijadores', 'Base', 'Primer',
-                'Corrector', 'Contorno', 'Bronceador', 'Iluminadores'],
-
-
-            ojos: ['Paletas de ojos', 'Sombras liquidas',
-                'Sombras individuales', 'Glitters', 'Mascara de pestanas',
-                'Delineadores', 'Paletas de ojos / Sombras liquidas / Sombras individuales / Glitters',
-                'Mascara de pestanas / Delineadores'],
-
-            labios: ['Labiales', 'gloses ', 'Labiales / gloses'],
+            searchTerm: '',
         };
     },
     filters: {
@@ -84,30 +64,12 @@ export default {
     },
     computed: {
         filteredProducts() {
-            console.log('Selected Category:', this.selectedCategory);
-            switch (this.selectedCategory) {
-                case 'Rostro':
-                    return this.products.filter(product => this.rostro.includes(product.type));
-                    break;
-                case 'Ojos':
-                    return this.products.filter(product => this.ojos.includes(product.type));
-                    break;
-                case 'Labios':
-                    return this.products.filter(product => this.labios.includes(product.type));
-                    break;
-                default:
-                    return this.products;
-                    break;
-            }
-        },
-        // filteredProducts() {
-        //     console.log('Selected Category:', this.selectedCategory);
-        //     if (this.selectedCategory !== '') {
-        //         console.log('Filtered Products:', this.products.filter(product => product.type === this.selectedCategory));
-        //         return this.products.filter(product => product.category === this.selectedCategory);
-        //     }
-        //     return this.products;
-        // }
+            return this.products.filter(product => {
+                const nameMatch = product.productName.toLowerCase().includes(this.searchTerm.toLowerCase());
+                const brandMatch = product.productBrand.toLowerCase().includes(this.searchTerm.toLowerCase());
+                return nameMatch || brandMatch;
+            });
+        }
     },
     mounted() {
         this.fetchProducts();
@@ -129,27 +91,39 @@ export default {
                     .then(response => {
                         p = response.data.data;
                         this.products = p;
-                        console.log('productos', this.products);
                     })
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
             }
-            this.filtrarMatch();
-            this.regresarCategoria();
         },
-        regresarCategoria() {
-            const xd = this.products.filter(product => this.rostro.includes(product.type));
-            const xd2 = xd.concat(this.products.filter(product => this.ojos.includes(product.type)));
-            this.products = xd2.concat(this.products.filter(product => this.labios.includes(product.type)));
-            console.log('maquillaje', this.products);
+        async agregarWishlist(product) {
+            const token = JSON.parse(localStorage.getItem('vue2.token'))
+            try {
+                const response = await axios.post(`${URL_DATOS}/wishList/`, {
+                    productId: product.productId,
+                    color: product.color
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Agregado a la Wishlist',
+                    text: 'El producto ha sido agregado a tu wishlist.',
+                    confirmButtonText: 'Entendido'
+                });
+
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al agregar a la Wishlist',
+                    text: 'No se pudo agregar el producto a la wishlist. Por favor, inténtalo de nuevo.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
         },
-        filtrarMatch() {
-            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
-            console.log('userCss', this.userClassification);
-            const matchingProducts = this.products.filter(product => this.userClassification === product.classification);
-            const nonMatchingProducts = this.products.filter(product => this.userClassification !== product.classification);
-            this.products = matchingProducts.concat(nonMatchingProducts);
-        }
     },
 }
 </script>
@@ -179,7 +153,6 @@ export default {
     width: 98%;
     height: 98%;
     overflow: hidden;
-
 }
 
 .titulo {
@@ -199,10 +172,11 @@ export default {
     /* background-color: antiquewhite; */
     position: relative;
     margin: auto;
+    margin-bottom: 3vh;
     width: 100%;
     max-width: 75%;
     color: #FFFCF7;
-    margin-bottom: 3vh;
+    border: none;
 }
 
 .searchBar img {
@@ -221,6 +195,7 @@ export default {
     border-radius: 2vh;
     color: #FFFCF7;
     font-size: 1rem;
+    border: none;
 }
 
 .custom-placeholder::placeholder {
@@ -232,37 +207,18 @@ export default {
     /* background-color: aquamarine; */
     width: 75%;
     height: auto;
-    margin-top: -1%;
-    margin-bottom: .5%;
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
 }
 
-.v-chip-group .v-chip {
-    cursor: pointer;
-    border-radius: 50px;
-    font-family: "DM Sans", sans-serif;
-    font-size: 1.1em;
-    background-color: #F00D38;
-    color: #FFFCF7;
-    margin-top: 0%;
-}
-
-.v-chip:hover {
-    background-color: #F00D38;
-
-}
-
-.active-chip {
-
-    background-color: #d00c33 !important;
-}
 
 .productos {
-    /* background-color: aqua; */
+    /* background-color: antiquewhite; */
     /* display: flex; */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 75%;
-    height: 75%;
+    height: 80%;
     gap: 2vh;
     /* flex-wrap: wrap; */
     margin: auto;
@@ -288,6 +244,7 @@ export default {
 }
 
 .producto {
+    
     display: flex;
     width: 60vh;
     height: 19vh;
@@ -296,11 +253,7 @@ export default {
     margin: 2vh auto;
 }
 
-.producto:hover {
-  transition: 0.3s;
-  transform: scale(1.1);
-  z-index: 1;
-}
+
 
 .imagen_producto {
     /* background-color: antiquewhite; */
@@ -318,6 +271,8 @@ export default {
 
 .imagen_producto img:hover {
   cursor: pointer;
+  transform: scale(1.02);
+  transition: 0.3s;
 }
 
 .informacion_producto {
@@ -353,6 +308,8 @@ export default {
 
 .nombre:hover {
   cursor: pointer;
+  transform: scale(1.01);
+  transition: 0.3s;
 }
 
 .marca {
@@ -385,10 +342,15 @@ export default {
     color: #fffcf7;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 1.5rem;
-    cursor: pointer;
+    border-radius: 0.5rem;
     font-family: "DM Sans", sans-serif;
     font-size: 1rem;
+}
+
+.btnAgregarWishList:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: 0.3s;
 }
 
 .btnAgregarWishList img {

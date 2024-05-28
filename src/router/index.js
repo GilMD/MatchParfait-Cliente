@@ -15,6 +15,8 @@ import UñasView from '@/views/UñasView.vue';
 import MtdPagoView from '@/views/MtdPagoView.vue';
 import HistorialView from '@/views/HistorialView.vue';
 import modalReseñas from '@/components/modalReseñas.vue';
+import SearchView from '@/views/SearchView.vue';
+
 
 
 
@@ -41,6 +43,11 @@ const routes = [
     name: 'home',
     component: HomeView
 
+  },
+  {
+    path: '/search',
+    name: 'SearchView',
+    component: SearchView
   },
   {
     path: '/cart',

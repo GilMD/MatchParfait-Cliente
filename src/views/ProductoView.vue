@@ -37,9 +37,7 @@
             <div>
               <img id="sparkles" class="sparkles" src="@/assets/img/sparkles_red.svg">
             </div>
-            
           </div>
-
           <div class="marca">
             {{ productos.productBrand }}
           </div>
@@ -95,11 +93,11 @@
         <div class="botones">
           <button class="action-button" @click.prevent="agregarCarrito">
             <img src="@/assets/img/cesta_ico.png" alt="">
-            Agregar al carrito
+            <span>Agregar al carrito</span>
           </button>
           <button class="action-button" @click.prevent="agregarWishlist">
             <img src="@/assets/img/sparkles.svg" alt="">
-            Agregar a wishlist
+            <span>Agregar a wishlist</span>
           </button>
         </div>
       </div>
@@ -111,6 +109,7 @@
 import axios from 'axios';
 import { URL_DATOS } from '../Utils/constantes';
 import sidebar from '@/components/sidebar.vue'
+import Swal from 'sweetalert2';
 
 export default {
   props: {
@@ -179,50 +178,79 @@ export default {
     },
     async agregarWishlist() {
       const token = JSON.parse(localStorage.getItem('vue2.token'))
-      const response = await axios.post(`${URL_DATOS}/wishList/`, {
-        productId: this.id,
-        color: this.colorSelected
-      },
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          }
-        }
-      )
-        .then(function (response) {
-          console.log(response.data.data[0]);
+      try {
+        const response = await axios.post(`${URL_DATOS}/wishList/`, {
+          productId: this.id,
+          color: this.colorSelected
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            }
+          });
 
-        })
-        .catch(function (error) {
-          console.log(error)
+        Swal.fire({
+          icon: 'success',
+          title: 'Producto Agregado',
+          text: 'El producto se ha agregado a tu lista de deseos con éxito.',
+          confirmButtonText: 'Entendido'
+        }).then(() => {
+          this.$router.push('/home'); 
         });
+
+        console.log(response.data.data[0]);
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al Agregar',
+          text: 'No se pudo agregar el producto a la lista de deseos. Por favor, inténtalo de nuevo.',
+          confirmButtonText: 'Entendido'
+        });
+
+        console.log(error);
+      }
 
     },
     async agregarCarrito() {
       const token = JSON.parse(localStorage.getItem('vue2.token'))
-      const response = await axios.post(`${URL_DATOS}/shoppingCart`, {
-        productId: this.id,
-        color: this.colorSelected,
-        cantidad: parseInt(this.cantidad)
-      },
-        {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          }
-        }
-      )
-        .then(function (response) {
-          console.log(response.data.data[0]);
+      try {
+        const response = await axios.post(`${URL_DATOS}/shoppingCart`, {
+          productId: this.id,
+          color: this.colorSelected,
+          cantidad: parseInt(this.cantidad)
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            }
+          });
 
-        })
-        .catch(function (error) {
-          console.log(error)
+        Swal.fire({
+          icon: 'success',
+          title: 'Producto Agregado',
+          text: 'El producto se ha agregado al carrito con éxito.',
+          confirmButtonText: 'Entendido'
+        }).then(() => {
+          this.$router.push('/home');
         });
+
+        console.log(response.data.data[0]);
+      } catch (error) {
+        // Error al agregar el producto al carrito
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al Agregar',
+          text: 'No se pudo agregar el producto al carrito. Por favor, inténtalo de nuevo.',
+          confirmButtonText: 'Entendido'
+        });
+
+        console.log(error);
+      }
     },
     revisarMatch() {
       this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification
-            console.log('userCss',this.userClassification);
-            console.log('prodcss',this.productos.classification);
+      console.log('userCss', this.userClassification);
+      console.log('prodcss', this.productos.classification);
       if (this.userClassification === this.productos.classification) {
         document.getElementById('sparkles').style.display = 'block';
         return;
@@ -533,34 +561,46 @@ export default {
 }
 
 .botones {
-  margin-left: 5%;
-  margin-top: 10px;
+  /* background-color: aqua; */
+  margin-top: 2vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 10%;
+  justify-content: center;
+  gap: 2vh;
+  height: 10vh;
+  width: 80%;
 }
 
+
+
 .action-button {
+
   display: flex;
   align-items: center;
-
-  margin-right: 10px;
   /* Ajusta el margen derecho para separar los botones */
-  padding: 12px 24px;
+  padding: 1.2vh 2.4vh;
   font-size: 16px;
   border-radius: 50px;
   background-color: #f00d38;
   color: white;
   border: 2px solid #ccc;
   height: 60%;
-  width: 50%;
+  width: 36%;
 }
 
 .action-button img {
   max-width: 15%;
   max-height: 95%;
   margin-right: 10%;
+}
+
+.action-button:hover {
+  background-color: #ff6385;
+  color: white;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: 0.3s;
 }
 
 .star-icon {

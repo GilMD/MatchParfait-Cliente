@@ -9,20 +9,23 @@
                 <div class="productos">
                     <div v-for="(product, index) in products" :key="product.cartId" class="producto">
                         <div class="imagen_producto">
-                            <img :src="product.photo" alt="Imagen del producto">
+                            <img @click.prevent="detalleProducto(product.productId)" :src="product.photo"
+                                alt="Imagen del producto">
                         </div>
                         <div class="informacion_producto">
                             <div class="nombre_marca">
-                                <td class="nombre">{{ product.productName }}
+                                <td @click.prevent="detalleProducto(product.productId)" class="nombre">{{
+                                    product.productName }}
                                     <div class="sparkles">
                                         <img src="@/assets/img/sparkles_red.svg" alt="">
                                     </div>
                                 </td>
                                 <span class="marca">{{ product.productBrand }}</span>
+                                <div class="color-box" :style="{ backgroundColor: '#' + product.color }"></div>
                             </div>
                             <div class="precio_botones">
                                 <td class="precio">{{ product.price | currency }}</td>
-                                <div class="color-box" :style="{ backgroundColor: '#' + product.color }"></div>
+
                                 <div class="dec_inc">
                                     <button @click="cambiarCantidad('-', index)">-</button>
                                     <td>{{ parseInt(product.cantidad) }}</td>
@@ -146,6 +149,7 @@ import sidebar from '@/components/sidebar.vue';
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
 import { isEmptyObject } from 'jquery';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -184,6 +188,10 @@ export default {
         // this.obtenerDireccion();
     },
     methods: {
+        detalleProducto(productId) {
+            // this.$router.push(`/producto/${productId}`);
+            this.$router.push({ name: 'producto', params: { id: productId } });
+        },
         async productList() {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
             try {
@@ -445,26 +453,43 @@ export default {
         async realizarCompra() {
             if (this.validarCampos()) {
                 const token = JSON.parse(localStorage.getItem('vue2.token'))
-                const response = await axios.post(`${URL_DATOS}/sale/transaction`, {
-                    cardId: this.tarjetaDatos.cardId,
-                    totalAmount: parseFloat(this.subtotal)
-                },
-                    {
+                try {
+                    const response = await axios.post(`${URL_DATOS}/sale/transaction`, {
+                        cardId: this.tarjetaDatos.cardId,
+                        totalAmount: parseFloat(this.subtotal)
+                    }, {
                         headers: {
                             Authorization: 'Bearer ' + token,
                         }
-                    }
-                )
-                    .then(function (response) {
-                        console.log('realizada', response);
-                    })
-                    .catch(function (error) {
-                        console.log(error)
                     });
+
+                    // Compra completada con éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Compra Completada',
+                        text: 'Tu compra se ha realizado con éxito.',
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        this.$router.push('/home'); // Redirigir a la página de inicio
+                    });
+
+                    console.log('Compra realizada', response);
+                } catch (error) {
+                    // Error al realizar la compra
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en la Compra',
+                        text: 'No se pudo completar tu compra. Por favor, inténtalo de nuevo.',
+                        confirmButtonText: 'Entendido'
+                    });
+
+                    console.log('Error', error);
+                }
+
             }
         },
         validarCampos() {
-            if (this.products.length===0) {
+            if (this.products.length === 0) {
                 alert('El carrito está vacio');
                 console.log('productosvacios');
                 return false;
@@ -621,6 +646,12 @@ export default {
     object-fit: cover;
 }
 
+.imagen_producto img:hover {
+    cursor: pointer;
+    transform: scale(1.01);
+    transition: 0.3s
+}
+
 .informacion_producto {
     /* background-color: blueviolet; */
     width: 100%;
@@ -633,6 +664,7 @@ export default {
 }
 
 .nombre_marca {
+    /* background-color: aqua; */
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -650,6 +682,13 @@ export default {
     font-size: 1.2rem;
     color: #391414;
     text-align: left;
+    margin-right: .5vh;
+}
+
+.nombre:hover {
+    cursor: pointer;
+    transform: scale(1.01);
+    transition: 0.3s
 }
 
 .marca {
@@ -661,9 +700,10 @@ export default {
 }
 
 .precio_botones {
+    /* background-color: aqua; */
     display: flex;
     align-items: center;
-    gap: 1vh;
+    gap: 0vh;
     /* Añadido espacio entre los elementos */
 }
 
@@ -704,8 +744,14 @@ export default {
 .precio_botones img {
     width: 6%;
     margin-left: 40%;
-    cursor: pointer;
+
     margin-bottom: 1%;
+}
+
+.precio_botones img:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+    transition: 0.3s;
 }
 
 .dic {
@@ -1130,8 +1176,8 @@ export default {
 }
 
 .sparkles img {
-    padding-top: 10px;
-    max-width: 100%;
+    padding-top: 0vh;
+    max-width: 80%;
     text-align: right;
 }
 

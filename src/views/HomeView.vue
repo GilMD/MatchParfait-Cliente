@@ -260,7 +260,7 @@ export default {
   align-items: center;
   justify-content: center;
   /* Centrar elementos horizontalmente */
-  margin-top: -1%;
+  margin-top: 1%;
   /* Ajustar margen superior según sea necesario */
   font-family: Playfair Display;
   font-weight: 400;
@@ -277,7 +277,7 @@ export default {
 
 .title img {
   width: 4%;
-  margin-top: 3%;
+  margin-top: 1%;
   margin-right: 0%;
   margin-left: 0%;
 

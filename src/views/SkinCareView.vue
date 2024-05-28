@@ -3,7 +3,7 @@
         <sidebar />
         <div class="contenedor">
             <div class="titulo">
-                <h1>Cuidado de la piel</h1>
+                <span>Cuidado de la piel</span>
             </div>
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
@@ -130,8 +130,8 @@ export default {
     text-align: left;
     margin: 2vh auto;
     font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 400;
     color: #9B0E28;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -145,6 +145,7 @@ export default {
     max-width: 75%;
     color: #FFFCF7;
     border: none;
+    margin-bottom: 3vh;
 }
 
 .searchBar img {
@@ -184,7 +185,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 75%;
-    height: 75%;
+    height: 80%;
     gap: 2vh;
     /* flex-wrap: wrap; */
     margin: auto;
