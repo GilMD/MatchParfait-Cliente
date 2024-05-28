@@ -190,7 +190,6 @@ export default {
 
 .lista_productos {
     display: flex;
-    /* background-color: #ab5ba4; */
     height: 100%;
     width: 100%;
     flex-direction: column;
@@ -199,33 +198,29 @@ export default {
 }
 
 .productos {
-    display: flex;
-    width: 85%;
-    height: 77%;
-    gap: 1vh;
-    flex-wrap: wrap;
-    margin: auto;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 75%;
+    height: 75%;
+    gap: 2vh;
+    /* flex-wrap: wrap; */
+  
+    padding-bottom: 2vh;
     /* Espacio entre los elementos */
-    /* border-radius: 2vh;
-    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15); */
+    border-radius: 2vh;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
     overflow: auto;
 }
 
 .producto {
-   
-    background-color: #FFFCF7;
-    height: 23%;
-    width: 40%;
-    margin: 0 auto;
     display: flex;
-    flex-direction: row;
-    /* Cambiado para que los elementos estén en fila */
-    border-radius: 10px;
+    width: 60vh;
+    height: 19vh;
+    border-radius: 1vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
-
-
+    margin: 2vh auto;
 }
-
 .titulo {
     /* background-color: #f0f0f0; */
     width: 80%;

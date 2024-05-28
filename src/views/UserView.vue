@@ -89,8 +89,10 @@ export default {
             
         }
     },
-    mounted() {
+    created() {
         this.cargarDatosUsuario();
+    },
+    mounted() {
         this.formatoDireccion();
         // this.obtenerDireccion();
     },

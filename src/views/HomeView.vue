@@ -226,7 +226,7 @@ export default {
       this.$router.push(`/maquillaje`);
     },
     UñasView() {
-      this.$router.push(`/uñas`);
+      this.$router.push(`/unas`);
     },
     wishListView() {
       this.$router.push(`/wishList`);
