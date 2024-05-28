@@ -25,7 +25,7 @@
                         <div>
                             <button class="btnAgregarWishList" @click.prevent="agregarWishlist(product)">
                                 <img src="@/assets/img/sparkles.svg" alt="">
-                                Agregar a wishlist
+                                Wishlist
                             </button>
                         </div>
                     </div>
@@ -342,7 +342,7 @@ export default {
     color: #fffcf7;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 1.5rem;
     font-family: "DM Sans", sans-serif;
     font-size: 1rem;
 }

@@ -7,7 +7,7 @@
             </div>
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
-                <input type="text" placeholder="Buscar..." class="custom-placeholder" />
+                <input v-model="searchTerm" type="text" placeholder="Buscar..." class="custom-placeholder" />
             </div>
             <v-container class="vcontainer">
                 <v-chip-group column active-class="primary--text" v-model="selectedCategory">
@@ -19,18 +19,20 @@
             <div class="productos">
                 <div v-for="product in filteredProducts" :key="product.id" class="producto">
                     <div class="imagen_producto">
-                        <img @click.prevent="detalleProducto(product.productId)" :src="product.photo" alt="Imagen del producto" />
+                        <img @click.prevent="detalleProducto(product.productId)" :src="product.photo"
+                            alt="Imagen del producto" />
                     </div>
                     <div class="informacion_producto">
                         <div class="nombre_marca">
-                            <div @click.prevent="detalleProducto(product.productId)" class="nombre">{{ product.productName }}</div>
+                            <div @click.prevent="detalleProducto(product.productId)" class="nombre">{{
+                                product.productName }}</div>
                             <div class="marca">{{ product.productBrand }}</div>
                         </div>
                         <div class="precio_botones">
                             <div class="precio">{{ product.price | currency }}</div>
                         </div>
                         <div>
-                            <button class="btnAgregarWishList" @click.prevent="agregarWishlist">
+                            <button class="btnAgregarWishList" @click.prevent="agregarWishlist(product)">
                                 <img src="@/assets/img/sparkles.svg" alt="">
                                 Wishlist
                             </button>
@@ -46,6 +48,7 @@
 import sidebar from '@/components/sidebar.vue'
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import Swal from 'sweetalert2';
 
 export default {
     name: 'MaquillajeView',
@@ -58,6 +61,7 @@ export default {
             // categories: ['Rostro', 'Ojos', 'Labios'],
             selectedCategory: '',
             OpcionProducto: ['Rostro', 'Ojos', 'Labios'],
+            searchTerm: '',
             userClassification: '',
             rostro: [
                 'Polvos / Fijadores / Base / Primer / Corrector',
@@ -84,30 +88,28 @@ export default {
     },
     computed: {
         filteredProducts() {
-            console.log('Selected Category:', this.selectedCategory);
+            let filtered = this.products;
+            // Filtrar por categoría
             switch (this.selectedCategory) {
                 case 'Rostro':
-                    return this.products.filter(product => this.rostro.includes(product.type));
+                    filtered = filtered.filter(product => this.rostro.includes(product.type));
                     break;
                 case 'Ojos':
-                    return this.products.filter(product => this.ojos.includes(product.type));
+                    filtered = filtered.filter(product => this.ojos.includes(product.type));
                     break;
                 case 'Labios':
-                    return this.products.filter(product => this.labios.includes(product.type));
-                    break;
-                default:
-                    return this.products;
+                    filtered = filtered.filter(product => this.labios.includes(product.type));
                     break;
             }
-        },
-        // filteredProducts() {
-        //     console.log('Selected Category:', this.selectedCategory);
-        //     if (this.selectedCategory !== '') {
-        //         console.log('Filtered Products:', this.products.filter(product => product.type === this.selectedCategory));
-        //         return this.products.filter(product => product.category === this.selectedCategory);
-        //     }
-        //     return this.products;
-        // }
+            if (this.searchTerm) {
+                filtered = filtered.filter(product => {
+                    const nameMatch = product.productName.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    const brandMatch = product.productBrand.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    return nameMatch || brandMatch;
+                });
+            }
+            return filtered;
+        }
     },
     mounted() {
         this.fetchProducts();
@@ -120,36 +122,56 @@ export default {
         async fetchProducts() {
             const token = JSON.parse(localStorage.getItem('vue2.token'))
             try {
-                let p = [];
                 const response = await axios.get(`${URL_DATOS}/products`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     }
-                })
-                    .then(response => {
-                        p = response.data.data;
-                        this.products = p;
-                        console.log('productos', this.products);
-                    })
+                });
+                this.products = response.data.data;
+                this.filtrarMatch();
+                this.regresarCategoria();
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
             }
-            this.filtrarMatch();
-            this.regresarCategoria();
         },
         regresarCategoria() {
-            const xd = this.products.filter(product => this.rostro.includes(product.type));
-            const xd2 = xd.concat(this.products.filter(product => this.ojos.includes(product.type)));
-            this.products = xd2.concat(this.products.filter(product => this.labios.includes(product.type)));
-            console.log('maquillaje', this.products);
+            const rostroProducts = this.products.filter(product => this.rostro.includes(product.type));
+            const ojosProducts = this.products.filter(product => this.ojos.includes(product.type));
+            const labiosProducts = this.products.filter(product => this.labios.includes(product.type));
+            this.products = [...rostroProducts, ...ojosProducts, ...labiosProducts];
         },
         filtrarMatch() {
-            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification
-            console.log('userCss', this.userClassification);
+            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification;
             const matchingProducts = this.products.filter(product => this.userClassification === product.classification);
             const nonMatchingProducts = this.products.filter(product => this.userClassification !== product.classification);
-            this.products = matchingProducts.concat(nonMatchingProducts);
-        }
+            this.products = [...matchingProducts, ...nonMatchingProducts];
+        },
+        async agregarWishlist(product) {
+            const token = JSON.parse(localStorage.getItem('vue2.token'))
+            try {
+                const response = await axios.post(`${URL_DATOS}/wishList/`, {
+                    productId: product.productId,
+                    color: product.color
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Agregado a la Wishlist',
+                    text: 'El producto ha sido agregado a tu wishlist.',
+                    confirmButtonText: 'Entendido'
+                });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al agregar a la Wishlist',
+                    text: 'No se pudo agregar el producto a la wishlist. Por favor, inténtalo de nuevo.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        },
     },
 }
 </script>
@@ -297,9 +319,9 @@ export default {
 }
 
 .producto:hover {
-  transition: 0.3s;
-  transform: scale(1.1);
-  z-index: 1;
+    transition: 0.3s;
+    transform: scale(1.1);
+    z-index: 1;
 }
 
 .imagen_producto {
@@ -317,7 +339,7 @@ export default {
 }
 
 .imagen_producto img:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .informacion_producto {
@@ -352,7 +374,7 @@ export default {
 }
 
 .nombre:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .marca {
