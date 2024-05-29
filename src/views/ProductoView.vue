@@ -25,22 +25,13 @@
 
       <div class="column3">
         <div class="info">
-
-          <!-- <div class="rating">
-            <span v-for="star in 5" :key="star" class="star" :class="{ filled: star <= producto.stars }">&#9733;</span>
-          </div> -->
-
           <div class="nombre">
-            <span>
-              {{ productos.productName }}
-            </span>
+            <span> {{ productos.productName }} </span>
             <div>
               <img id="sparkles" class="sparkles" src="@/assets/img/sparkles_red.svg">
             </div>
           </div>
-          <div class="marca">
-            {{ productos.productBrand }}
-          </div>
+          <div class="marca"> {{ productos.productBrand }} </div>
 
           <hr class="linea-horizontal">
 
@@ -196,7 +187,7 @@ export default {
           text: 'El producto se ha agregado a tu lista de deseos con éxito.',
           confirmButtonText: 'Entendido'
         }).then(() => {
-          this.$router.push('/home'); 
+          this.$router.push('/home');
         });
 
         console.log(response.data.data[0]);
@@ -374,7 +365,8 @@ export default {
   margin-top: 9%;
   flex-direction: column;
   max-height: 80%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .gallery-image {
@@ -398,7 +390,7 @@ export default {
   /* Asegura que el panel sea transparente */
   border-radius: 15px;
   z-index: -14;
-  
+
   overflow: auto;
 }
 
@@ -486,6 +478,8 @@ export default {
 
 /* Estilos del nombre */
 .nombre {
+  /* background-color: #ff6385; */
+  width: 80%;
   display: flex;
   font-size: 24px;
   font-weight: 100;
@@ -495,11 +489,17 @@ export default {
   text-align: left;
   color: #9B0E28;
   font-family: Playfair Display;
+  justify-content: space-between;
+  justify-items: space-between;
+  align-items: center;
+  gap: 3vh;
 }
 
 .nombre img {
-  max-width: 9%;
-  align-self: flex-end;
+  max-width: 30%;
+  justify-self: center;
+  align-self: center;
+  
 }
 
 .marca {
@@ -703,10 +703,9 @@ input::-webkit-inner-spin-button {
 }
 
 .sparkles {
+  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
-  align-items: start;
-  width: 20%;
-
+  width: 40%;
 }
 </style>
