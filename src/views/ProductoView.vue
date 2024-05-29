@@ -385,6 +385,22 @@ export default {
   /* Asegura que el panel sea transparente */
   border-radius: 15px;
   z-index: -14;
+  
+  overflow: auto;
+}
+
+.panel::-webkit-scrollbar {
+  width: 12px;
+}
+
+.panel::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+.panel::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border-radius: 6px;
 }
 
 .previewImg {

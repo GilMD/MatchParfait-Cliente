@@ -31,10 +31,13 @@
                     <div class="cardDetails">
                         <div class="pedido_fecha">
                             <span class="pedido2">Pedido: {{ ordenSeleccionado }}</span>
-                            <span class="fecha2">Fecha: {{ fechaSeleccionado }}</span>
+                            <span v-if="estatusSeleccionado === 'C' || estatusSeleccionado === 'P'" class="fecha2">Fecha
+                                tentativa de entrega: {{ fechaSeleccionado }}</span>
+                            <span v-if="estatusSeleccionado === 'E'" class="fecha2">Fecha de entrega: {{
+                                fechaSeleccionado }}</span>
                         </div>
                         <div class="statusdiv">
-                            <span class="status2">Estatus: {{ estatusSeleccionado }}</span>
+                            <span class="status2">Estatus: {{ regresarEstatus() }}</span>
                         </div>
                         <div class="contenedorcards">
                             <div v-for="(product, index) in productosSeleccionados" :key="index"
@@ -45,7 +48,7 @@
                                 <div class="info2">
                                     <div class="nombre_sparkles">
                                         <span class="nombre">{{ product.productName }}</span>
-                                        <img src="@/assets/img/icons/sparkles.svg" alt="">
+                                        <img v-if="revisarMatch(product)" src="@/assets/img/icons/sparkles.svg" alt="">
                                     </div>
                                     <div class="marcadiv">
                                         <span class="marca">{{ product.productBrand }}</span>
@@ -56,8 +59,9 @@
                                             </div>
                                             <span class="precio">{{ product.price | currency }}</span>
                                         </div>
-                                        <div class="boton">
-                                            <button @click.prevent="abrirModal(product.productId)">Agregar comentario</button>
+                                        <div v-if="estatusSeleccionado === 'E'" class="boton">
+                                            <button @click.prevent="abrirModal(product.productId)">Agregar
+                                                comentario</button>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +70,8 @@
 
                         <hr class="linea-horizontal">
                         <div class="totaldiv">
-                            <span class="rastrear">Rastrear</span>
+                            <span v-if="estatusSeleccionado === 'C'" class="rastrear">Rastrear</span>
+                            <span v-else class="rastrear">&nbsp;</span>
                             <span class="total">Total: {{ totalSeleccionado | currency }}</span>
                         </div>
                     </div>
@@ -102,11 +107,12 @@ export default {
             history: [],
             ordenSeleccionado: '',
             fechaSeleccionado: '',
-            estatusSeleccionado: '',
             totalSeleccionado: 0,
             productosSeleccionados: [],
             productoSeleccionado: '',
             ModalReseñas: false,
+            userClassification: '',
+            estatusSeleccionado: ''
         }
 
     },
@@ -134,7 +140,7 @@ export default {
                         p = response.data.data.sales;
                         console.log('historial', p);
                         this.history = p;
-                        this.history.sort((a, b) =>b.orderSale - a.orderSale);
+                        this.history.sort((a, b) => b.orderSale - a.orderSale);
                         this.selectOrder(0);
                     })
             } catch (error) {
@@ -142,16 +148,42 @@ export default {
             }
         },
         selectOrder(index) {
-            
             this.ordenSeleccionado = this.history[index].orderSale;
             this.fechaSeleccionado = this.formatDate(this.history[index].estimatedDate);
             this.estatusSeleccionado = this.history[index].status;
             this.totalSeleccionado = this.history[index].totalAmount;
             this.productosSeleccionados = this.history[index].products;
         },
+        regresarEstatus() {
+            let estatus = '';
+            switch (this.estatusSeleccionado) {
+                case 'EP':
+                    estatus = 'En espera de pago';
+                    break;
+                case 'C':
+                    estatus = 'En camino';
+                    break;
+                case 'P':
+                    estatus = 'Procesando';
+                    break;
+                case 'E':
+                    estatus = 'Entregado';
+                    break;
+            }
+            return estatus;
+        },
         formatDate(dateString) {
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             return new Date(dateString).toLocaleDateString(undefined, options);
+        },
+        revisarMatch(product) {
+            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification;
+            if (typeof product.classification !== 'undefined') {
+                if (product.classification !== this.userClassification) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

@@ -470,7 +470,7 @@ export default {
                         text: 'Tu compra se ha realizado con éxito.',
                         confirmButtonText: 'Entendido'
                     }).then(() => {
-                        this.$router.push('/home'); // Redirigir a la página de inicio
+                        this.$router.push('/historial'); // Redirigir a la página de inicio
                     });
 
                     console.log('Compra realizada', response);

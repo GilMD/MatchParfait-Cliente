@@ -131,7 +131,7 @@ body::-webkit-scrollbar {
 
 .Sidebar__User {
   // background-color: blueviolet;
-  margin-bottom: 20px;
+  margin-bottom: 15%;
   /* Añadido margen inferior */
   width: 75%;
   height: 9%;
