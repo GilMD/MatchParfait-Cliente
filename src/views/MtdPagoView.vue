@@ -59,6 +59,7 @@
 <script>
 import sidebar from '@/components/sidebar.vue'
 import axios from 'axios';
+import { isEmptyObject } from 'jquery';
 import { URL_DATOS } from '@/Utils/constantes';
 
 export default {
@@ -66,15 +67,18 @@ export default {
     components: {
         sidebar
     },
-    data: function () {
+    data() {
         return {
             tarjetaExiste: false,
             tarjetaDatos: [],
             numTarjeta: '',
             mes: '',
-            year: '',
+            year: ''
         }
 
+    },
+    created(){
+        this.cargarDatosTarjeta();
     },
     methods: {
         async cargarDatosTarjeta() {
@@ -157,6 +161,12 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        obtenerFechas() {
+            const partes = this.tarjetaDatos.expDate.split('/');
+            this.mes = partes[0];
+            this.year = partes[1];
+            this.numTarjeta = 'XXXX-XXXX-XXXX-' + this.tarjetaDatos.cardNumber.substring(8, 12);
         },
         isNumber(event) {
             const char = String.fromCharCode(event.keyCode);
