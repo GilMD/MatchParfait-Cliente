@@ -7,7 +7,7 @@
         <div class="previewImg ">
           <div class="panel">
             <div v-for="(image, index) in imageArray" :key="index" class="image-item">
-              <img :src="image" alt="Imagen" class="gallery-image">
+              <img :src="image" alt="Imagen" class="gallery-image" @click="selectImage(index)">
             </div>
           </div>
         </div>
@@ -15,7 +15,7 @@
 
       <div class="column2">
         <div class="centered-container">
-          <div class="imgsProduct">
+          <div ref="imgsProduct" class="imgsProduct">
             <div v-for="(image, index) in imageArray" :key="index" class="image-item2">
               <img :src="image" alt="Imagen" class="gallery-image2">
             </div>
@@ -124,7 +124,8 @@ export default {
       colorSelected: '',
       selectedIndex: 0,
       claseColor: 'color-box',
-      userClassification: ''
+      userClassification: '',
+      selectedImageIndex: 0,
     };
   },
   created() {
@@ -278,7 +279,16 @@ export default {
         .catch(function (error) {
           console.log(error)
         });
-    }
+    },
+    selectImage(index) {
+      this.selectedImageIndex = index;
+      this.scrollToImage(index);
+    },
+    scrollToImage(index) {
+      const container = this.$refs.imgsProduct;
+      const imageElement = container.children[index];
+      container.scrollTop = imageElement.offsetTop;
+    },
   }
 }
 </script>
@@ -312,7 +322,7 @@ export default {
   width: 100%;
   /* Ancho del 100% del contenedor */
   height: auto;
-  /* Altura automática para mantener la proporción */
+  cursor: pointer;
 }
 
 .image-item2 {
@@ -327,6 +337,8 @@ export default {
   border-radius: 3%;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
   margin-left: 10%;
+  margin-bottom: 1vh;
+  margin-top: 3vh;
 }
 
 
@@ -366,7 +378,7 @@ export default {
 }
 
 .gallery-image {
-  margin-top: 20%;
+  margin-top: 4%;
   max-width: 90%;
   /* Ancho de cada imagen */
   max-height: 115px;
@@ -380,7 +392,8 @@ export default {
   padding: 5% 0;
   top: 10%;
   width: 100%;
-  height: 80%;
+  height: auto;
+  max-height: 80%;
   background-color: rgb(146, 143, 143);
   /* Asegura que el panel sea transparente */
   border-radius: 15px;
@@ -390,7 +403,7 @@ export default {
 }
 
 .panel::-webkit-scrollbar {
-  width: 12px;
+  width: .5vh;
 }
 
 .panel::-webkit-scrollbar-thumb {
@@ -417,6 +430,8 @@ export default {
 }
 
 .imgsProduct {
+  /* background-color: aqua; */
+  height: auto;
   max-height: 1200px;
   width: 90%;
   overflow-y: auto;

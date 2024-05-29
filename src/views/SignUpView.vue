@@ -242,15 +242,15 @@ export default {
             rangeValue: 1,
             passwordError: '',
             images: [
-                { src: require('@/assets/img/1.png'), label: 'Tone 1' },
-                { src: require('@/assets/img/2.png'), label: 'Tone 2' },
-                { src: require('@/assets/img/3.png'), label: 'Tone 3' },
-                { src: require('@/assets/img/4.png'), label: 'Tone 4' },
-                { src: require('@/assets/img/5.png'), label: 'Tone 5' },
-                { src: require('@/assets/img/6.png'), label: 'Tone 6' }
+                { src: require('@/assets/img/skintype/rangevalue1.png'), label: 'LIGHT' },
+                { src: require('@/assets/img/skintype/rangevalue2.png'), label: 'LIGHT MEDIUM' },
+                { src: require('@/assets/img/skintype/rangevalue3.png'), label: 'MEDIUM' },
+                { src: require('@/assets/img/skintype/rangevalue4.png'), label: 'MEDIUM TAN' },
+                { src: require('@/assets/img/skintype/rangevalue5.png'), label: 'MEDIUM DEEP' },
+                { src: require('@/assets/img/skintype/rangevalue6.png'), label: 'DEEP' }
             ],
-            currentImage: require('@/assets/img/1.png'),
-            currentLabel: 'Tone 1',
+            currentImage: require('@/assets/img/skintype/rangevalue1.png'),
+            currentLabel: 'LIGHT',
 
 
             days: Array.from({ length: 31 }, (_, i) => i + 1),
@@ -514,8 +514,10 @@ export default {
 }
 
 .tone-image {
-    max-width: 65%;
+    max-width: 50%;
     height: auto;
+    border-radius: 1.5vh;
+    transition: 10s;
 }
 
 .tonoPiel {
