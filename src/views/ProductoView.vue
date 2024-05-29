@@ -50,7 +50,7 @@
 
           <div class="precio-cantidad">
             <div class="precio">
-              ${{ productos.price }}
+              {{ productos.price | currency}}
             </div>
             <div class="cantidad">
               <button @click.prevent="cambiarCantidad('-')" class="cantidad-btn">
@@ -126,6 +126,14 @@ export default {
     this.traeDetalleProducto();
     this.agregarRecientes();
   },
+    filters: {
+        currency(value) {
+            if (typeof value !== "number") {
+                return value;
+            }
+            return `$${value.toFixed(2)}`;
+        }
+    },
   components: {
     sidebar
   },
