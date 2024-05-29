@@ -17,7 +17,7 @@
                             <div class="cardInfo">
                                 <div class="pedido_status">
                                     <span class="pedido">Pedido: {{ sale.orderSale }}</span>
-                                    <span class="status">Estatus: {{ sale.status }}</span>
+                                    <span class="status">Estatus: {{ regresarEstatus2(sale.status) }}</span>
                                 </div>
                                 <div class="fecha_total">
                                     <span class="fecha">Fecha: {{ formatDate(sale.estimatedDate) }}</span>
@@ -157,6 +157,24 @@ export default {
         regresarEstatus() {
             let estatus = '';
             switch (this.estatusSeleccionado) {
+                case 'EP':
+                    estatus = 'En espera de pago';
+                    break;
+                case 'C':
+                    estatus = 'En camino';
+                    break;
+                case 'P':
+                    estatus = 'Procesando';
+                    break;
+                case 'E':
+                    estatus = 'Entregado';
+                    break;
+            }
+            return estatus;
+        },
+        regresarEstatus2(status) {
+            let estatus = '';
+            switch (status) {
                 case 'EP':
                     estatus = 'En espera de pago';
                     break;
@@ -395,6 +413,8 @@ export default {
 
 }
 
+
+
 .pedido_fecha {
     /* background-color: aqua; */
     position: relative;
@@ -443,6 +463,20 @@ export default {
     margin-left: 2.5vh;
     margin-right: 2vh;
     overflow: auto;
+}
+
+.contenedorcards::-webkit-scrollbar {
+    width: 1vh;
+}
+
+.contenedorcards::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 1vh;
+}
+
+.contenedorcards::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    border-radius: 1vh;
 }
 
 .cardProductDetails {

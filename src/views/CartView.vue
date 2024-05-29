@@ -490,13 +490,21 @@ export default {
         },
         validarCampos() {
             if (this.products.length === 0) {
-                alert('El carrito está vacio');
-                console.log('productosvacios');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Compra fallida',
+                    text: 'Tu carrito está vacio',
+                    confirmButtonText: 'Entendido'
+                })
                 return false;
             }
             if (!this.tarjetaExiste) {
-                alert('Agregue una tarjeta para realizar el pago');
-                console.log('sintarjeta');
+                Swal.fire({
+                    icon: 'failure',
+                    title: 'Compra fallida',
+                    text: 'Agrega un metodo de pago',
+                    confirmButtonText: 'Entendido'
+                })
                 return false;
             }
             return true;

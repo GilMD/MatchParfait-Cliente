@@ -132,7 +132,7 @@ export default {
       this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification;
       try {
         let p = [];
-        const response = await axios.get(`${URL_DATOS}/products`, {
+        const response = await axios.get(`${URL_DATOS}/favorites`, {
           headers: {
             Authorization: 'Bearer ' + token,
           }
