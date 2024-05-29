@@ -305,23 +305,25 @@ export default {
 }
 
 .nombre_marca {
+    /* background-color: aqua; */
     display: flex;
+    justify-content: center;
     flex-direction: column;
     gap: 1vh;
+    overflow: hidden;
     /* Añadido espacio entre los elementos */
 }
 
-.nombre_marca .celda {
+.nombre {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-between;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 15px;
+    font-size: 1.2rem;
     color: #391414;
     text-align: left;
-
+    margin-right: .5vh;
 }
 
 .nombre_marca .marca {
@@ -330,10 +332,6 @@ export default {
     font-size: 15px;
     color: #391414;
     text-align: left;
-}
-
-.nombre {
-    width: 80%;
 }
 
 .nombre:hover {
@@ -345,15 +343,14 @@ export default {
 .sparkles {
     display: flex;
     flex-direction: column;
-    align-items: end;
-    width: 20%;
-
+    align-items: start;
+    width: 5vh;
+    height: 100%;
 }
 
 .sparkles img {
-    padding-top: 10px;
-    max-width: 30px;
-    max-height: 30px;
+    padding-top: 0vh;
+    max-width: 80%;
     text-align: right;
 }
 

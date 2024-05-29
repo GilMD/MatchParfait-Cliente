@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div id="form2div2" class="direccionInputs2">
-                    <h1>Método de pago</h1>
+                    <h1>Informacion de tarjeta</h1>
                     <div class="coloniaCalleInputs">
                         <input v-model="tarjetaDatos.titular" type="text" placeholder="Nombre completo">
                         <input v-model="tarjetaDatos.cardNumber" type="text" placeholder="Número de tarjeta"
@@ -261,6 +261,16 @@ export default {
     font-family: "DM Sans", sans-serif;
     margin-top: 8%;
     margin-left: 5%;
+}
+
+.formulario2 input {
+    border-radius: 50px;
+    margin-bottom: 25px;
+    font-size: 17px;
+}
+
+.formulario2 input::placeholder {
+    font-family: "DM Sans", sans-serif;
 }
 
 .dic2 {

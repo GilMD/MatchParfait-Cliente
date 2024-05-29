@@ -137,7 +137,7 @@ export default {
                     //   Authorization: `Bearer ${localStorage.getItem('token')}`
                     // }
                     .then(response => {
-                        p = response.data.data.sales;
+                        p = response.data.data;
                         console.log('historial', p);
                         this.history = p;
                         this.history.sort((a, b) => b.orderSale - a.orderSale);
