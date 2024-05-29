@@ -268,7 +268,7 @@ export default {
                 { value: 11, name: 'Noviembre' },
                 { value: 12, name: 'Diciembre' }
             ],
-            years: Array.from({ length: 121 }, (_, i) => new Date().getFullYear() - i)
+            years: Array.from({ length: 2006 - 1930 + 1 }, (_, i) => 2006 - i)
         }
 
     },
@@ -329,12 +329,36 @@ export default {
                 });
                 return false;
             }
+            const regex = /^[A-Za-z]+$/;
+            if (!regex.test(this.user.name)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Caracteres invalidos en Nombre',
+                    text: 'Por favor, complete correctamente todos los campos obligatorios.',
+                    confirmButtonText: 'Entendido'
+                });
+                return false;
+            }
+            if (this.user.phone_number.toString().length!==10){
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tamaño invalido en número de teléfono',
+                    text: 'Por favor, complete correctamente todos los campos obligatorios.',
+                    confirmButtonText: 'Entendido'
+                });
+                return false;
+            }
             return true;
 
         },
         validarFormulario2() {
             if (!this.user.texture || !this.user.shine) {
-                alert('Por favor, complete todos los campos obligatorios.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: 'Por favor, complete todos los campos obligatorios.',
+                    confirmButtonText: 'Entendido'
+                });
                 return false;
             }
             return true;
@@ -378,7 +402,6 @@ export default {
             }
             return true;
         },
-
         async finalizar() {
             if (this.validarFormulario2()) {
                 try {
@@ -457,8 +480,22 @@ export default {
                         roughness: this.user.roughness,
                         tone: this.user.rangeValue
                     });
-                    this.$router.push('/');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registro Completado',
+                        text: 'Te has registrado correctamente, por favor inicia sesión',
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        this.$router.push('/'); // Redirigir a la página de inicio
+                    });
                 } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el registro',
+                        text: 'No se pudo completar tu registro. Por favor, inténtalo de nuevo.',
+                        confirmButtonText: 'Entendido'
+                    });
+
                     console.error('Error:', error);
                     if (error.response && error.response.data) {
                         console.log('Error:', error.response.data);

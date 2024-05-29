@@ -41,6 +41,8 @@
 <script>
 import axios from 'axios';
 import { URL_DATOS } from '@/Utils/constantes';
+import Swal from 'sweetalert2';
+
 export default {
     props: {
         productId: String // Asegúrate de que la información del producto es pasada como una prop
@@ -58,12 +60,22 @@ export default {
     methods: {
         async save() {
             if (this.puntuacionSeleccionada === 0) {
-                alert('Por favor, selecciona una puntuación antes de guardar.');
+                Swal.fire({
+                        icon: 'warning',
+                        title: 'Reseña incompleta',
+                        text: 'Dale una puntuacion al producto para continuar',
+                        confirmButtonText: 'Entendido'
+                    })
                 return;
             }
 
             if (this.puntuacionMatch === 0) {
-                alert('Por favor, selecciona una puntuación de match antes de guardar.');
+                Swal.fire({
+                        icon: 'warning',
+                        title: 'Reseña incompleta',
+                        text: 'Dale una puntuacion de match al producto para continuar',
+                        confirmButtonText: 'Entendido'
+                    })
                 return;
             }
             try {
@@ -79,6 +91,12 @@ export default {
                     }
                 });
                 console.log('Reseña guardada:', response.data);
+                Swal.fire({
+                        icon: 'success',
+                        title: 'Reseña enviada',
+                        text: 'Se ha registrado correctamente tu reseña del producto',
+                        confirmButtonText: 'Entendido'
+                    })
                 this.close();
             } catch (error) {
                 console.error('Error al guardar la reseña:', error);

@@ -134,8 +134,7 @@
                         <span>Total: {{ subtotal | currency }}</span>
                         <hr class="linea-horizontal">
                         <div>
-                            <input @click.prevent="realizarCompra" class="btnSubtotalPago" type="submit"
-                                value="Proceder al pago">
+                            <input @click.prevent="realizarCompra" class="btnSubtotalPago" type="submit" value="Pagar">
                         </div>
                     </div>
                 </div>
@@ -392,28 +391,29 @@ export default {
             this.cambiarVisibililidadform2();
         },
         async agregarTarjeta() {
-            const token = JSON.parse(localStorage.getItem('vue2.token'))
-            const response = await axios.post(`${URL_DATOS}/cards`, {
-                titular: this.tarjetaDatos.titular,
-                cardNumber: parseInt(this.tarjetaDatos.cardNumber),
-                cvv: this.tarjetaDatos.cvv,
-                expDate: this.mes + '/' + this.year
-            },
-                {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
+            if (this.validarTarjeta()) {
+                const token = JSON.parse(localStorage.getItem('vue2.token'))
+                const response = await axios.post(`${URL_DATOS}/cards`, {
+                    titular: this.tarjetaDatos.titular,
+                    cardNumber: parseInt(this.tarjetaDatos.cardNumber),
+                    cvv: this.tarjetaDatos.cvv,
+                    expDate: this.mes + '/' + this.year
+                },
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token,
+                        }
                     }
-                }
-            )
-                .then(function (response) {
-                    console.log(response);
-                    this.tarjetaDatos.expDate = this.mes + '/' + this.year;
-                    this.tarjetaExiste = true;
-                })
-                .catch(function (error) {
-                    console.log(error)
-                });
-
+                )
+                    .then(function (response) {
+                        console.log(response);
+                        this.tarjetaDatos.expDate = this.mes + '/' + this.year;
+                        this.tarjetaExiste = true;
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            }
         },
         async actualizarTarjeta() {
             const token = JSON.parse(localStorage.getItem('vue2.token'));
@@ -505,6 +505,20 @@ export default {
                     text: 'Agrega un metodo de pago',
                     confirmButtonText: 'Entendido'
                 })
+                return false;
+            }
+            return true;
+        },
+        validarTarjeta() {
+            const regex = /^[A-Za-z]+$/;
+            console.log(regex.test(this.tarjetaDatos.titular));
+            if (!regex.test(this.tarjetaDatos.titular)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Caracteres invalidos en Titular',
+                    text: 'Por favor, complete correctamente todos los campos de la tarjeta.',
+                    confirmButtonText: 'Entendido'
+                });
                 return false;
             }
             return true;
