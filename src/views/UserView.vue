@@ -5,7 +5,7 @@
             <div class="lista_productos">
                 <div class="titulo">
                     <img src="@/assets/img/IMG-LOGO-RED.png" alt="">
-                    <h1>Mi perfil</h1>
+                    <span>Mi perfil</span>
                 </div>
                 <div class="info_user">
                     <div class="info">
@@ -248,11 +248,11 @@ html {
     align-items: center;
 
 }
-.titulo h1 {
+.titulo span {
     width: 100%;
     font-family: 'Playfair Display', serif;
     font-weight: 400;
-    font-size: 2rem;
+    font-size: 5vh;
     color: #9B0E28;
     text-align: center;
     text-align: left;

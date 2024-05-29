@@ -4,7 +4,7 @@
         <div class="contenedor">
             <div class="titulo">
                 <img src="@/assets/img/IMG-LOGO-RED.png" alt="">
-                <h1>Método de Pago</h1>
+                <span>Método de Pago</span>
             </div>
             <div class="formulario2">
                 <div id="form2div1" class="dic2">
@@ -238,9 +238,9 @@ export default {
     display: flex;
     height: 10%;
     width: 100%;
-    font-size: 2.5vh;
+    font-size: 5vh;
     font-weight: bold;
-    color: #FF5733;
+    color: #9B0E28;
     align-items: center;
     margin-top: 2%;
     margin-left: 2%;
