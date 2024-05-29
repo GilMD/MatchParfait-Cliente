@@ -421,7 +421,8 @@ export default {
 .cancelar2 {
     /* background-color: #ff0000; */
     display: flex;
-    margin-top: 2%;
+    margin-top: 4%;
+    margin-left: 3.7vh;
 }
 
 .btnCancelar2 {
