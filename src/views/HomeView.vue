@@ -93,8 +93,6 @@ export default {
 
   mounted() {
     this.startScrolling();
-    this.obtenerProductsFM();
-    this.obtenerProductsVR();
     // Carga imágenes
     fetch('rutaimagenes.json')
       .then(response => response.json()) // Convierte la respuesta a formato JSON
@@ -130,7 +128,8 @@ export default {
       this.$router.push({ name: 'producto', params: { id: productId } });
     },
     async obtenerProductsFM() {
-      const token = JSON.parse(localStorage.getItem('vue2.token'))
+      const token = JSON.parse(localStorage.getItem('vue2.token'));
+      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification;
       try {
         let p = [];
         const response = await axios.get(`${URL_DATOS}/products`, {
@@ -167,8 +166,6 @@ export default {
       }
     },
     filtrarMatch() {
-      this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification
-      console.log('userCssfiltro', this.userClassification);
       const matchingProducts = this.productosfm.filter(product => this.userClassification === product.classification);
       const nonMatchingProducts = this.productosfm.filter(product => this.userClassification !== product.classification);
       this.productosfm = matchingProducts.concat(nonMatchingProducts);

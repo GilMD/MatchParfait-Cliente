@@ -17,7 +17,7 @@
                                 <td @click.prevent="detalleProducto(product.productId)" class="nombre">{{
                                     product.productName }}
                                     <div class="sparkles">
-                                        <img src="@/assets/img/sparkles_red.svg" alt="">
+                                        <img v-if="revisarMatch(product)" src="@/assets/img/sparkles_red.svg" alt="">
                                     </div>
                                 </td>
                                 <span class="marca">{{ product.productBrand }}</span>
@@ -341,7 +341,7 @@ export default {
             if (this.userData.length > 0) {
                 const user = this.userData[0];
                 this.address = user.postal_code + ', ' + user.street + ' #' + user.ext_num;
-                if (user.int_num !== '') {
+                if (user.int_num !== '' || user.int_num !== null) {
                     this.address += ', #' + user.int_num;
                 }
                 this.address += ', ' + user.suburb + ', ' + user.municipality + ', ' + user.state + ', ' + user.country;
@@ -498,6 +498,14 @@ export default {
                 alert('Agregue una tarjeta para realizar el pago');
                 console.log('sintarjeta');
                 return false;
+            }
+            return true;
+        },
+        revisarMatch(product) {
+            if (typeof product.classification !== 'undefined') {
+                if (product.classification !== this.userData[0].classification) {
+                    return false;
+                }
             }
             return true;
         }

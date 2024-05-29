@@ -7,7 +7,7 @@
             </div>
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
-                <input type="text" placeholder="Buscar..." class="custom-placeholder" />
+                <input  v-model="searchTerm" type="text" placeholder="Buscar..." class="custom-placeholder" />
             </div>
             <div class="productos">
                 <div v-for="product in filteredProducts" :key="product.id" class="producto">
@@ -50,6 +50,8 @@ export default {
     data() {
         return {
             products: [],
+            skincare: 'Skincare',
+            searchTerm: ''
         };
     },
     filters: {
@@ -62,9 +64,16 @@ export default {
     },
     computed: {
         filteredProducts() {
-            console.log('Selected Category:', this.selectedCategory);
-            console.log('Filtered Products:', this.products.filter(product => product.category === this.selectedCategory));
-            return this.products.filter(product => product.category === this.selectedCategory);
+            let filtered = this.products;
+            filtered = this.products.filter(product => this.skincare === product.type);
+            if (this.searchTerm) {
+                filtered = filtered.filter(product => {
+                    const nameMatch = product.productName.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    const brandMatch = product.productBrand.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    return nameMatch || brandMatch;
+                });
+            }
+            return filtered;
         }
     },
     mounted() {

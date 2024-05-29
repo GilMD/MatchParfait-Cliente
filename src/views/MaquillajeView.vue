@@ -128,8 +128,9 @@ export default {
                     }
                 });
                 this.products = response.data.data;
-                this.filtrarMatch();
+                console.log('productos', this.products);
                 this.regresarCategoria();
+                this.filtrarMatch();
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
             }
@@ -139,9 +140,10 @@ export default {
             const ojosProducts = this.products.filter(product => this.ojos.includes(product.type));
             const labiosProducts = this.products.filter(product => this.labios.includes(product.type));
             this.products = [...rostroProducts, ...ojosProducts, ...labiosProducts];
+            console.log('productos filtrados', this.products);
         },
         filtrarMatch() {
-            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData')).classification;
+            this.userClassification = JSON.parse(localStorage.getItem('vue2.userData'))[0].classification;
             const matchingProducts = this.products.filter(product => this.userClassification === product.classification);
             const nonMatchingProducts = this.products.filter(product => this.userClassification !== product.classification);
             this.products = [...matchingProducts, ...nonMatchingProducts];

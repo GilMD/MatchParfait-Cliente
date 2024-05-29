@@ -34,7 +34,7 @@
                                     </button>
                                 </div>
                                 <div class="basura">
-                                    <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd()">
+                                    <img src="@/assets/img/trash.png" alt="" @click.prevent="borrarProd(product.wish_listId)">
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,6 @@ export default {
     mounted() {
         this.productList();
         this.cargarDatosUsuario();
-        this.revisarMatch();
     },
     methods: {
         detalleProducto(productId) {
@@ -166,8 +165,12 @@ export default {
             console.log('Datos usuario', this.userData);
         },
         revisarMatch(product) {
-            if (product.classification !== this.userData[0].classification) {
-                return false;
+            console.log('userCssfiltro', this.userData[0].classification);
+            console.log('ProductCssfiltro', product.classification);
+            if (typeof product.classification !== 'undefined') {
+                if (product.classification !== this.userData[0].classification) {
+                    return false;
+                }
             }
             return true;
         }

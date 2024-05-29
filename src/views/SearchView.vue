@@ -91,6 +91,7 @@ export default {
                     .then(response => {
                         p = response.data.data;
                         this.products = p;
+                        console.log(this.products);
                     })
             } catch (error) {
                 console.error('Error al obtener la información de los productos:', error);
@@ -123,7 +124,7 @@ export default {
                     confirmButtonText: 'Entendido'
                 });
             }
-        },
+        }
     },
 }
 </script>
@@ -222,7 +223,7 @@ export default {
     gap: 2vh;
     /* flex-wrap: wrap; */
     margin: auto;
-    padding-bottom: 2vh;
+    padding-bottom: 1vh;
     /* Espacio entre los elementos */
     border-radius: 2vh;
     box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.15);
@@ -301,7 +302,7 @@ export default {
     justify-content: space-between;
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: #391414;
     text-align: left;
 }

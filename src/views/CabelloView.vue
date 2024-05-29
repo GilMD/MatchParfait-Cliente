@@ -7,7 +7,7 @@
             </div> 
             <div class="searchBar">
                 <img src="@/assets/img/icons/search.svg" alt="">
-                <input type="text" placeholder="Buscar..." class="custom-placeholder" />
+                <input  v-model="searchTerm" type="text" placeholder="Buscar..." class="custom-placeholder" />
             </div>
             <div class="productos">
                 <div v-for="product in filteredProducts" :key="product.id" class="producto">
@@ -50,6 +50,9 @@ export default {
     data() {
         return {
             products: [],
+            cabello: 'Productos de cabello',
+            searchTerm: ''
+
         };
     },
     filters: {
@@ -62,9 +65,16 @@ export default {
     },
     computed: {
         filteredProducts() {
-            console.log('Selected Category:', this.selectedCategory);
-            console.log('Filtered Products:', this.products.filter(product => product.category === this.selectedCategory));
-            return this.products.filter(product => product.category === this.selectedCategory);
+            let filtered = this.products;
+            filtered = this.products.filter(product => this.cabello === product.type);
+            if (this.searchTerm) {
+                filtered = filtered.filter(product => {
+                    const nameMatch = product.productName.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    const brandMatch = product.productBrand.toLowerCase().includes(this.searchTerm.toLowerCase());
+                    return nameMatch || brandMatch;
+                });
+            }
+            return filtered;
         }
     },
     mounted() {
@@ -92,6 +102,34 @@ export default {
                 console.error('Error al obtener la información de los productos:', error);
             }
         },
+        async agregarWishlist(product) {
+            const token = JSON.parse(localStorage.getItem('vue2.token'))
+            try {
+                const response = await axios.post(`${URL_DATOS}/wishList/`, {
+                    productId: product.productId,
+                    color: product.color
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    }
+                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Agregado a la Wishlist',
+                    text: 'El producto ha sido agregado a tu wishlist.',
+                    confirmButtonText: 'Entendido'
+                });
+
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al agregar a la Wishlist',
+                    text: 'No se pudo agregar el producto a la wishlist. Por favor, inténtalo de nuevo.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        }
     },
 }
 </script>
