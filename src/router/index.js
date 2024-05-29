@@ -26,70 +26,108 @@ const routes = [
   {
     path: '/',
     name: 'login',
-    component: LoginView
+    component: LoginView,
+    meta: {
+      guest: true
+    }
   },
   {
     path: '/signup',
     name: 'signup',
-    component: SignUpView
+    component: SignUpView,
+    meta: {
+      guest: true
+    }
   },
   {
     path: '/user',
     name: 'user',
-    component: UserView
+    component: UserView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/home',
     name: 'home',
-    component: HomeView
-
+    component: HomeView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/search',
     name: 'SearchView',
-    component: SearchView
+    component: SearchView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/cart',
     name: 'cart',
-    component: CartView
+    component: CartView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/wishlist',
     name: 'wishlist',
-    component: WishView
+    component: WishView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/producto/:id',
     name: 'producto',
     component: ProductoView,
-    props: true
+    props: true,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/reseñas',
     name: 'modalReseñas',
     component: modalReseñas,
+    meta: {
+      requiresAuth: true
+    },
     props: true
   },
   {
     path: '/maquillaje',
     name: 'maquillaje',
-    component: MaquillajeView
+    component: MaquillajeView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/cabello',
     name: 'cabello',
-    component: CabelloView
+    component: CabelloView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/unas',
     name: 'unas',
-    component: UñasView
-  }, 
+    component: UñasView,
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: '/skincare',
     name: 'skincare',
-    component: SkinCareView
+    component: SkinCareView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/metodoPago',
@@ -126,8 +164,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('vue2.token'); // O utiliza Vuex
+  const isAuthenticated = !!localStorage.getItem('vue2.token'); // Check if the token exists
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    // Route requires authentication
     if (!isAuthenticated) {
       next({
         path: '/',
@@ -136,8 +176,15 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    // Route should be accessible only to guests (unauthenticated users)
+    if (isAuthenticated) {
+      next({ path: '/home' }); // Redirect authenticated users to a different route
+    } else {
+      next();
+    }
   } else {
-    next(); // Asegúrate de llamar a next() siempre
+    next(); // Ensure to call next() always
   }
 });
 
